@@ -1,127 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CREST CRT Exam Preparation Quiz</title>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;900&display=swap');
-    :root { --header:#0c1220; --bg:#080d18; --white:#111a2e; --primary:#00c896; --success:#00c896; --danger:#ff4757; --warning:#ffc048; --text:#c8d6e5; --card:#0f1829; --accent:#1e90ff; --border:#1a2640; }
-    ::-webkit-scrollbar { width:10px; } ::-webkit-scrollbar-track { background:#060a12; } ::-webkit-scrollbar-thumb { background:#1e90ff; border-radius:5px; border:2px solid #060a12; }
-    * { box-sizing:border-box; }
-    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); margin:0; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
-    .header { background:linear-gradient(135deg, #0c1220 0%, #111a2e 50%, #0a1628 100%); color:#fff; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 20px rgba(0,200,150,0.08); flex-shrink:0; z-index:10; border-bottom:2px solid var(--primary); }
-    .header-title { font-family:'IBM Plex Mono',monospace; font-size:1.4em; font-weight:700; letter-spacing:1px; }
-    .header-title span { color:var(--primary); }
-    .header-title .sub { color:#5a6e8a; font-size:0.65em; letter-spacing:2px; }
-    .progress-text { font-family:'IBM Plex Mono',monospace; font-size:1.1em; font-weight:700; color:var(--warning); background:rgba(0,0,0,0.4); padding:6px 18px; border-radius:6px; border:1px solid rgba(255,192,72,0.3); }
-    .main { display:flex; flex:1; overflow:hidden; }
-    .sidebar { width:260px; background:#0a0f1a; border-right:1px solid var(--border); overflow-y:auto; padding:12px; display:grid; grid-template-columns:repeat(5,1fr); gap:6px; align-content:start; flex-shrink:0; }
-    .nav-btn { height:34px; border:1px solid var(--border); background:#0f1525; cursor:pointer; font-weight:700; font-size:0.82em; border-radius:5px; transition:all 0.15s; color:#4a5c7a; font-family:'IBM Plex Mono',monospace; }
-    .nav-btn:hover { background:#1a2640; color:#8aa; border-color:#1e90ff; }
-    .nav-btn.active { background:var(--primary); color:#000; border-color:var(--primary); box-shadow:0 0 10px rgba(0,200,150,0.35); }
-    .nav-btn.answered-correct { background:#0a2818; border-color:var(--success); color:#4ade80; }
-    .nav-btn.answered-wrong { background:#2d0a12; border-color:var(--danger); color:#f87171; }
-    .nav-btn.flagged { border:2px solid var(--warning); box-shadow:0 0 8px rgba(255,192,72,0.3); }
-    .content { flex:1; padding:35px; overflow-y:auto; display:flex; justify-content:center; align-items:flex-start; }
-    .card { background:var(--card); max-width:900px; width:100%; padding:45px; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.3); margin-bottom:40px; border:1px solid var(--border); }
-    .q-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; border-bottom:1px solid var(--border); padding-bottom:14px; }
-    .tag { background:var(--primary); color:#000; padding:5px 14px; border-radius:20px; font-size:0.75em; font-weight:700; text-transform:uppercase; letter-spacing:1px; font-family:'IBM Plex Mono',monospace; }
-    .q-num { color:#3a4e6a; font-family:'IBM Plex Mono',monospace; font-size:0.9em; }
-    .q-text { font-size:1.25em; font-weight:600; margin-bottom:30px; line-height:1.55; color:#dde6f0; }
-    .option { width:100%; text-align:left; padding:16px 22px; margin-bottom:12px; background:#0a1020; border:2px solid var(--border); border-radius:8px; cursor:pointer; font-size:1.05em; transition:all 0.2s; color:#90a4be; display:block; font-family:'DM Sans',sans-serif; }
-    .option:hover:not(.locked) { border-color:#1e90ff; background:#111c30; color:#c8d6e5; }
-    .option.locked { cursor:default; }
-    .option.opt-correct { border-color:var(--success); background:rgba(0,200,150,0.1); color:#4ade80; font-weight:700; }
-    .option.opt-wrong { border-color:var(--danger); background:rgba(255,71,87,0.08); color:#f87171; }
-    .option.opt-dim { opacity:0.45; }
-    .explanation-box { margin-top:24px; padding:18px 22px; background:rgba(30,144,255,0.08); border:1px solid rgba(30,144,255,0.2); border-radius:8px; font-size:1em; color:#8ab4d8; line-height:1.6; }
-    .explanation-box strong { color:#a0d0f0; }
-    .next-btn-wrap { text-align:center; margin-top:22px; }
-    .footer { background:#0a0f1a; padding:14px 35px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
-    .btn { padding:11px 28px; border:none; border-radius:6px; font-size:1.05em; font-weight:700; cursor:pointer; color:white; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
-    .btn:hover { transform:translateY(-1px); }
-    .btn-s { background:#1a2640; } .btn-s:hover { background:#243354; }
-    .btn-p { background:var(--primary); color:#000; } .btn-p:hover { background:#00b085; }
-    .btn-w { background:var(--warning); color:#111; } .btn-w:hover { background:#e0a828; }
-    .btn-g { background:var(--success); color:#000; } .btn-g:hover { background:#00b085; }
-    #start-screen, #results-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:2000; overflow-y:auto; }
-    .center-wrapper { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:40px; box-sizing:border-box; }
-    .start-box { background:var(--card); padding:60px; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.4); max-width:850px; text-align:center; border:1px solid var(--border); position:relative; overflow:hidden; }
-    .start-box::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--primary), var(--accent), var(--primary)); }
-    .start-box h1 { color:#fff; margin-bottom:8px; font-size:2.8em; font-family:'IBM Plex Mono',monospace; letter-spacing:2px; }
-    .start-box h1 span { color:var(--primary); }
-    .start-box .subtitle { font-size:1em; color:#4a5c7a; margin-bottom:30px; font-family:'IBM Plex Mono',monospace; letter-spacing:3px; text-transform:uppercase; }
-    .start-box p { font-size:1.15em; line-height:1.7; color:#6a7e96; margin:25px 0; }
-    .start-box .stats { display:flex; justify-content:center; gap:40px; margin:30px 0; }
-    .start-box .stat { text-align:center; }
-    .start-box .stat-num { font-size:2.2em; font-weight:900; color:var(--primary); font-family:'IBM Plex Mono',monospace; }
-    .start-box .stat-label { font-size:0.85em; color:#4a5c7a; text-transform:uppercase; letter-spacing:2px; margin-top:4px; }
-    .score-circle { width:200px; height:200px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:3.8em; font-weight:900; color:white; margin:20px auto; box-shadow:0 10px 30px rgba(0,0,0,0.3); font-family:'IBM Plex Mono',monospace; background:linear-gradient(135deg, #0a2838, #0f3460); border:6px solid #0a1e30; }
-    .review-item { text-align:left; background:var(--card); padding:22px; margin-bottom:16px; border-radius:10px; border-left:6px solid #2a3e5a; width:100%; max-width:800px; box-shadow:0 2px 10px rgba(0,0,0,0.2); border:1px solid var(--border); }
-    .review-item.correct { border-left-color:var(--success); }
-    .review-item.wrong { border-left-color:var(--danger); }
-    .review-item strong { color:#dde6f0; }
-    .review-explanation { margin-top:12px; font-size:0.92em; color:#7a94b0; background:rgba(30,144,255,0.08); padding:14px; border-radius:6px; border:1px solid rgba(30,144,255,0.15); }
-    #status { font-weight:700; color:#4a5c7a; font-size:1.05em; font-family:'IBM Plex Mono',monospace; }
-    .code { font-family:'IBM Plex Mono',monospace; background:rgba(0,200,150,0.08); padding:2px 6px; border-radius:3px; font-size:0.92em; color:#00c896; }
-</style>
-</head>
-<body>
-
-<div id="start-screen">
-    <div class="center-wrapper">
-        <div class="start-box">
-            <h1><span>CREST</span> CRT</h1>
-            <div class="subtitle">Registered Penetration Tester</div>
-            <div class="stats">
-                <div class="stat"><div class="stat-num">120</div><div class="stat-label">Questions</div></div>
-                <div class="stat"><div class="stat-num">Self-paced</div><div class="stat-label">No Timer</div></div>
-            </div>
-            <p>
-                Based on the official CREST CRT Syllabus v2.0 covering all assessed domains:
-                Core Technical Skills, Reconnaissance, Networks, Network Services,
-                Windows &amp; Linux Assessment, Web Technologies &amp; Databases.<br>
-                <em style="color:#4a5c7a;">Questions selected from a pool of 200+. Explanation shown after each answer.</em>
-            </p>
-            <button class="btn btn-p" onclick="initExam()" style="padding:16px 55px; font-size:1.25em; margin-top:10px;">Start Quiz</button>
-        </div>
-    </div>
-</div>
-
-<div class="header">
-    <div class="header-title"><span>CREST</span> CRT Quiz <span class="sub">// Syllabus v2.0</span></div>
-    <div id="progress-display" class="progress-text">0 / 120</div>
-</div>
-
-<div class="main" id="exam-ui" style="display:none;">
-    <div class="sidebar" id="sidebar"></div>
-    <div class="content" id="question-container"></div>
-</div>
-
-<div class="footer" id="footer" style="display:none;">
-    <div><button class="btn btn-s" onclick="nav(-1)">Previous</button> <button class="btn btn-w" onclick="flag()" style="margin-left:10px;">Flag</button></div>
-    <div id="status">Q 1 / 120</div>
-    <div><button class="btn btn-g" id="finish-btn" onclick="finish()" style="display:none;">Finish Quiz</button></div>
-</div>
-
-<div id="results-screen" style="display:none;">
-    <div class="center-wrapper" style="justify-content:flex-start; padding-top:50px;">
-        <div style="background:var(--card); padding:40px; border-radius:12px; max-width:800px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,0.3); text-align:center; border:1px solid var(--border);">
-            <h1 style="margin:0; color:#fff; font-family:'IBM Plex Mono',monospace;">Quiz Results</h1>
-            <div id="score-circle" class="score-circle">0%</div>
-            <div id="raw-score" style="font-size:1.2em; color:#6a7e96; margin-bottom:25px; font-family:'IBM Plex Mono',monospace;"></div>
-            <button class="btn btn-p" onclick="location.reload()">Take New Quiz</button>
-        </div>
-        <div id="review-list" style="width:100%; max-width:800px; margin-top:25px;"></div>
-    </div>
-</div>
-
-<script>
-// ==============================================================
-// CREST CRT QUIZ — BASED ON SYLLABUS V2.0 — ALL OPTIONS BALANCED
-// ==============================================================
-const pool = [
+const MASTER_POOL = [
     // ===== A: CORE TECHNICAL SKILLS (12 questions) =====
     {c:"Core Technical Skills", q:"During an infrastructure penetration test, you run an Nmap SYN scan against a target and receive no response on a particular port. What is the most accurate interpretation of this result?", a:"The port is likely filtered by a firewall that is silently dropping the SYN packets.", d:["The port is definitively closed and the service behind it is not running at all.", "The host is offline and not responding to any type of network traffic at all.", "The port is open but the service is configured to ignore SYN-only packets."], e:"When Nmap receives no response to a SYN probe, it marks the port as 'filtered'. A closed port would return a RST/ACK. No response typically indicates a firewall is silently dropping the packet."},
     {c:"Core Technical Skills", q:"You need to fingerprint a remote operating system without sending any packets to the target. Which technique should you use?", a:"Passive OS fingerprinting by analysing network traffic characteristics like TTL and window size.", d:["Active OS fingerprinting using Nmap's -O flag to send specially crafted TCP/IP probe packets.", "Banner grabbing by connecting to open services and reading the version strings that are returned.", "Running a vulnerability scan with authenticated credentials to read system information remotely."], e:"Passive OS fingerprinting analyses existing network traffic (e.g. using p0f) to determine the OS from TCP/IP stack characteristics like default TTL, window size, and DF bit settings without generating any traffic."},
@@ -188,7 +65,7 @@ const pool = [
     {c:"Network Services", q:"What does it mean when a TLS-enabled service is found to support the TLS_RSA_WITH_RC4_128_SHA cipher suite?", a:"The server uses RSA key exchange without forward secrecy and the deprecated RC4 stream cipher.", d:["The server employs a modern authenticated encryption mode with RSA signatures for key verification.", "The server requires mutual TLS authentication with both client and server certificates for each session.", "The server is configured with the strongest available cipher suite including perfect forward secrecy."], e:"This cipher suite uses static RSA key exchange (no forward secrecy — if the server key is compromised, all past traffic can be decrypted) and the RC4 cipher (deprecated due to known biases). Both are significant weaknesses."},
 
     // ===== E: WINDOWS SECURITY ASSESSMENT (20 questions) =====
-    {c:"Windows Assessment", q:"You have gained access to a Windows host and want to extract password hashes from the local SAM database. Which tool would you use?", a:"Use a tool like secretsdump, mimikatz, or reg save to extract SAM and SYSTEM hive files for offline cracking.", d:["Run the 'net user' command with the /hashes flag to display password hashes for all local user accounts.", "Access the SAM file directly at C:\\Windows\\System32\\config\\SAM while the operating system is running.", "Use PowerShell's Get-Credential cmdlet to retrieve stored password hashes from the Windows Credential Store."], e:"The SAM database is locked while Windows is running. Tools like secretsdump (Impacket), mimikatz (lsadump::sam), or copying the SAM/SYSTEM registry hives via 'reg save' allow offline hash extraction. This is a core CRT post-exploitation skill."},
+    {c:"Windows Assessment", q:"You have gained access to a Windows host and want to extract password hashes from the local SAM database. Which tool would you use?", a:"Use a tool like secretsdump, mimikatz, or reg save to extract SAM and SYSTEM hive files for offline cracking.", d:["Run the 'net user' command with the /hashes flag to display password hashes for all local user accounts.", "Access the SAM file directly at C:\Windows\System32\config\SAM while the operating system is running.", "Use PowerShell's Get-Credential cmdlet to retrieve stored password hashes from the Windows Credential Store."], e:"The SAM database is locked while Windows is running. Tools like secretsdump (Impacket), mimikatz (lsadump::sam), or copying the SAM/SYSTEM registry hives via 'reg save' allow offline hash extraction. This is a core CRT post-exploitation skill."},
     {c:"Windows Assessment", q:"During Active Directory enumeration, you discover a user account with a Service Principal Name (SPN) set. What attack does this enable?", a:"Kerberoasting — requesting a TGS ticket for the SPN and cracking the service account's password offline.", d:["Pass-the-Hash — using the user's NTLM hash to authenticate to other services across the domain.", "Golden Ticket — forging Kerberos TGT tickets to impersonate any user within the Active Directory forest.", "DCSync — replicating the domain controller's password database using the account's replication privileges."], e:"Accounts with SPNs registered in AD are vulnerable to Kerberoasting. Any authenticated domain user can request a TGS ticket for the service, which is encrypted with the service account's password hash and can be cracked offline."},
     {c:"Windows Assessment", q:"You have obtained NTLM password hashes from a compromised Windows host. The hashes begin with 'aad3b435b51404eeaad3b435b51404ee'. What does this tell you?", a:"The LANMAN hash portion is blank, indicating the password is longer than 14 characters or LM hashing is disabled.", d:["The password is empty and the account can be accessed without providing any authentication credentials.", "The hash is corrupted and cannot be used for either pass-the-hash attacks or offline cracking attempts.", "The account uses a smartcard for authentication and the password hash field is a reserved placeholder."], e:"'aad3b435b51404ee' is the LM hash of an empty string. When LM hashing is disabled (default on modern Windows), this placeholder appears. The NT hash (second half) is the one that matters for cracking or pass-the-hash attacks."},
     {c:"Windows Assessment", q:"You need to enumerate Active Directory users and groups from a Linux attack machine. Which tool is most appropriate?", a:"Use ldapsearch or Impacket's GetADUsers.py to query the domain controller's LDAP service directly.", d:["Run enum4linux against the domain controller to retrieve user listings via the SMB null session method.", "Use nmap's LDAP scripts which automatically dump the entire Active Directory forest object hierarchy.", "Install RSAT tools under Wine on your Linux machine to run Active Directory Users and Computers remotely."], e:"ldapsearch allows direct LDAP queries against the domain controller to enumerate users, groups, OUs, SPNs, and other AD objects. Impacket provides purpose-built Python tools for AD enumeration from Linux."},
@@ -198,15 +75,15 @@ const pool = [
     {c:"Windows Assessment", q:"During a Windows assessment, you discover that the AlwaysInstallElevated registry key is set to 1 in both HKLM and HKCU. What does this mean?", a:"Any user can install MSI packages with SYSTEM privileges, enabling trivial privilege escalation.", d:["Windows Installer is disabled and no software can be installed by any user including administrators.", "MSI packages require a digital signature from Microsoft before they can be executed on the system.", "Elevated installations are logged with enhanced audit detail but standard installation privileges apply."], e:"When AlwaysInstallElevated is set to 1 in both HKLM and HKCU, any user can install .msi packages with SYSTEM privileges. An attacker can create a malicious MSI package containing a payload to escalate to SYSTEM."},
     {c:"Windows Assessment", q:"You need to perform RID cycling against a Windows domain controller. What does this technique accomplish?", a:"Enumerating user and group accounts by incrementally querying Security Identifiers via anonymous sessions.", d:["Cracking password hashes by cycling through Rainbow tables indexed by the account's Relative Identifier.", "Bypassing Kerberos pre-authentication by replaying previously captured RID-based authentication tokens.", "Escalating domain privileges by modifying the Relative Identifier value in your current access token."], e:"RID cycling uses anonymous SMB (null session) access to query SIDs with incrementing RIDs (500 for Administrator, 501 for Guest, 1000+ for user accounts). This enumerates domain accounts without authentication."},
     {c:"Windows Assessment", q:"What is the purpose of extracting Group Policy Objects (GPOs) during an Active Directory penetration test?", a:"GPOs may contain stored credentials, mapped drives, scheduled tasks, and security policy configurations.", d:["GPOs only define desktop wallpaper settings and screen saver timeouts with no security relevance.", "GPO extraction triggers a domain-wide alert, so it is used specifically to test incident response speed.", "GPOs contain the master encryption keys for BitLocker, allowing offline decryption of all domain drives."], e:"GPOs can contain Group Policy Preferences (GPP) with stored credentials (cpassword), reveal security policies, software deployment settings, login scripts, mapped drives, and scheduled tasks — all valuable for privilege escalation."},
-    {c:"Windows Assessment", q:"You discover an unquoted service path on a Windows system: 'C:\\Program Files\\My App\\Service\\service.exe'. How can this be exploited?", a:"Place a malicious executable named 'My.exe' in C:\\Program Files\\ to be executed instead of the service.", d:["Modify the executable name in the service configuration to point to your payload file using sc.exe.", "Inject a DLL named service.dll into the same directory to be loaded when the legitimate service starts.", "Rename the legitimate service binary and replace it with your payload using the same original filename."], e:"Windows resolves unquoted paths with spaces by trying each possible path segment. For 'C:\\Program Files\\My App\\Service\\service.exe', Windows tries 'C:\\Program.exe', then 'C:\\Program Files\\My.exe', etc. Placing an executable at these paths hijacks execution."},
+    {c:"Windows Assessment", q:"You discover an unquoted service path on a Windows system: 'C:\Program Files\My App\Service\service.exe'. How can this be exploited?", a:"Place a malicious executable named 'My.exe' in C:\Program Files\ to be executed instead of the service.", d:["Modify the executable name in the service configuration to point to your payload file using sc.exe.", "Inject a DLL named service.dll into the same directory to be loaded when the legitimate service starts.", "Rename the legitimate service binary and replace it with your payload using the same original filename."], e:"Windows resolves unquoted paths with spaces by trying each possible path segment. For 'C:\Program Files\My App\Service\service.exe', Windows tries 'C:\Program.exe', then 'C:\Program Files\My.exe', etc. Placing an executable at these paths hijacks execution."},
     {c:"Windows Assessment", q:"What Windows command would you use to identify all running services and their associated executable paths during a local assessment?", a:"Run 'wmic service get name,pathname,startmode' or use 'sc query' with PowerShell's Get-WmiObject.", d:["Execute 'tasklist /svc' to display all service executables alongside their full file system path details.", "Use 'netstat -anob' to list all services by their network connections and associated binary file paths.", "Run 'systeminfo' with the /services flag to generate a complete report of installed services and paths."], e:"'wmic service get name,pathname,startmode' returns service names, executable paths, and start modes. This is essential for identifying unquoted service paths and writable binary locations for privilege escalation."},
     {c:"Windows Assessment", q:"You have domain user credentials and want to check if any domain accounts have Kerberos pre-authentication disabled. Why is this important?", a:"Accounts without pre-authentication can have their AS-REP encrypted data requested and cracked offline.", d:["These accounts bypass Kerberos entirely and authenticate using cleartext NTLM over the network.", "Disabling pre-authentication grants the account unconditional access to all domain resources and shares.", "Accounts without pre-authentication cannot change their passwords, so they use a permanent static key."], e:"AS-REP Roasting targets accounts with 'Do not require Kerberos preauthentication' set. Without pre-auth, anyone can request an AS-REP encrypted with the user's password hash and crack it offline — no authentication required."},
     {c:"Windows Assessment", q:"During a Windows assessment, you find the WSUS (Windows Server Update Services) server communicating over HTTP. What attack does this enable?", a:"Man-in-the-middle injection of malicious updates that execute with SYSTEM privileges on client machines.", d:["Direct exploitation of the WSUS server to distribute ransomware to all managed domain workstations.", "Downloading the complete list of missing patches for every client to plan targeted exploitation attacks.", "Hijacking the WSUS administrator session to approve a backdoored update for domain-wide deployment."], e:"If WSUS uses HTTP instead of HTTPS, an attacker in a MITM position can intercept update requests and inject malicious updates (e.g., using WSUSpendu/SharpWSUS) that execute as SYSTEM on target machines."},
-    {c:"Windows Assessment", q:"You need to determine the patch level of a compromised Windows host. What is the most reliable method?", a:"Run 'systeminfo' or 'wmic qfe list' to enumerate all installed hotfixes and their KB article numbers.", d:["Check the Windows version number in the About dialog, as it reflects the cumulative update level.", "Review the Windows Update log file at C:\\Windows\\Logs\\WindowsUpdate.log for the latest update entry.", "Query the registry key HKLM\\SOFTWARE\\Microsoft\\Updates for the most recently applied service pack."], e:"'systeminfo' and 'wmic qfe list' provide comprehensive lists of installed patches and hotfixes with KB numbers and installation dates. These can be cross-referenced against known exploits to identify missing critical patches."},
+    {c:"Windows Assessment", q:"You need to determine the patch level of a compromised Windows host. What is the most reliable method?", a:"Run 'systeminfo' or 'wmic qfe list' to enumerate all installed hotfixes and their KB article numbers.", d:["Check the Windows version number in the About dialog, as it reflects the cumulative update level.", "Review the Windows Update log file at C:\Windows\Logs\WindowsUpdate.log for the latest update entry.", "Query the registry key HKLM\SOFTWARE\Microsoft\Updates for the most recently applied service pack."], e:"'systeminfo' and 'wmic qfe list' provide comprehensive lists of installed patches and hotfixes with KB numbers and installation dates. These can be cross-referenced against known exploits to identify missing critical patches."},
     {c:"Windows Assessment", q:"What technique allows you to extract cleartext passwords from a running Windows system's memory?", a:"Use mimikatz to access LSASS process memory and extract credentials stored by WDigest or Kerberos.", d:["Read the SAM registry hive directly while the system is running to decode the stored plaintext passwords.", "Dump the pagefile.sys to disk and parse it for password strings that were swapped out of memory.", "Run 'net user' with debug privileges to retrieve password hashes and reverse them to their plaintext."], e:"Mimikatz can extract cleartext credentials from the LSASS process memory, particularly when WDigest authentication is enabled (default on older systems). It can also extract Kerberos tickets, NTLM hashes, and PIN codes."},
     {c:"Windows Assessment", q:"You discover a Windows service running with a writable DACL that allows SERVICE_ALL_ACCESS to your user. How can you escalate privileges?", a:"Modify the service configuration to change the binary path to your payload and restart the service.", d:["Read the service's stored credentials to obtain the password of the account the service runs under.", "Inject a malicious thread into the service process using the WriteProcessMemory Windows API function.", "Stop the service permanently to trigger a failover that executes an alternate binary with elevated rights."], e:"With SERVICE_ALL_ACCESS (or SERVICE_CHANGE_CONFIG), you can use 'sc config <service> binpath= \"cmd /c <payload>\"' to change the service binary path to execute your payload, which runs with the service account's privileges."},
     {c:"Windows Assessment", q:"During an internal penetration test, you capture NTLMv2 hashes using Responder. Which is faster to crack — NTLMv2 or Net-NTLMv2?", a:"These are the same thing — 'Net-NTLMv2' and 'NTLMv2 hash' refer to the challenge-response captured on the wire.", d:["NTLMv2 is faster to crack because it uses a simpler hashing algorithm than the network-captured variant.", "Net-NTLMv2 is faster because the challenge is known, reducing the brute-force search space significantly.", "Neither can be cracked offline; both must be relayed in real-time to authenticate against other services."], e:"'Net-NTLMv2' (the challenge-response hash captured via Responder) and 'NTLMv2 hash' in capture context refer to the same thing. Both can be cracked offline using hashcat mode 5600, though they are significantly slower to crack than raw NTLM hashes."},
-    {c:"Windows Assessment", q:"You have compromised a domain user account and want to enumerate all hosts where you have local administrator privileges. What tool would you use?", a:"Use BloodHound or CrackMapExec to map admin access relationships across domain-joined systems.", d:["Run 'net view /domain' from a command prompt to list all machines where your account has admin access.", "Query the Domain Controller's LDAP for the AdminSDHolder object which lists all admin-accessible hosts.", "Use Group Policy Results (gpresult) to check which machines have granted your account elevated rights."], e:"BloodHound analyses AD relationships to find attack paths. CrackMapExec (CME) can test admin access across multiple hosts by attempting authenticated SMB connections. Both are standard tools for mapping lateral movement opportunities."},
+    {c:"Windows Assessment", q:"You have compromised a domain user account and want to enumerate all hosts where you have local administrator privileges. What tool would you use?", a:"Use BloodHound or CrackMapExec to map admin access relationships across domain-joined systems.", d:["Run 'net view /domain' from a command prompt to list all machines where your account has admin access.", "Query the Domain Controller's LDAP for the AdminSDHolder object which list all admin-accessible hosts.", "Use Group Policy Results (gpresult) to check which machines have granted your account elevated rights."], e:"BloodHound analyses AD relationships to find attack paths. CrackMapExec (CME) can test admin access across multiple hosts by attempting authenticated SMB connections. Both are standard tools for mapping lateral movement opportunities."},
     {c:"Windows Assessment", q:"What is the DLL search order hijacking technique, and why is it relevant during a Windows assessment?", a:"Windows searches for DLLs in a predictable order, so placing a malicious DLL in a higher-priority location hijacks loading.", d:["DLL hijacking involves modifying an existing system DLL in System32 to include backdoor code for persistence.", "The technique exploits a race condition in the DLL loading process to swap a legitimate DLL mid-execution.", "DLL hijacking requires administrative privileges to modify the system PATH variable and redirect DLL lookups."], e:"Windows searches for DLLs in a specific order: application directory, current directory, system directories, PATH directories. If an application loads a DLL without specifying its full path, placing a malicious DLL in a higher-priority search location causes it to be loaded instead."},
 
     // ===== F: LINUX/UNIX SECURITY ASSESSMENT (15 questions) =====
@@ -258,150 +135,3 @@ const pool = [
     {c:"Databases", q:"What is a common method for identifying the database version during a blind SQL injection attack?", a:"Use conditional statements that return different responses based on version-specific functions or variables.", d:["Blind SQL injection cannot be used to determine the database type or version under any circumstances.", "Send a UNION SELECT with the VERSION() function, as all database platforms support this exact syntax.", "Trigger a deliberate syntax error and extract the database version from the detailed error message text."], e:"In blind SQLi, conditional logic like IF(SUBSTRING(@@version,1,1)='5', SLEEP(5), 0) (MySQL) or CASE WHEN (SELECT version()) LIKE 'PostgreSQL%' THEN pg_sleep(5) END allows version detection through timing or Boolean responses."},
     {c:"Databases", q:"You discover a web application using JDBC connection strings stored in a configuration file. What sensitive information might these contain?", a:"Database server addresses, port numbers, database names, and potentially cleartext usernames and passwords.", d:["Only the database driver class name and the JDBC API version number used by the application connector.", "The SQL queries that the application will execute, including all parameterised stored procedure definitions.", "The database schema definition and table structures but not any authentication or connection credentials."], e:"JDBC connection strings typically follow the format 'jdbc:type://host:port/dbname?user=X&password=Y'. They can contain server addresses, ports, database names, and credentials. The CRT syllabus covers recognition of 'common database connection string formats, e.g. JDBC, ODBC'."}
 ];
-
-// ==============================================================
-// ENGINE
-// ==============================================================
-const TOTAL = 120;
-let examQs = [], answered = {}, userAns = {}, flagged = {}, curr = 0;
-
-function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-}
-
-function initExam() {
-    const shuffled = shuffle([...pool]);
-    examQs = shuffled.slice(0, TOTAL);
-    answered = {}; userAns = {}; flagged = {}; curr = 0;
-
-    examQs.forEach((q, i) => {
-        const opts = shuffle([q.a, ...q.d]);
-        examQs[i]._opts = opts;
-    });
-
-    document.getElementById('start-screen').style.display='none';
-    document.getElementById('results-screen').style.display='none';
-    document.getElementById('exam-ui').style.display='flex';
-    document.getElementById('footer').style.display='flex';
-
-    renderSide(); loadQ(0); updateProgress();
-}
-
-function updateProgress() {
-    const cnt = Object.keys(answered).length;
-    document.getElementById('progress-display').innerText = `${cnt} / ${TOTAL}`;
-    document.getElementById('finish-btn').style.display = cnt === TOTAL ? 'inline-block' : 'none';
-}
-
-function renderSide() {
-    const sb = document.getElementById('sidebar'); sb.innerHTML='';
-    examQs.forEach((q,i) => {
-        const b = document.createElement('button');
-        b.className = 'nav-btn'; b.innerText = i+1;
-        b.id = `nav-${i}`; b.onclick = () => loadQ(i);
-        sb.appendChild(b);
-    });
-}
-
-function loadQ(i) {
-    curr = i;
-    const q = examQs[i];
-
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`nav-${i}`).classList.add('active');
-    document.getElementById('status').innerText = `Q ${i+1} / ${TOTAL}`;
-
-    const con = document.getElementById('question-container'); con.innerHTML='';
-    const card = document.createElement('div'); card.className='card';
-
-    let html = `<div class="q-meta"><span class="tag">${q.c}</span><span class="q-num">#${i+1}</span></div><div class="q-text">${q.q}</div>`;
-
-    const isAnswered = answered[i] !== undefined;
-
-    q._opts.forEach((o, oi) => {
-        let cls = 'option';
-        if (isAnswered) {
-            cls += ' locked';
-            if (o === q.a) cls += ' opt-correct';
-            else if (o === userAns[i]) cls += ' opt-wrong';
-            else cls += ' opt-dim';
-        }
-        const clickHandler = isAnswered ? '' : `onclick="ans(${i}, ${oi})"`;
-        html += `<div class="${cls}" ${clickHandler}>${o}</div>`;
-    });
-
-    if (isAnswered) {
-        const wasCorrect = userAns[i] === q.a;
-        html += `<div class="explanation-box"><strong>${wasCorrect ? '✓ Correct' : '✗ Incorrect'}</strong><br>${q.e}</div>`;
-        if (i < TOTAL - 1) {
-            html += `<div class="next-btn-wrap"><button class="btn btn-p" onclick="loadQ(${i+1})">Next Question →</button></div>`;
-        }
-    }
-
-    card.innerHTML = html; con.appendChild(card);
-    con.scrollTop = 0;
-}
-
-function ans(qi, optIdx) {
-    const q = examQs[qi];
-    userAns[qi] = q._opts[optIdx];
-    answered[qi] = true;
-
-    const navBtn = document.getElementById(`nav-${qi}`);
-    if (userAns[qi] === q.a) {
-        navBtn.classList.add('answered-correct');
-    } else {
-        navBtn.classList.add('answered-wrong');
-    }
-
-    loadQ(qi);
-    updateProgress();
-}
-
-function nav(d) {
-    const n = curr + d;
-    if(n >= 0 && n < TOTAL) loadQ(n);
-}
-
-function flag() {
-    flagged[curr] = !flagged[curr];
-    const b = document.getElementById(`nav-${curr}`);
-    if(flagged[curr]) b.classList.add('flagged'); else b.classList.remove('flagged');
-}
-
-function finish() {
-    if(!confirm('Finish the quiz and see your results?')) return;
-    document.getElementById('exam-ui').style.display='none';
-    document.getElementById('footer').style.display='none';
-
-    const resScreen = document.getElementById('results-screen');
-    resScreen.style.display='block';
-    resScreen.scrollTop = 0;
-
-    let score = 0;
-    let html = '';
-
-    examQs.forEach((q, i) => {
-        const correct = userAns[i] === q.a;
-        if(correct) score++;
-        html += `<div class="review-item ${correct?'correct':'wrong'}">
-            <strong>Q${i+1} [${q.c}]: ${q.q}</strong><br>
-            Your Answer: <b style="color:${correct?'#4ade80':'#f87171'}">${userAns[i]||'Skipped'}</b><br>
-            ${!correct ? `Correct Answer: <b style="color:#4ade80">${q.a}</b>` : ''}
-            <div class="review-explanation">Rationale: ${q.e}</div>
-        </div>`;
-    });
-
-    const pct = Math.round((score/TOTAL)*100);
-
-    document.getElementById('score-circle').innerText = `${pct}%`;
-    document.getElementById('raw-score').innerText = `You answered ${score} out of ${TOTAL} questions correctly.`;
-    document.getElementById('review-list').innerHTML = html;
-}
-</script>
-</body>
-</html>

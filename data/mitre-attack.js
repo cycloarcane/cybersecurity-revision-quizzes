@@ -1,129 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MITRE ATT&CK Framework Knowledge Quiz</title>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Outfit:wght@400;500;600;700;900&display=swap');
-    :root { --header:#120a1e; --bg:#0a0612; --white:#1a1028; --primary:#bf5af2; --success:#30d158; --danger:#ff453a; --warning:#ffd60a; --text:#c8c0d8; --card:#14101f; --accent:#0a84ff; --border:#2a1e3e; }
-    ::-webkit-scrollbar { width:10px; } ::-webkit-scrollbar-track { background:#06030c; } ::-webkit-scrollbar-thumb { background:#bf5af2; border-radius:5px; border:2px solid #06030c; }
-    * { box-sizing:border-box; }
-    body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text); margin:0; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
-    .header { background:linear-gradient(135deg, #120a1e 0%, #1a1028 50%, #180e28 100%); color:#fff; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 20px rgba(191,90,242,0.1); flex-shrink:0; z-index:10; border-bottom:2px solid var(--primary); }
-    .header-title { font-family:'Fira Code',monospace; font-size:1.3em; font-weight:700; letter-spacing:1px; }
-    .header-title span { color:var(--primary); }
-    .header-title .sub { color:#5a4e6e; font-size:0.65em; letter-spacing:2px; }
-    .progress-text { font-family:'Fira Code',monospace; font-size:1.1em; font-weight:700; color:var(--warning); background:rgba(0,0,0,0.4); padding:6px 18px; border-radius:6px; border:1px solid rgba(255,214,10,0.25); }
-    .main { display:flex; flex:1; overflow:hidden; }
-    .sidebar { width:260px; background:#0d0818; border-right:1px solid var(--border); overflow-y:auto; padding:12px; display:grid; grid-template-columns:repeat(5,1fr); gap:6px; align-content:start; flex-shrink:0; }
-    .nav-btn { height:34px; border:1px solid var(--border); background:#140e20; cursor:pointer; font-weight:700; font-size:0.82em; border-radius:5px; transition:all 0.15s; color:#4a3e60; font-family:'Fira Code',monospace; }
-    .nav-btn:hover { background:#221838; color:#a090c0; border-color:#bf5af2; }
-    .nav-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 0 10px rgba(191,90,242,0.4); }
-    .nav-btn.answered-correct { background:#0a2010; border-color:var(--success); color:#4ade80; }
-    .nav-btn.answered-wrong { background:#2d0a0a; border-color:var(--danger); color:#f87171; }
-    .nav-btn.flagged { border:2px solid var(--warning); box-shadow:0 0 8px rgba(255,214,10,0.3); }
-    .content { flex:1; padding:35px; overflow-y:auto; display:flex; justify-content:center; align-items:flex-start; }
-    .card { background:var(--card); max-width:900px; width:100%; padding:45px; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.3); margin-bottom:40px; border:1px solid var(--border); }
-    .q-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; border-bottom:1px solid var(--border); padding-bottom:14px; }
-    .tag { background:var(--primary); color:#fff; padding:5px 14px; border-radius:20px; font-size:0.72em; font-weight:700; text-transform:uppercase; letter-spacing:1px; font-family:'Fira Code',monospace; }
-    .q-num { color:#3e3458; font-family:'Fira Code',monospace; font-size:0.9em; }
-    .q-text { font-size:1.25em; font-weight:600; margin-bottom:30px; line-height:1.55; color:#e0d8ee; }
-    .option { width:100%; text-align:left; padding:16px 22px; margin-bottom:12px; background:#0d0818; border:2px solid var(--border); border-radius:8px; cursor:pointer; font-size:1.05em; transition:all 0.2s; color:#9088a8; display:block; font-family:'Outfit',sans-serif; }
-    .option:hover:not(.locked) { border-color:#bf5af2; background:#1a1230; color:#c8c0d8; }
-    .option.locked { cursor:default; }
-    .option.opt-correct { border-color:var(--success); background:rgba(48,209,88,0.08); color:#4ade80; font-weight:700; }
-    .option.opt-wrong { border-color:var(--danger); background:rgba(255,69,58,0.06); color:#f87171; }
-    .option.opt-dim { opacity:0.4; }
-    .explanation-box { margin-top:24px; padding:18px 22px; background:rgba(10,132,255,0.06); border:1px solid rgba(10,132,255,0.18); border-radius:8px; font-size:1em; color:#8ab0d8; line-height:1.6; }
-    .explanation-box strong { color:#a0c8f0; }
-    .next-btn-wrap { text-align:center; margin-top:22px; }
-    .footer { background:#0d0818; padding:14px 35px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
-    .btn { padding:11px 28px; border:none; border-radius:6px; font-size:1.05em; font-weight:700; cursor:pointer; color:white; font-family:'Outfit',sans-serif; transition:all 0.2s; }
-    .btn:hover { transform:translateY(-1px); }
-    .btn-s { background:#221838; } .btn-s:hover { background:#302448; }
-    .btn-p { background:var(--primary); } .btn-p:hover { background:#a848d8; }
-    .btn-w { background:var(--warning); color:#111; } .btn-w:hover { background:#e0c000; }
-    .btn-g { background:var(--success); color:#000; } .btn-g:hover { background:#28b848; }
-    #start-screen, #results-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:2000; overflow-y:auto; }
-    .center-wrapper { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:40px; box-sizing:border-box; }
-    .start-box { background:var(--card); padding:60px; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.4); max-width:850px; text-align:center; border:1px solid var(--border); position:relative; overflow:hidden; }
-    .start-box::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--primary), var(--accent), var(--primary)); }
-    .start-box h1 { color:#fff; margin-bottom:8px; font-size:2.8em; font-family:'Fira Code',monospace; letter-spacing:2px; }
-    .start-box h1 span { color:var(--primary); }
-    .start-box .subtitle { font-size:1em; color:#5a4e6e; margin-bottom:30px; font-family:'Fira Code',monospace; letter-spacing:3px; text-transform:uppercase; }
-    .start-box p { font-size:1.15em; line-height:1.7; color:#6a5e80; margin:25px 0; }
-    .start-box .stats { display:flex; justify-content:center; gap:40px; margin:30px 0; }
-    .start-box .stat { text-align:center; }
-    .start-box .stat-num { font-size:2.2em; font-weight:900; color:var(--primary); font-family:'Fira Code',monospace; }
-    .start-box .stat-label { font-size:0.85em; color:#5a4e6e; text-transform:uppercase; letter-spacing:2px; margin-top:4px; }
-    .score-circle { width:200px; height:200px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:3.8em; font-weight:900; color:white; margin:20px auto; box-shadow:0 10px 30px rgba(0,0,0,0.3); font-family:'Fira Code',monospace; background:linear-gradient(135deg, #1a0e30, #2a1848); border:6px solid #1a0e30; }
-    .review-item { text-align:left; background:var(--card); padding:22px; margin-bottom:16px; border-radius:10px; border-left:6px solid #2a1e3e; width:100%; max-width:800px; box-shadow:0 2px 10px rgba(0,0,0,0.2); border:1px solid var(--border); }
-    .review-item.correct { border-left-color:var(--success); }
-    .review-item.wrong { border-left-color:var(--danger); }
-    .review-item strong { color:#e0d8ee; }
-    .review-explanation { margin-top:12px; font-size:0.92em; color:#7a6e98; background:rgba(10,132,255,0.06); padding:14px; border-radius:6px; border:1px solid rgba(10,132,255,0.12); }
-    #status { font-weight:700; color:#5a4e6e; font-size:1.05em; font-family:'Fira Code',monospace; }
-</style>
-</head>
-<body>
-
-<div id="start-screen">
-    <div class="center-wrapper">
-        <div class="start-box">
-            <h1>MITRE <span>ATT&CK</span></h1>
-            <div class="subtitle">Enterprise Framework Knowledge</div>
-            <div class="stats">
-                <div class="stat"><div class="stat-num">120</div><div class="stat-label">Questions</div></div>
-                <div class="stat"><div class="stat-num">Self-paced</div><div class="stat-label">No Timer</div></div>
-            </div>
-            <p>
-                Covers all 14 Enterprise Tactics: Reconnaissance, Resource Development, Initial Access,
-                Execution, Persistence, Privilege Escalation, Defense Evasion, Credential Access,
-                Discovery, Lateral Movement, Collection, Command &amp; Control, Exfiltration &amp; Impact.<br>
-                Includes framework fundamentals, technique IDs, real-world procedures &amp; detection.<br>
-                <em style="color:#5a4e6e;">Questions selected from a pool of 150+. Explanation shown after each answer.</em>
-            </p>
-            <button class="btn btn-p" onclick="initExam()" style="padding:16px 55px; font-size:1.25em; margin-top:10px;">Start Quiz</button>
-        </div>
-    </div>
-</div>
-
-<div class="header">
-    <div class="header-title">MITRE <span>ATT&CK</span> Quiz <span class="sub">// Enterprise</span></div>
-    <div id="progress-display" class="progress-text">0 / 120</div>
-</div>
-
-<div class="main" id="exam-ui" style="display:none;">
-    <div class="sidebar" id="sidebar"></div>
-    <div class="content" id="question-container"></div>
-</div>
-
-<div class="footer" id="footer" style="display:none;">
-    <div><button class="btn btn-s" onclick="nav(-1)">Previous</button> <button class="btn btn-w" onclick="flag()" style="margin-left:10px;">Flag</button></div>
-    <div id="status">Q 1 / 120</div>
-    <div><button class="btn btn-g" id="finish-btn" onclick="finish()" style="display:none;">Finish Quiz</button></div>
-</div>
-
-<div id="results-screen" style="display:none;">
-    <div class="center-wrapper" style="justify-content:flex-start; padding-top:50px;">
-        <div style="background:var(--card); padding:40px; border-radius:12px; max-width:800px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,0.3); text-align:center; border:1px solid var(--border);">
-            <h1 style="margin:0; color:#fff; font-family:'Fira Code',monospace;">Quiz Results</h1>
-            <div id="score-circle" class="score-circle">0%</div>
-            <div id="raw-score" style="font-size:1.2em; color:#6a5e80; margin-bottom:25px; font-family:'Fira Code',monospace;"></div>
-            <button class="btn btn-p" onclick="location.reload()">Take New Quiz</button>
-        </div>
-        <div id="review-list" style="width:100%; max-width:800px; margin-top:25px;"></div>
-    </div>
-</div>
-
-<script>
 const pool = [
     // ===== FRAMEWORK FUNDAMENTALS (15) =====
     {c:"Framework Fundamentals", q:"What does the acronym ATT&CK stand for in the MITRE ATT&CK framework?", a:"Adversarial Tactics, Techniques, and Common Knowledge — a structured knowledge base of cyber threats.", d:["Advanced Threat Tracking and Comprehensive Knowledge — a database of malware signatures and indicators.", "Automated Threat Taxonomy and Categorised Knowledge — an AI-driven classification system for attacks.", "Adversary Tools, Threats, and Countermeasure Knowledge — a defensive mitigation and patching resource."], e:"ATT&CK stands for Adversarial Tactics, Techniques, and Common Knowledge. It was created by MITRE Corporation and publicly released in 2015 as a knowledge base grounded in real-world observations of adversary behaviour."},
     {c:"Framework Fundamentals", q:"How many tactics are included in the current MITRE ATT&CK Enterprise matrix?", a:"14 tactics, ranging from Reconnaissance through to Impact, covering the full attack lifecycle.", d:["7 tactics, aligned with the original Lockheed Martin Cyber Kill Chain phases and stages.", "10 tactics, matching the OWASP Top 10 categories for web application security vulnerabilities.", "21 tactics, providing one tactic per major operating system and cloud platform in the matrix."], e:"The Enterprise matrix contains 14 tactics: Reconnaissance, Resource Development, Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion, Credential Access, Discovery, Lateral Movement, Collection, Command and Control, Exfiltration, and Impact."},
     {c:"Framework Fundamentals", q:"In MITRE ATT&CK, what is the relationship between a 'tactic' and a 'technique'?", a:"A tactic is the adversary's goal (the 'why'), and a technique is the method used to achieve it (the 'how').", d:["A tactic is a specific tool used in an attack, and a technique is the configuration of that tool.", "A tactic is a detection rule written by defenders, and a technique is the alert it generates.", "A tactic is a vulnerability in software, and a technique is the exploit code that targets it."], e:"Tactics represent the adversary's tactical objective — why they perform an action. Techniques describe how the adversary achieves that objective. For example, the tactic 'Credential Access' can be achieved via the technique 'OS Credential Dumping'."},
-    {c:"Framework Fundamentals", q:"What are 'sub-techniques' in the MITRE ATT&CK framework, and how do they relate to techniques?", a:"Sub-techniques describe more specific implementations of a parent technique in greater detail.", d:["Sub-techniques are deprecated techniques that have been removed from the current framework version.", "Sub-techniques are detection methods that defenders use to identify the parent technique in logs.", "Sub-techniques are alternative names used by different threat intelligence vendors for the same method."], e:"Sub-techniques provide granular detail on specific ways a technique can be implemented. For example, T1003 OS Credential Dumping has sub-techniques like T1003.001 (LSASS Memory), T1003.002 (Security Account Manager), and T1003.003 (NTDS)."},
+    {c:"Framework Fundamentals", q:"What are 'sub-techniques' in the MITRE ATT&CK framework, and how do they relate to techniques?", a:"Sub-techniques describe more specific implementations of a parent technique in greater detail.", d:["Sub-techniques are deprecated techniques that have been removed from the current framework version.", "Sub-techniques are detection methods that defenders use to identify the parent technique in logs.", "Sub-techniques are alternative names used by different threat intelligence vendors for the same method."], e:"Sub-techniques provide granular detail on specific ways a technique can be implemented. For example, T1059 OS Credential Dumping has sub-techniques like T1003.001 (LSASS Memory), T1003.002 (Security Account Manager), and T1003.003 (NTDS)."},
     {c:"Framework Fundamentals", q:"Which three main matrices does MITRE ATT&CK maintain for different operational environments?", a:"Enterprise, Mobile, and Industrial Control Systems (ICS), each tailored to their respective platforms.", d:["Windows, Linux, and macOS, each containing platform-specific techniques and detection guidance.", "Network, Endpoint, and Cloud, organised by the infrastructure layer where attacks are observed.", "Offensive, Defensive, and Hybrid, categorised by whether the action is adversary or defender initiated."], e:"MITRE ATT&CK maintains three matrices: Enterprise (Windows, macOS, Linux, Cloud, Network, Containers), Mobile (Android, iOS), and ICS (Industrial Control Systems). Each covers platform-specific adversary behaviours."},
     {c:"Framework Fundamentals", q:"What platforms does the MITRE ATT&CK Enterprise matrix currently cover?", a:"Windows, macOS, Linux, Cloud (IaaS, SaaS), Network Devices, Containers, Identity Providers, and Office Suite.", d:["Only Windows, macOS, and Linux desktop operating systems in their most recent major versions.", "All platforms are covered under a single unified matrix with no platform-specific differentiation.", "Windows Server, Linux Server, and mainframe systems used in traditional enterprise data centres."], e:"The Enterprise matrix covers a broad set of platforms: Windows, macOS, Linux, PRE (pre-compromise), Office Suite, Identity Provider, SaaS, IaaS, Network Devices, Containers, and ESXi — reflecting the modern hybrid enterprise."},
     {c:"Framework Fundamentals", q:"What is a 'procedure' in MITRE ATT&CK terminology, and how does it differ from a technique?", a:"A procedure is a specific, real-world implementation of a technique by a particular threat actor or malware.", d:["A procedure is an abstract description of an attack method that has not yet been observed in the wild.", "A procedure is a defensive playbook that security teams follow to mitigate a specific known technique.", "A procedure is the unique identifier code assigned to each technique within the ATT&CK knowledge base."], e:"Procedures describe the actual, observed use of techniques by specific adversaries. For example, APT29 using rundll32.exe to execute a DLL payload is a procedure — a concrete implementation of the T1218.011 Rundll32 technique."},
@@ -175,7 +55,7 @@ const pool = [
     {c:"TA0002 Execution", q:"An adversary uses inter-process communication mechanisms like Component Object Model (COM) to execute code. Which technique is this?", a:"T1559 Inter-Process Communication — abusing IPC mechanisms like COM, DDE, or XPC Services for execution.", d:["T1055 Process Injection — injecting malicious code directly into the memory space of a running legitimate process.", "T1106 Native API — directly invoking operating system API functions to execute code without using shell commands.", "T1129 Shared Modules — loading malicious code through shared library or DLL loading during process initialisation."], e:"T1559 Inter-Process Communication covers adversaries abusing IPC mechanisms. Sub-techniques include T1559.001 (Component Object Model) and T1559.002 (Dynamic Data Exchange/DDE). These allow execution through legitimate inter-process communication channels."},
 
     // ===== TA0003 PERSISTENCE (8) =====
-    {c:"TA0003 Persistence", q:"An adversary adds a Registry Run key entry pointing to their malware to survive reboots. Which technique is this?", a:"T1547.001 Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder — persisting via startup entries.", d:["T1053.005 Scheduled Task/Job: Scheduled Task — creating a recurring task to re-execute the payload after reboot.", "T1543.003 Create or Modify System Process: Windows Service — installing a Windows service for automatic startup.", "T1136.001 Create Account: Local Account — creating a new local user account to maintain access after reboots."], e:"T1547.001 covers adding entries to Registry Run/RunOnce keys (HKLM/HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run) or the Startup folder. These execute automatically at user logon, providing persistence across reboots."},
+    {c:"TA0003 Persistence", q:"An adversary adds a Registry Run key entry pointing to their malware to survive reboots. Which technique is this?", a:"T1547.001 Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder — persisting via startup entries.", d:["T1053.005 Scheduled Task/Job: Scheduled Task — creating a recurring task to re-execute the payload after reboot.", "T1543.003 Create or Modify System Process: Windows Service — installing a Windows service for automatic startup.", "T1136.001 Create Account: Local Account — creating a new local user account to maintain access after reboots."], e:"T1547.001 covers adding entries to Registry Run/RunOnce keys (HKLM/HKCU\Software\Microsoft\Windows\CurrentVersion\Run) or the Startup folder. These execute automatically at user logon, providing persistence across reboots."},
     {c:"TA0003 Persistence", q:"An adversary installs a malicious Windows service that starts automatically at boot. Which ATT&CK technique does this represent?", a:"T1543.003 Create or Modify System Process: Windows Service — creating a service for persistent elevated execution.", d:["T1547.001 Boot or Logon Autostart Execution: Registry Run Keys — adding a startup entry for the user's login session.", "T1053.005 Scheduled Task/Job: Scheduled Task — configuring a scheduled task to run the payload at system startup.", "T1546.015 Event Triggered Execution: Component Object Model Hijacking — replacing COM objects for code execution."], e:"T1543.003 covers creating or modifying Windows services (using sc.exe, New-Service, or direct registry manipulation). Services run as SYSTEM by default and start automatically, providing both persistence and elevated privileges."},
     {c:"TA0003 Persistence", q:"An adversary modifies the .bashrc file on a Linux system to execute their payload every time a user opens a terminal. Which technique is this?", a:"T1546.004 Event Triggered Execution: Unix Shell Configuration Modification — altering shell startup files for persistence.", d:["T1053.003 Scheduled Task/Job: Cron — adding a cron job entry to execute the payload at regular time intervals.", "T1547.006 Boot or Logon Autostart Execution: Kernel Modules and Extensions — loading a malicious kernel module.", "T1136.001 Create Account: Local Account — creating a backdoor user account with access to the compromised system."], e:"T1546.004 covers modifying shell configuration files like .bashrc, .bash_profile, .zshrc, and /etc/profile. Commands in these files execute each time a shell session starts, providing user-level persistence on Unix/Linux systems."},
     {c:"TA0003 Persistence", q:"An adversary creates a new domain admin account on a compromised Active Directory domain controller. Which technique is this?", a:"T1136.002 Create Account: Domain Account — creating a new account in the domain for persistent privileged access.", d:["T1098 Account Manipulation — modifying an existing account's properties to maintain access to the domain.", "T1078.002 Valid Accounts: Domain Accounts — using pre-existing legitimate domain credentials for continued access.", "T1556 Modify Authentication Process — altering the authentication mechanism to allow access without valid credentials."], e:"T1136 Create Account has three sub-techniques: T1136.001 Local Account, T1136.002 Domain Account, and T1136.003 Cloud Account. Creating a domain admin account provides the adversary with a persistent, highly privileged backdoor."},
@@ -255,7 +135,7 @@ const pool = [
     // ===== TA0010 EXFILTRATION (5) =====
     {c:"TA0010 Exfiltration", q:"An adversary sends stolen data out of the network through their existing C2 channel. Which technique is this?", a:"T1041 Exfiltration Over C2 Channel — using the established command and control connection to transfer collected data.", d:["T1048 Exfiltration Over Alternative Protocol — using a different protocol than C2 to transfer data out of the network.", "T1567 Exfiltration Over Web Service — uploading stolen data to legitimate cloud storage or web services for retrieval.", "T1052 Exfiltration Over Physical Medium — copying stolen data to removable media for physical removal from the site."], e:"T1041 is the simplest exfiltration method — reusing the existing C2 channel. This avoids opening new network connections that might be detected. The trade-off is that large data transfers may be noticed as anomalous C2 traffic volume."},
     {c:"TA0010 Exfiltration", q:"An adversary uploads stolen data to a personal Dropbox account using the Dropbox API. Which technique is this?", a:"T1567.002 Exfiltration Over Web Service: Exfiltration to Cloud Storage — uploading data to cloud storage platforms.", d:["T1041 Exfiltration Over C2 Channel — sending data through the existing command and control communication channel.", "T1048.003 Exfiltration Over Alternative Protocol: Exfiltration Over Unencrypted Non-C2 Protocol — using plaintext protocols.", "T1102 Web Service — using legitimate web services as a command and control channel for the adversary's implant."], e:"T1567.002 covers exfiltration to cloud storage services (Dropbox, Google Drive, OneDrive, Box). Traffic to these services is typically trusted and allowed by corporate firewalls, making detection difficult without deep content inspection."},
-    {c:"TA0010 Exfiltration", q:"An adversary encodes stolen data in DNS TXT record queries to slowly exfiltrate it from the target network. Which technique is this?", a:"T1048.001 Exfiltration Over Alternative Protocol: Exfiltration Over Symmetric Encrypted Non-C2 Protocol — using DNS for data exfiltration.", d:["T1071.004 Application Layer Protocol: DNS — using DNS for command and control communications with the C2 server.", "T1567 Exfiltration Over Web Service — uploading data to a web service using DNS-over-HTTPS for transport encryption.", "T1041 Exfiltration Over C2 Channel — exfiltrating data through the primary command and control DNS-based channel."], e:"Using DNS for exfiltration falls under T1048 when it's a separate exfiltration channel (distinct from C2). Data is encoded in DNS queries and sent to an adversary-controlled authoritative name server. If DNS is also the C2 channel, T1041 may apply instead."},
+    {c:"TA0010 Exfiltration", q:"An adversary encodes stolen data in DNS TXT record queries to slowly exfiltrate it from the target network. Which technique is this?", a:"T1048.001 Exfiltration Over Alternative Protocol: Exfiltration Over Symmetric Encrypted Non-C2 Protocol — using DNS for data exfiltration.", d:["T1071.004 Application Layer Protocol: DNS — using DNS for command and control communications with the C2 server.", "T1568.001 Dynamic Resolution: Fast Flux DNS — rapidly rotating C2 server IP addresses to evade DNS-based blocking.", "T1583.001 Acquire Infrastructure: Domains — registering domain names to establish DNS-based C2 infrastructure."], e:"Using DNS for exfiltration falls under T1048 when it's a separate exfiltration channel (distinct from C2). Data is encoded in DNS queries and sent to an adversary-controlled authoritative name server. If DNS is also the C2 channel, T1041 may apply instead."},
     {c:"TA0010 Exfiltration", q:"An adversary limits the size and frequency of their data exfiltration to avoid triggering network DLP alerts. Which technique is this?", a:"T1030 Data Transfer Size Limits — breaking exfiltrated data into small chunks to evade detection thresholds.", d:["T1029 Scheduled Transfer — transferring data only at specific times to coincide with legitimate traffic patterns.", "T1560 Archive Collected Data — compressing data before exfiltration to reduce the total volume transferred.", "T1048 Exfiltration Over Alternative Protocol — using a different protocol to bypass DLP monitoring entirely."], e:"T1030 covers adversaries limiting data transfer sizes to stay below detection thresholds. Combined with T1029 (Scheduled Transfer — timing exfiltration to blend with normal traffic), these techniques make exfiltration harder to detect via volumetric analysis."},
     {c:"TA0010 Exfiltration", q:"An adversary copies stolen data to a USB drive for physical removal from a secure, air-gapped facility. Which technique is this?", a:"T1052.001 Exfiltration Over Physical Medium: Exfiltration over USB — using removable storage to physically remove data.", d:["T1091 Replication Through Removable Media — using USB devices to spread malware to other systems in the facility.", "T1200 Hardware Additions — connecting rogue hardware devices to the network for data collection and exfiltration.", "T1567 Exfiltration Over Web Service — uploading data to cloud storage via a USB-tethered mobile data connection."], e:"T1052.001 covers physical exfiltration via USB drives, external hard drives, or other removable media. This is particularly relevant for air-gapped environments where network-based exfiltration is not possible."},
 
@@ -269,7 +149,7 @@ const pool = [
 
     // ===== DETECTION & PRACTICAL APPLICATION (8) =====
     {c:"Detection & Application", q:"A security analyst detects multiple failed Kerberos TGS requests for different SPNs from a single user in a short timeframe. What ATT&CK technique is likely being attempted?", a:"T1558.003 Kerberoasting — the analyst is observing bulk TGS ticket requests indicative of service account password cracking.", d:["T1110.001 Brute Force: Password Guessing — the user is attempting to guess passwords for multiple service accounts.", "T1078 Valid Accounts — the user is testing stolen credentials against multiple services to find valid access paths.", "T1087.002 Account Discovery: Domain Account — the user is enumerating domain accounts to identify potential targets."], e:"Bulk TGS requests for different SPNs from a single account is a key indicator of Kerberoasting (T1558.003). Detection involves monitoring Event ID 4769 (Kerberos Service Ticket Operations) for anomalous patterns."},
-    {c:"Detection & Application", q:"A SIEM alert fires when a process named 'svchost.exe' is observed running from the C:\\Users\\Public directory. Which technique is being detected?", a:"T1036.005 Masquerading: Match Legitimate Name or Location — the binary uses a legitimate name but runs from an unusual path.", d:["T1543.003 Create or Modify System Process: Windows Service — a malicious Windows service has been installed on the system.", "T1059.003 Command and Scripting Interpreter: Windows Command Shell — cmd.exe is being used to execute malicious commands.", "T1055 Process Injection — malicious code has been injected into the legitimate svchost.exe process in system memory."], e:"Legitimate svchost.exe runs from C:\\Windows\\System32. Detecting instances running from other locations (like user directories) is a strong indicator of T1036.005 Masquerading. Path-based detection rules are effective for catching this technique."},
+    {c:"Detection & Application", q:"A SIEM alert fires when a process named 'svchost.exe' is observed running from the C:\Users\Public directory. Which technique is being detected?", a:"T1036.005 Masquerading: Match Legitimate Name or Location — the binary uses a legitimate name but runs from an unusual path.", d:["T1543.003 Create or Modify System Process: Windows Service — a malicious Windows service has been installed on the system.", "T1059.003 Command and Scripting Interpreter: Windows Command Shell — cmd.exe is being used to execute malicious commands.", "T1055 Process Injection — malicious code has been injected into the legitimate svchost.exe process in system memory."], e:"Legitimate svchost.exe runs from C:\Windows\System32. Detecting instances running from other locations (like user directories) is a strong indicator of T1036.005 Masquerading. Path-based detection rules are effective for catching this technique."},
     {c:"Detection & Application", q:"How should a security team use the MITRE ATT&CK framework to assess their detection coverage gaps?", a:"Map existing detection rules and data sources against the ATT&CK matrix to identify techniques with no monitoring.", d:["Run every ATT&CK technique against production systems and check which ones trigger alerts in the security stack.", "Compare the organisation's security budget against MITRE's recommended spending guidelines for each technique.", "Count the total number of ATT&CK techniques and divide by the number of security tools to calculate coverage."], e:"Gap analysis involves mapping detection capabilities (SIEM rules, EDR detections, log sources) to ATT&CK techniques using the Navigator. Unmapped techniques represent blind spots. Teams then prioritise based on threat intelligence about relevant adversaries."},
     {c:"Detection & Application", q:"An analyst observes a scheduled task created via 'schtasks.exe /create' on a server that typically has no scheduled tasks. Which ATT&CK techniques should they investigate?", a:"T1053.005 Scheduled Task/Job: Scheduled Task (for persistence/execution) and potentially T1059 for the payload being scheduled.", d:["Only T1082 System Information Discovery, as schtasks is commonly used for system reconnaissance activity on servers.", "Only T1070 Indicator Removal, as creating a scheduled task is a common method for covering tracks after an intrusion.", "Only T1547.001 Boot or Logon Autostart Execution: Registry Run Keys, since scheduled tasks and registry keys are equivalent."], e:"schtasks.exe creation on an unusual host warrants investigating T1053.005 (the scheduling itself), the scheduled command/payload (potentially T1059 Command and Scripting Interpreter), and whether it indicates persistence or lateral movement."},
     {c:"Detection & Application", q:"What Windows Event ID is most useful for detecting the creation of new services, which may indicate T1543.003?", a:"Event ID 7045 (A service was installed in the system) from the System Event Log records new service creation.", d:["Event ID 4624 (An account was successfully logged on) from the Security Log tracks all authentication events.", "Event ID 4688 (A new process has been created) from the Security Log records all new process creation events.", "Event ID 1102 (The audit log was cleared) from the Security Log indicates that event log tampering occurred."], e:"Windows Event ID 7045 in the System log records when a new service is installed, capturing the service name, path, and account. This is the primary detection for T1543.003 (Windows Service persistence) and tools like PsExec."},
@@ -277,150 +157,4 @@ const pool = [
     {c:"Detection & Application", q:"What is the value of mapping incident response findings to MITRE ATT&CK techniques during post-incident analysis?", a:"It creates a structured record of adversary behaviour that enables gap analysis and improves future detection capabilities.", d:["It automatically generates a compliance report that satisfies all major regulatory and audit framework requirements.", "It replaces the need for traditional forensic analysis by providing a pre-built timeline of the adversary's actions.", "It identifies the specific vulnerability that was exploited, eliminating the need for separate vulnerability assessment."], e:"Mapping IR findings to ATT&CK provides a common language for the incident, enables identification of detection gaps (techniques that were not alerted on), supports threat intelligence sharing, and helps prioritise security improvements."},
     {c:"Detection & Application", q:"A purple team exercise reveals that the security stack fails to detect T1003.001 (LSASS Memory Credential Dumping). What mitigations should be considered?", a:"Enable Credential Guard, restrict debug privileges, deploy LSASS process protection, and create detection rules for LSASS access.", d:["Disable LSASS entirely on all workstations since it is only required on domain controllers for authentication.", "Implement network-level encryption to prevent credential hashes from being intercepted during network transmission.", "Focus detection efforts exclusively on the exfiltration phase, as credential dumping cannot be reliably prevented."], e:"ATT&CK's mitigation for T1003.001 includes M1043 Credential Access Protection (Credential Guard), restricting SeDebugPrivilege, enabling LSASS Protected Process Light (PPL), and monitoring for suspicious access to the LSASS process (Sysmon Event ID 10)."}
 ];
-
-// ==============================================================
-// ENGINE
-// ==============================================================
-const TOTAL = 120;
-let examQs = [], answered = {}, userAns = {}, flagged = {}, curr = 0;
-
-function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-}
-
-function initExam() {
-    const shuffled = shuffle([...pool]);
-    examQs = shuffled.slice(0, TOTAL);
-    answered = {}; userAns = {}; flagged = {}; curr = 0;
-
-    examQs.forEach((q, i) => {
-        const opts = shuffle([q.a, ...q.d]);
-        examQs[i]._opts = opts;
-    });
-
-    document.getElementById('start-screen').style.display='none';
-    document.getElementById('results-screen').style.display='none';
-    document.getElementById('exam-ui').style.display='flex';
-    document.getElementById('footer').style.display='flex';
-
-    renderSide(); loadQ(0); updateProgress();
-}
-
-function updateProgress() {
-    const cnt = Object.keys(answered).length;
-    document.getElementById('progress-display').innerText = `${cnt} / ${TOTAL}`;
-    document.getElementById('finish-btn').style.display = cnt === TOTAL ? 'inline-block' : 'none';
-}
-
-function renderSide() {
-    const sb = document.getElementById('sidebar'); sb.innerHTML='';
-    examQs.forEach((q,i) => {
-        const b = document.createElement('button');
-        b.className = 'nav-btn'; b.innerText = i+1;
-        b.id = `nav-${i}`; b.onclick = () => loadQ(i);
-        sb.appendChild(b);
-    });
-}
-
-function loadQ(i) {
-    curr = i;
-    const q = examQs[i];
-
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`nav-${i}`).classList.add('active');
-    document.getElementById('status').innerText = `Q ${i+1} / ${TOTAL}`;
-
-    const con = document.getElementById('question-container'); con.innerHTML='';
-    const card = document.createElement('div'); card.className='card';
-
-    let html = `<div class="q-meta"><span class="tag">${q.c}</span><span class="q-num">#${i+1}</span></div><div class="q-text">${q.q}</div>`;
-
-    const isAnswered = answered[i] !== undefined;
-
-    q._opts.forEach((o, oi) => {
-        let cls = 'option';
-        if (isAnswered) {
-            cls += ' locked';
-            if (o === q.a) cls += ' opt-correct';
-            else if (o === userAns[i]) cls += ' opt-wrong';
-            else cls += ' opt-dim';
-        }
-        const clickHandler = isAnswered ? '' : `onclick="ans(${i}, ${oi})"`;
-        html += `<div class="${cls}" ${clickHandler}>${o}</div>`;
-    });
-
-    if (isAnswered) {
-        const wasCorrect = userAns[i] === q.a;
-        html += `<div class="explanation-box"><strong>${wasCorrect ? '✓ Correct' : '✗ Incorrect'}</strong><br>${q.e}</div>`;
-        if (i < TOTAL - 1) {
-            html += `<div class="next-btn-wrap"><button class="btn btn-p" onclick="loadQ(${i+1})">Next Question →</button></div>`;
-        }
-    }
-
-    card.innerHTML = html; con.appendChild(card);
-    con.scrollTop = 0;
-}
-
-function ans(qi, optIdx) {
-    const q = examQs[qi];
-    userAns[qi] = q._opts[optIdx];
-    answered[qi] = true;
-
-    const navBtn = document.getElementById(`nav-${qi}`);
-    if (userAns[qi] === q.a) {
-        navBtn.classList.add('answered-correct');
-    } else {
-        navBtn.classList.add('answered-wrong');
-    }
-
-    loadQ(qi);
-    updateProgress();
-}
-
-function nav(d) {
-    const n = curr + d;
-    if(n >= 0 && n < TOTAL) loadQ(n);
-}
-
-function flag() {
-    flagged[curr] = !flagged[curr];
-    const b = document.getElementById(`nav-${curr}`);
-    if(flagged[curr]) b.classList.add('flagged'); else b.classList.remove('flagged');
-}
-
-function finish() {
-    if(!confirm('Finish the quiz and see your results?')) return;
-    document.getElementById('exam-ui').style.display='none';
-    document.getElementById('footer').style.display='none';
-
-    const resScreen = document.getElementById('results-screen');
-    resScreen.style.display='block';
-    resScreen.scrollTop = 0;
-
-    let score = 0;
-    let html = '';
-
-    examQs.forEach((q, i) => {
-        const correct = userAns[i] === q.a;
-        if(correct) score++;
-        html += `<div class="review-item ${correct?'correct':'wrong'}">
-            <strong>Q${i+1} [${q.c}]: ${q.q}</strong><br>
-            Your Answer: <b style="color:${correct?'#4ade80':'#f87171'}">${userAns[i]||'Skipped'}</b><br>
-            ${!correct ? `Correct Answer: <b style="color:#4ade80">${q.a}</b>` : ''}
-            <div class="review-explanation">Rationale: ${q.e}</div>
-        </div>`;
-    });
-
-    const pct = Math.round((score/TOTAL)*100);
-
-    document.getElementById('score-circle').innerText = `${pct}%`;
-    document.getElementById('raw-score').innerText = `You answered ${score} out of ${TOTAL} questions correctly.`;
-    document.getElementById('review-list').innerHTML = html;
-}
-</script>
-</body>
-</html>
+const MASTER_POOL = pool;

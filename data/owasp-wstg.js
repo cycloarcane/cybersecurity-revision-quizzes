@@ -1,116 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OWASP WSTG v4.2 — Web Security Testing Knowledge Quiz</title>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Source+Sans+3:wght@400;600;700;900&display=swap');
-    :root { --header:#1a1a2e; --bg:#0f0f1a; --white:#16213e; --primary:#e94560; --success:#0f9b58; --danger:#e94560; --warning:#f5a623; --text:#e0e0e0; --card:#16213e; --accent:#533483; --border:#2a2a4a; }
-    ::-webkit-scrollbar { width:10px; } ::-webkit-scrollbar-track { background:#0a0a15; } ::-webkit-scrollbar-thumb { background:#533483; border-radius:5px; border:2px solid #0a0a15; }
-    * { box-sizing:border-box; }
-    body { font-family:'Source Sans 3',sans-serif; background:var(--bg); color:var(--text); margin:0; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
-    .header { background:linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color:#fff; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 20px rgba(233,69,96,0.15); flex-shrink:0; z-index:10; border-bottom:2px solid var(--primary); }
-    .header-title { font-family:'JetBrains Mono',monospace; font-size:1.4em; font-weight:700; letter-spacing:1px; }
-    .header-title span { color:var(--primary); }
-    .progress-text { font-family:'JetBrains Mono',monospace; font-size:1.1em; font-weight:700; color:var(--warning); background:rgba(0,0,0,0.4); padding:6px 18px; border-radius:6px; border:1px solid rgba(245,166,35,0.3); }
-    .main { display:flex; flex:1; overflow:hidden; }
-    .sidebar { width:260px; background:#111125; border-right:1px solid var(--border); overflow-y:auto; padding:12px; display:grid; grid-template-columns:repeat(5,1fr); gap:6px; align-content:start; flex-shrink:0; }
-    .nav-btn { height:34px; border:1px solid var(--border); background:#1a1a2e; cursor:pointer; font-weight:700; font-size:0.82em; border-radius:5px; transition:all 0.15s; color:#8888aa; font-family:'JetBrains Mono',monospace; }
-    .nav-btn:hover { background:#2a2a4a; color:#ccc; border-color:#533483; }
-    .nav-btn.active { background:var(--primary); color:white; border-color:var(--primary); box-shadow:0 0 10px rgba(233,69,96,0.4); }
-    .nav-btn.answered-correct { background:#0d2818; border-color:var(--success); color:#4ade80; }
-    .nav-btn.answered-wrong { background:#2d1018; border-color:var(--danger); color:#f87171; }
-    .nav-btn.flagged { border:2px solid var(--warning); box-shadow:0 0 8px rgba(245,166,35,0.3); }
-    .content { flex:1; padding:35px; overflow-y:auto; display:flex; justify-content:center; align-items:flex-start; }
-    .card { background:var(--card); max-width:900px; width:100%; padding:45px; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.3); margin-bottom:40px; border:1px solid var(--border); }
-    .q-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; border-bottom:1px solid var(--border); padding-bottom:14px; }
-    .tag { background:var(--primary); color:white; padding:5px 14px; border-radius:20px; font-size:0.8em; font-weight:700; text-transform:uppercase; letter-spacing:1px; font-family:'JetBrains Mono',monospace; }
-    .q-num { color:#666; font-family:'JetBrains Mono',monospace; font-size:0.9em; }
-    .q-text { font-size:1.25em; font-weight:600; margin-bottom:30px; line-height:1.55; color:#e8e8e8; }
-    .option { width:100%; text-align:left; padding:16px 22px; margin-bottom:12px; background:#111125; border:2px solid var(--border); border-radius:8px; cursor:pointer; font-size:1.05em; transition:all 0.2s; color:#c0c0d0; display:block; font-family:'Source Sans 3',sans-serif; }
-    .option:hover:not(.locked) { border-color:#533483; background:#1a1a35; color:#e0e0e0; }
-    .option.locked { cursor:default; }
-    .option.opt-correct { border-color:var(--success); background:rgba(15,155,88,0.15); color:#4ade80; font-weight:700; }
-    .option.opt-wrong { border-color:var(--danger); background:rgba(233,69,96,0.1); color:#f87171; }
-    .option.opt-dim { opacity:0.5; }
-    .explanation-box { margin-top:24px; padding:18px 22px; background:rgba(83,52,131,0.15); border:1px solid rgba(83,52,131,0.3); border-radius:8px; font-size:1em; color:#c8c0d8; line-height:1.6; }
-    .explanation-box strong { color:#e0d0f0; }
-    .next-btn-wrap { text-align:center; margin-top:22px; }
-    .footer { background:#111125; padding:14px 35px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
-    .btn { padding:11px 28px; border:none; border-radius:6px; font-size:1.05em; font-weight:700; cursor:pointer; color:white; font-family:'Source Sans 3',sans-serif; transition:all 0.2s; }
-    .btn:hover { transform:translateY(-1px); }
-    .btn-s { background:#2a2a4a; } .btn-s:hover { background:#3a3a5a; }
-    .btn-p { background:var(--primary); } .btn-p:hover { background:#d13555; }
-    .btn-w { background:var(--warning); color:#111; } .btn-w:hover { background:#e09515; }
-    .btn-g { background:var(--success); } .btn-g:hover { background:#0d8a4e; }
-    #start-screen, #results-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:2000; overflow-y:auto; }
-    .center-wrapper { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:40px; box-sizing:border-box; }
-    .start-box { background:var(--card); padding:60px; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.4); max-width:850px; text-align:center; border:1px solid var(--border); position:relative; overflow:hidden; }
-    .start-box::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--primary), var(--accent), var(--primary)); }
-    .start-box h1 { color:#fff; margin-bottom:8px; font-size:2.8em; font-family:'JetBrains Mono',monospace; letter-spacing:2px; }
-    .start-box h1 span { color:var(--primary); }
-    .start-box .subtitle { font-size:1em; color:#666; margin-bottom:30px; font-family:'JetBrains Mono',monospace; letter-spacing:3px; text-transform:uppercase; }
-    .start-box p { font-size:1.15em; line-height:1.7; color:#999; margin:25px 0; }
-    .start-box .stats { display:flex; justify-content:center; gap:40px; margin:30px 0; }
-    .start-box .stat { text-align:center; }
-    .start-box .stat-num { font-size:2.2em; font-weight:900; color:var(--primary); font-family:'JetBrains Mono',monospace; }
-    .start-box .stat-label { font-size:0.85em; color:#666; text-transform:uppercase; letter-spacing:2px; margin-top:4px; }
-    .score-circle { width:200px; height:200px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:3.8em; font-weight:900; color:white; margin:20px auto; box-shadow:0 10px 30px rgba(0,0,0,0.3); font-family:'JetBrains Mono',monospace; background:linear-gradient(135deg, var(--accent), #3a2066); border:6px solid #2a1850; }
-    .review-item { text-align:left; background:var(--card); padding:22px; margin-bottom:16px; border-radius:10px; border-left:6px solid #444; width:100%; max-width:800px; box-shadow:0 2px 10px rgba(0,0,0,0.2); border:1px solid var(--border); }
-    .review-item.correct { border-left-color:var(--success); }
-    .review-item.wrong { border-left-color:var(--danger); }
-    .review-item strong { color:#e0e0e0; }
-    .review-explanation { margin-top:12px; font-size:0.92em; color:#aaa; background:rgba(83,52,131,0.15); padding:14px; border-radius:6px; border:1px solid rgba(83,52,131,0.3); }
-    #status { font-weight:700; color:#666; font-size:1.05em; font-family:'JetBrains Mono',monospace; }
-</style>
-</head>
-<body>
-<div id="start-screen">
-    <div class="center-wrapper">
-        <div class="start-box">
-            <h1><span>OWASP</span> WSTG v4.2</h1>
-            <div class="subtitle">Web Security Testing Guide Quiz</div>
-            <div class="stats">
-                <div class="stat"><div class="stat-num">120</div><div class="stat-label">Questions</div></div>
-                <div class="stat"><div class="stat-num">Self-paced</div><div class="stat-label">No Timer</div></div>
-            </div>
-            <p>
-                Covers all 12 testing categories: Information Gathering, Configuration &amp; Deployment,
-                Identity Management, Authentication, Authorization, Session Management,
-                Input Validation, Error Handling, Cryptography, Business Logic, Client-side &amp; API Testing.<br>
-                <em style="color:#666;">120 questions drawn from a pool. Explanation shown after each answer.</em>
-            </p>
-            <button class="btn btn-p" onclick="initExam()" style="padding:16px 55px; font-size:1.25em; margin-top:10px;">Start Quiz</button>
-        </div>
-    </div>
-</div>
-<div class="header">
-    <div class="header-title"><span>WSTG</span> v4.2 Quiz</div>
-    <div id="progress-display" class="progress-text">0 / 120</div>
-</div>
-<div class="main" id="exam-ui" style="display:none;">
-    <div class="sidebar" id="sidebar"></div>
-    <div class="content" id="question-container"></div>
-</div>
-<div class="footer" id="footer" style="display:none;">
-    <div><button class="btn btn-s" onclick="nav(-1)">Previous</button> <button class="btn btn-w" onclick="flag()" style="margin-left:10px;">Flag</button></div>
-    <div id="status">Q 1 / 120</div>
-    <div><button class="btn btn-g" id="finish-btn" onclick="finish()" style="display:none;">Finish Quiz</button></div>
-</div>
-<div id="results-screen" style="display:none;">
-    <div class="center-wrapper" style="justify-content:flex-start; padding-top:50px;">
-        <div style="background:var(--card); padding:40px; border-radius:12px; max-width:800px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,0.3); text-align:center; border:1px solid var(--border);">
-            <h1 style="margin:0; color:#fff; font-family:'JetBrains Mono',monospace;">Quiz Results</h1>
-            <div id="score-circle" class="score-circle">0%</div>
-            <div id="raw-score" style="font-size:1.2em; color:#aaa; margin-bottom:25px; font-family:'JetBrains Mono',monospace;"></div>
-            <button class="btn btn-p" onclick="location.reload()">Take New Quiz</button>
-        </div>
-        <div id="review-list" style="width:100%; max-width:800px; margin-top:25px;"></div>
-    </div>
-</div>
-<script>
-const allQuestions = [
+const pool = [
 // --- 4.1 INFORMATION GATHERING (WSTG-INFO) — 12 questions ---
 {c:"INFO — Information Gathering", q:"What is the WSTG identifier format for the second Information Gathering test scenario?", a:"WSTG-INFO-02, where INFO is the category and 02 is the test number.", d:["WSTG-CONF-02, where CONF is the category and 02 is the test number.", "WSTG-INPT-02, where INPT is the category and 02 is the test number.", "WSTG-SESS-02, where SESS is the category and 02 is the test number."], e:"WSTG identifiers follow the format WSTG-&lt;category&gt;-&lt;number&gt;. The Information Gathering category uses the INFO prefix, so the second test is WSTG-INFO-02."},
 {c:"INFO — Information Gathering", q:"When performing search engine reconnaissance (WSTG-INFO-01), what technique chains search operators to find sensitive files?", a:"Google hacking or Dorking, combining operators to find specific information.", d:["DNS zone transfer enumeration, using dig queries to uncover hidden subdomains.", "Banner grabbing via netcat, using raw socket connections to fingerprint servers.", "Passive certificate transparency log analysis to discover internal host names."], e:"The WSTG describes Google hacking (Dorking) as combining search operators like site:, filetype:, and inurl: to discover sensitive files and information leakage."},
@@ -142,7 +30,7 @@ const allQuestions = [
 // --- 4.3 IDENTITY MANAGEMENT (WSTG-IDNT) — 8 questions ---
 {c:"IDNT — Identity Management", q:"What does testing for account enumeration (WSTG-IDNT-04) attempt to determine?", a:"Whether the application reveals if a specific username or account actually exists.", d:["Whether the application enforces a minimum password character length requirement.", "Whether the application logs all successful user authentication events to a file.", "Whether the application encrypts database records using column-level key rotation."], e:"WSTG-IDNT-04 tests whether different error messages, response codes, or timing differences reveal whether a given username exists, enabling attackers to enumerate valid accounts."},
 {c:"IDNT — Identity Management", q:"When testing role definitions (WSTG-IDNT-01), what is the tester trying to identify?", a:"All defined roles, their associated permissions, and their access control boundaries.", d:["Only the total number of user accounts currently registered in the application.", "Exclusively the password hashing algorithm used for storing user credentials.", "Just the names of the database tables that store the session token values."], e:"WSTG-IDNT-01 involves identifying all roles (admin, user, moderator, etc.), understanding what permissions each grants, and testing the boundaries between them."},
-{c:"IDNT — Identity Management", q:"What should a tester verify about the user registration process (WSTG-IDNT-02)?", a:"Whether registration can be abused for identity spoofing or automated bulk creation.", d:["Whether the registration page uses a particular front-end CSS framework library.", "Whether the registration form contains exactly three fields and one submit button.", "Whether the registration page loads within two hundred milliseconds on average."], e:"WSTG-IDNT-02 tests the registration process for allowing duplicate identities, lack of CAPTCHA, insufficient email verification, and predictable user ID assignment."},
+{c:"IDNT — Identity Management", q:"What should a tester verify about the user registration process (WSTG-IDNT-02)?", a:"Whether registration can be abused for identity spoofing or automated bulk creation.", d:["Whether the registration page uses a particular front-end JavaScript framework library.", "Whether the registration form contains exactly three fields and one submit button.", "Whether the registration page loads within two hundred milliseconds on average."], e:"WSTG-IDNT-02 tests the registration process for allowing duplicate identities, lack of CAPTCHA, insufficient email verification, and predictable user ID assignment."},
 {c:"IDNT — Identity Management", q:"How might an application inadvertently reveal valid usernames during the login process?", a:"By returning different error messages for invalid usernames versus wrong passwords.", d:["By requiring all users to authenticate with a hardware security token at every login.", "By enforcing multi-factor authentication across all user accounts without exception.", "By using a content delivery network to serve the static login page to all regions."], e:"Messages like 'User not found' vs 'Invalid password' allow attackers to distinguish between non-existent and existing accounts, enabling enumeration."},
 {c:"IDNT — Identity Management", q:"What does WSTG-IDNT-03 test regarding the account provisioning and deprovisioning process?", a:"Whether accounts can be provisioned or deprovisioned in an unauthorised manner.", d:["Whether the application backup schedule runs at the correct configured interval.", "Whether the database connection pool is sized appropriately for peak traffic loads.", "Whether the monitoring dashboard displays accurate real-time server CPU utilisation."], e:"WSTG-IDNT-03 examines whether attackers can create, modify, or delete accounts without proper authorisation, and whether deprovisioning properly revokes all access."},
 {c:"IDNT — Identity Management", q:"Which technique does the WSTG describe for detecting account enumeration via timing differences?", a:"Measuring response times, since valid usernames may trigger slower password hash lookups.", d:["Counting the number of HTTP redirects returned when submitting randomly generated input.", "Comparing the TLS certificate expiry dates across different application login subdomains.", "Analysing the JavaScript bundle size differences between various error page responses."], e:"Timing-based enumeration occurs when the application performs password hashing only for valid accounts, causing measurably slower responses for existing usernames."},
@@ -164,7 +52,7 @@ const allQuestions = [
 {c:"ATHN — Authentication", q:"Why does the WSTG recommend testing whether the current password is required before allowing a change?", a:"Without it, an attacker with a hijacked session can permanently change the password.", d:["Without it, the application cannot display the current password in plain text form.", "Without it, the password hash algorithm cannot be upgraded during the change flow.", "Without it, the browser password manager will not offer to save the new credentials."], e:"WSTG-ATHN-09 notes that requiring the current password during changes prevents session hijackers from permanently taking over accounts."},
 
 // --- 4.5 AUTHORIZATION (WSTG-ATHZ) — 8 questions ---
-{c:"ATHZ — Authorization", q:"What is the objective of testing for directory traversal (WSTG-ATHZ-01)?", a:"Determine if the application allows accessing files outside the intended directory path.", d:["Determine if the application correctly renders directory listing index pages for users.", "Determine if the application supports WebDAV protocol for remote document management.", "Determine if the application logs all directory access events to the system audit log."], e:"WSTG-ATHZ-01 tests whether path traversal sequences (like ../ or ..\\) allow attackers to read files outside the web root, such as /etc/passwd or configuration files."},
+{c:"ATHZ — Authorization", q:"What is the objective of testing for directory traversal (WSTG-ATHZ-01)?", a:"Determine if the application allows accessing files outside the intended directory path.", d:["Determine if the application correctly renders directory listing index pages for users.", "Determine if the application supports WebDAV protocol for remote document management.", "Determine if the application logs all directory access events to the system audit log."], e:"WSTG-ATHZ-01 tests whether path traversal sequences (like ../ or ..\) allow attackers to read files outside the web root, such as /etc/passwd or configuration files."},
 {c:"ATHZ — Authorization", q:"When testing for authorization bypass (WSTG-ATHZ-02), what technique accesses another user's data by modifying an identifier?", a:"Horizontal privilege escalation, achieved by changing a resource ID like a user ID.", d:["Brute-forcing the login form by submitting a dictionary of common password values.", "Injecting SQL syntax into the search field to extract records from the database.", "Performing a denial of service by flooding the server with many concurrent requests."], e:"WSTG-ATHZ-02 includes testing horizontal access control by modifying parameters (e.g., changing user_id=123 to user_id=124) to access another user's data."},
 {c:"ATHZ — Authorization", q:"What does testing for privilege escalation (WSTG-ATHZ-03) verify?", a:"Whether a lower-privileged user can gain access to higher-privileged admin functions.", d:["Whether administrator accounts can successfully log in during peak server usage hours.", "Whether the database server rejects all connections from unauthorised IP address ranges.", "Whether the application firewall blocks all requests exceeding the maximum body size."], e:"WSTG-ATHZ-03 tests vertical privilege escalation by attempting to access admin functions or elevated capabilities from a standard user account."},
 {c:"ATHZ — Authorization", q:"Which common payload tests for directory traversal vulnerabilities on Unix-based systems?", a:"The sequence ../../etc/passwd to attempt reading the system's local password file.", d:["The string &lt;script&gt;alert(1)&lt;/script&gt; to trigger a cross-site scripting popup.", "The query ' OR 1=1 -- to manipulate the back-end SQL query logic and condition.", "The command ; cat /etc/shadow to chain an operating system command injection."], e:"The classic directory traversal test payload ../../etc/passwd attempts to escape the web root and read the Unix password file, confirming the vulnerability."},
@@ -210,7 +98,7 @@ const allQuestions = [
 // --- 4.8 ERROR HANDLING (WSTG-ERRH) — 6 questions ---
 {c:"ERRH — Error Handling", q:"What does the WSTG test regarding improper error handling (WSTG-ERRH-01)?", a:"Whether error messages reveal internal details like stack traces, paths, or SQL code.", d:["Whether error pages use the correct corporate branding colours and logo placement.", "Whether the application returns HTTP 200 status codes for all error conditions.", "Whether error messages are translated into all officially supported user languages."], e:"WSTG-ERRH-01 tests whether the application discloses sensitive information through error messages, including technology details, paths, database structure, and code snippets."},
 {c:"ERRH — Error Handling", q:"When testing for stack traces (WSTG-ERRH-02), what type of information is typically leaked?", a:"Framework versions, code file paths, line numbers, and database connection details.", d:["Only the HTTP status code number and its standard corresponding reason phrase text.", "Exclusively the client browser type and the operating system version currently in use.", "Just the current server date and time formatted in the Coordinated Universal Time zone."], e:"Stack traces can expose framework names and versions, absolute file paths, line numbers, function names, database connection strings, and internal class structures."},
-{c:"ERRH — Error Handling", q:"What method does the WSTG recommend for triggering error responses during testing?", a:"Submit unexpected input like special characters, oversized data, and invalid formats.", d:["Only access the application's dedicated /error test endpoint documented in the API.", "Restart the web server process and observe the default startup page that appears.", "Switch the browser to offline mode and then capture the browser-generated error page."], e:"The WSTG recommends probing with malformed input, unexpected types, empty values, special characters, and boundary values to trigger error conditions."},
+{c:"ERRH — Error Handling", q:"What method does the WSTG recommend for triggering error responses during testing?", a:"Submit unexpected input like special characters, oversized data, and invalid formats.", d:["Only access the application's dedicated /error test endpoint documented in the API.", "Restart the web server process and observe the default startup page that appears.", "Switch the browser to offline mode and then capture the browser-generated error page."], e:"The WSTG recommends probing with malformed input, unexpected types, empty values, special characters, and boundary values to trigger error responses."},
 {c:"ERRH — Error Handling", q:"Why is information leakage through error messages a security concern, according to the WSTG?", a:"Leaked details help attackers map the technology stack and craft more targeted exploits.", d:["Error messages increase the application's overall page load time for all end users.", "Error messages cause the browser to consume excessive amounts of client-side memory.", "Error messages trigger antivirus software alerts on the user's local workstation."], e:"Detailed error information helps attackers understand the technology stack, database type, file structure, and logic, enabling more targeted and effective attacks."},
 {c:"ERRH — Error Handling", q:"What does the WSTG recommend as the primary remediation for improper error handling?", a:"Use custom error pages with generic messages while logging full details server-side.", d:["Disable all error handling so exceptions propagate directly to the user browser.", "Configure the application to return an empty 204 No Content response for all errors.", "Show the full stack trace to users connecting from the corporate VPN network only."], e:"The WSTG recommends implementing custom error handlers that show generic messages while logging detailed error information securely on the server."},
 {c:"ERRH — Error Handling", q:"A crafted SQL query in a form field returns a detailed database error with the table name and query structure. Which tests are relevant?", a:"Both WSTG-ERRH-01 (improper error handling) and WSTG-INPT-05 (SQL injection).", d:["Only WSTG-CONF-02 (platform configuration) and no additional test category applies.", "Only WSTG-ATHN-07 (weak password policy) because the form is the login page only.", "Only WSTG-SESS-01 (session management schema) since database errors affect sessions."], e:"This scenario demonstrates both SQL injection (input reaches the database) and improper error handling (the database error is shown to the user), making both tests relevant."},
@@ -255,147 +143,4 @@ const allQuestions = [
 {c:"APIT — API Testing", q:"What denial of service risk specific to GraphQL does the WSTG describe?", a:"Deeply nested or complex queries that consume excessive server resources to resolve.", d:["Sending extremely large numbers of HTTP OPTIONS preflight requests every second.", "Uploading binary files that exceed the maximum content length configured on the CDN.", "Establishing thousands of idle TCP connections to exhaust the server socket pool."], e:"GraphQL's flexible query language allows attackers to craft deeply nested queries (e.g., recursive relationships) that consume excessive CPU and memory on the server."},
 {c:"APIT — API Testing", q:"What should be tested regarding GraphQL mutation operations according to the WSTG?", a:"Whether mutations enforce proper authorisation and input validation on all operations.", d:["Whether mutations return responses formatted in XML instead of the standard JSON.", "Whether mutations are logged to a separate database from the one used for queries.", "Whether mutations automatically trigger a full re-index of the search engine cluster."], e:"The WSTG recommends testing that GraphQL mutations enforce authorisation (preventing unauthorised data modification) and validate all input to prevent injection attacks."}
 ];
-
-const TOTAL = 120;
-
-function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-}
-
-let examQs = [], curr = 0, answered = {}, userAns = {}, flagged = {};
-
-function initExam() {
-    examQs = shuffle([...allQuestions]).slice(0, TOTAL);
-    curr = 0; answered = {}; userAns = {}; flagged = {};
-
-    examQs.forEach((q, i) => {
-        const opts = shuffle([q.a, ...q.d]);
-        examQs[i]._opts = opts;
-    });
-
-    document.getElementById('start-screen').style.display='none';
-    document.getElementById('results-screen').style.display='none';
-    document.getElementById('exam-ui').style.display='flex';
-    document.getElementById('footer').style.display='flex';
-
-    renderSide(); loadQ(0); updateProgress();
-}
-
-function updateProgress() {
-    const cnt = Object.keys(answered).length;
-    document.getElementById('progress-display').innerText = cnt + ' / ' + TOTAL;
-    document.getElementById('finish-btn').style.display = cnt === TOTAL ? 'inline-block' : 'none';
-}
-
-function renderSide() {
-    const sb = document.getElementById('sidebar'); sb.innerHTML='';
-    examQs.forEach((q,i) => {
-        const b = document.createElement('button');
-        b.className = 'nav-btn'; b.innerText = i+1;
-        b.id = 'nav-' + i; b.onclick = () => loadQ(i);
-        sb.appendChild(b);
-    });
-}
-
-function loadQ(i) {
-    curr = i;
-    const q = examQs[i];
-
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('nav-' + i).classList.add('active');
-    document.getElementById('status').innerText = 'Q ' + (i+1) + ' / ' + TOTAL;
-
-    const con = document.getElementById('question-container'); con.innerHTML='';
-    const card = document.createElement('div'); card.className='card';
-
-    let html = '<div class="q-meta"><span class="tag">' + q.c + '</span><span class="q-num">#' + (i+1) + '</span></div><div class="q-text">' + q.q + '</div>';
-
-    const isAnswered = answered[i] !== undefined;
-
-    q._opts.forEach((o, oi) => {
-        let cls = 'option';
-        if (isAnswered) {
-            cls += ' locked';
-            if (o === q.a) cls += ' opt-correct';
-            else if (o === userAns[i]) cls += ' opt-wrong';
-            else cls += ' opt-dim';
-        }
-        const clickHandler = isAnswered ? '' : 'onclick="ans(' + i + ',' + oi + ')"';
-        html += '<div class="' + cls + '" ' + clickHandler + '>' + o + '</div>';
-    });
-
-    if (isAnswered) {
-        const wasCorrect = userAns[i] === q.a;
-        html += '<div class="explanation-box"><strong>' + (wasCorrect ? '\u2713 Correct' : '\u2717 Incorrect') + '</strong><br>' + q.e + '</div>';
-        if (i < TOTAL - 1) {
-            html += '<div class="next-btn-wrap"><button class="btn btn-p" onclick="loadQ(' + (i+1) + ')">Next Question \u2192</button></div>';
-        }
-    }
-
-    card.innerHTML = html; con.appendChild(card);
-    con.scrollTop = 0;
-}
-
-function ans(qi, optIdx) {
-    const q = examQs[qi];
-    userAns[qi] = q._opts[optIdx];
-    answered[qi] = true;
-
-    const navBtn = document.getElementById('nav-' + qi);
-    if (userAns[qi] === q.a) {
-        navBtn.classList.add('answered-correct');
-    } else {
-        navBtn.classList.add('answered-wrong');
-    }
-
-    loadQ(qi);
-    updateProgress();
-}
-
-function nav(d) {
-    const n = curr + d;
-    if(n >= 0 && n < TOTAL) loadQ(n);
-}
-
-function flag() {
-    flagged[curr] = !flagged[curr];
-    const b = document.getElementById('nav-' + curr);
-    if(flagged[curr]) b.classList.add('flagged'); else b.classList.remove('flagged');
-}
-
-function finish() {
-    if(!confirm('Finish the quiz and see your results?')) return;
-    document.getElementById('exam-ui').style.display='none';
-    document.getElementById('footer').style.display='none';
-
-    const resScreen = document.getElementById('results-screen');
-    resScreen.style.display='block';
-    resScreen.scrollTop = 0;
-
-    let score = 0;
-    let html = '';
-
-    examQs.forEach((q, i) => {
-        const correct = userAns[i] === q.a;
-        if(correct) score++;
-        html += '<div class="review-item ' + (correct?'correct':'wrong') + '">' +
-            '<strong>Q' + (i+1) + ' [' + q.c + ']: ' + q.q + '</strong><br>' +
-            'Your Answer: <b style="color:' + (correct?'#4ade80':'#f87171') + '">' + (userAns[i]||'Skipped') + '</b><br>' +
-            (!correct ? 'Correct Answer: <b style="color:#4ade80">' + q.a + '</b>' : '') +
-            '<div class="review-explanation">Rationale: ' + q.e + '</div>' +
-        '</div>';
-    });
-
-    const pct = Math.round((score/TOTAL)*100);
-
-    document.getElementById('score-circle').innerText = pct + '%';
-    document.getElementById('raw-score').innerText = 'You answered ' + score + ' out of ' + TOTAL + ' questions correctly.';
-    document.getElementById('review-list').innerHTML = html;
-}
-</script>
-</body>
-</html>
+const MASTER_POOL = pool;

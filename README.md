@@ -1,65 +1,68 @@
 # Cybersecurity Revision Quizzes
 
-This repository contains a set of **interactive cybersecurity revision quizzes** designed to support self‑study, exam preparation, and general knowledge reinforcement across a range of cybersecurity topics.
+This repository contains a set of **interactive cybersecurity revision quizzes** designed to support self‑study, exam preparation, and general knowledge reinforcement.
 
-> **Important**
-> All quiz pages in this repository are intended to be run **locally**. They are **not designed, tested, or security‑hardened for remote or public hosting**. Do not deploy these files to an internet‑facing server without a full security review.
-
----
-
-## Overview
-
-The quizzes in this repository are implemented using simple web technologies (HTML, JavaScript, and CSS) and are designed to be opened directly in a browser without any backend services.
-
-Typical use cases include:
-
-* Personal cybersecurity exam revision
-* Offline learning and self‑assessment
-* Reinforcing knowledge of protocols, standards, and security concepts
-* Lightweight study tools that require no installation or internet access
-
-This project deliberately prioritises clarity and accessibility over production‑grade web security controls.
+The project features both a **local web-based version** and a **hardened Android application**, providing a secure and flexible environment for learners.
 
 ---
 
-## How to Use
+## 📱 Android Application
 
+The repository includes a complete Android Studio project (`/AndroidApp`) that compiles into a hardened, zero-permission mobile application.
+
+### Security Architecture
+The Android app is built with a focus on security and privacy:
+- **Zero Permissions**: The app requests no Android permissions (no network, no file access, no location).
+- **WebView Hardening**: Uses `WebViewAssetLoader` to serve local content via virtual HTTPS (`https://appassets.androidplatform.net/assets/`), preventing common `file://` scheme vulnerabilities.
+- **Strict Content-Security-Policy (CSP)**: A robust CSP blocks all inline scripts and styles, mitigating potential XSS risks.
+- **Data Isolation**: Quiz datasets are isolated into standalone JS modules, ensuring a clean separation between the logic engine and content.
+- **R8 Obfuscation**: Release builds are automatically obfuscated and shrunk to protect source code and minimize the attack surface.
+
+### Build Instructions
+Refer to the [Android Build & Security Guide](AndroidApp/BUILD_GUIDE.md) for detailed instructions on compiling, signing, and verifying the APK.
+
+---
+
+## 🌐 Web Version (Hardened)
+
+The quizzes are also available as a hardened web application for use in desktop browsers. This version uses the exact same secure architecture as the Android app.
+
+### Features
+- **CSP Compliant**: Full protection against inline script execution.
+- **Unified Engine**: Shared logic between web and mobile platforms.
+- **Responsive Design**: Optimized for both large screens and mobile browsers.
+
+### How to Use
 1. **Clone the repository**
-
    ```bash
    git clone https://github.com/cycloarcane/cybersecurity-revision-quizzes.git
    ```
-
 2. **Open locally**
-   Navigate to the repository directory and open the relevant `.html` file directly in your browser. A local web server is not required.
+   Navigate to the directory and open `index.html` in your browser.
 
-3. **No hosting assumed**
-   These pages are intended to be accessed via `file://` or a trusted local environment only.
+> **Note**
+> While the web version is hardened with a strict Content-Security-Policy, it is still recommended for local use. If deploying to a web server, ensure you configure appropriate server-side security headers.
 
 ---
 
-## Local‑Only Security Model
+## 📚 Included Quizzes
 
-This project **does not assume a hostile environment**. As a result, it intentionally omits protections that would be required for remote deployment, including but not limited to:
-
-* Authentication and authorisation
-* Input sanitisation for untrusted users
-* Content Security Policy (CSP) headers
-* Server‑side validation or logging
-* Protection against XSS, CSRF, or injection attacks
-
-If you intend to host this content remotely, you must treat it as **unsafe by default** and implement appropriate security controls.
+- **CREST CRT**: Based on Syllabus v2.0 (Core Skills, Networks, Windows/Linux, Web).
+- **OWASP Top 10 (2025 & 2021)**: Web Application Security Risks.
+- **OWASP MAS**: Mobile Application Security (MASVS categories).
+- **Active Directory Pentest**: 12 domains of AD security and enumeration.
+- **MITRE ATT&CK**: Enterprise Tactics and Techniques.
+- **OWASP Agentic AI**: Top 10 for Agentic Applications (2026).
+- **OWASP WSTG v4.2**: Web Security Testing Guide categories.
 
 ---
 
 ## Contributing
 
 Contributions are welcome, particularly for:
-
-* Additional quiz content
-* Accuracy corrections
-* Improved usability or accessibility
-* Refactoring quiz logic for maintainability
+- Additional quiz content
+- Accuracy corrections
+- Improved UI/UX components
 
 Please fork the repository and submit a pull request with a clear description of your changes.
 
@@ -67,7 +70,5 @@ Please fork the repository and submit a pull request with a clear description of
 
 ## Contact
 
-For questions, collaboration, or issues:
-
-* **GitHub**: [https://github.com/cycloarcane](https://github.com/cycloarcane)
-* **Email**: [cycloarkane@gmail.com](mailto:cycloarkane@gmail.com)
+- **GitHub**: [https://github.com/cycloarcane](https://github.com/cycloarcane)
+- **Email**: [cycloarkane@gmail.com](mailto:cycloarkane@gmail.com)

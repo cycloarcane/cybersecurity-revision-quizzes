@@ -1,134 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OWASP Top 10:2025 Knowledge Quiz</title>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Source+Sans+3:wght@400;600;700;900&display=swap');
-    :root { 
-        --bg: #010409; 
-        --header: #0d1117; 
-        --card: #161b22; 
-        --border: #30363d; 
-        --primary: #2f81f7; 
-        --accent: #a371f7; 
-        --success: #2ea043; 
-        --danger: #f85149; 
-        --warning: #d29922; 
-        --text: #c9d1d9; 
-        --white: #f0f6fc;
-    }
-    ::-webkit-scrollbar { width:10px; } ::-webkit-scrollbar-track { background:var(--bg); } ::-webkit-scrollbar-thumb { background:var(--border); border-radius:5px; border:2px solid var(--bg); }
-    * { box-sizing:border-box; }
-    body { font-family:'Source Sans 3',sans-serif; background:var(--bg); color:var(--text); margin:0; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
-    .header { background:linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%); color:#fff; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 20px rgba(47,129,247,0.15); flex-shrink:0; z-index:10; border-bottom:2px solid var(--primary); }
-    .header-title { font-family:'JetBrains Mono',monospace; font-size:1.4em; font-weight:700; letter-spacing:1px; color:var(--white); }
-    .header-title span { color:var(--primary); }
-    .progress-text { font-family:'JetBrains Mono',monospace; font-size:1.1em; font-weight:700; color:var(--warning); background:rgba(0,0,0,0.4); padding:6px 18px; border-radius:6px; border:1px solid rgba(210,153,34,0.3); }
-    .main { display:flex; flex:1; overflow:hidden; }
-    .sidebar { width:260px; background:var(--header); border-right:1px solid var(--border); overflow-y:auto; padding:12px; display:grid; grid-template-columns:repeat(5,1fr); gap:6px; align-content:start; flex-shrink:0; }
-    .nav-btn { height:34px; border:1px solid var(--border); background:var(--card); cursor:pointer; font-weight:700; font-size:0.82em; border-radius:5px; transition:all 0.15s; color:#8b949e; font-family:'JetBrains Mono',monospace; }
-    .nav-btn:hover { background:#21262d; color:#c9d1d9; border-color:#8b949e; }
-    .nav-btn.active { background:var(--primary); color:white; border-color:var(--primary); box-shadow:0 0 10px rgba(47,129,247,0.4); }
-    .nav-btn.answered-correct { background:#051d0f; border-color:var(--success); color:#3fb950; }
-    .nav-btn.answered-wrong { background:#2d0b09; border-color:var(--danger); color:#ff7b72; }
-    .nav-btn.flagged { border:2px solid var(--warning); box-shadow:0 0 8px rgba(210,153,34,0.3); }
-    .content { flex:1; padding:35px; overflow-y:auto; display:flex; justify-content:center; align-items:flex-start; }
-    .card { background:var(--card); max-width:900px; width:100%; padding:45px; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.4); margin-bottom:40px; border:1px solid var(--border); }
-    .q-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; border-bottom:1px solid var(--border); padding-bottom:14px; }
-    .tag { background:var(--primary); color:white; padding:5px 14px; border-radius:20px; font-size:0.8em; font-weight:700; text-transform:uppercase; letter-spacing:1px; font-family:'JetBrains Mono',monospace; }
-    .q-num { color:#8b949e; font-family:'JetBrains Mono',monospace; font-size:0.9em; }
-    .q-text { font-size:1.25em; font-weight:600; margin-bottom:30px; line-height:1.55; color:var(--white); }
-    .option { width:100%; text-align:left; padding:16px 22px; margin-bottom:12px; background:var(--header); border:2px solid var(--border); border-radius:8px; cursor:pointer; font-size:1.05em; transition:all 0.2s; color:#c9d1d9; display:block; font-family:'Source Sans 3',sans-serif; }
-    .option:hover:not(.locked) { border-color:#8b949e; background:#21262d; color:#ffffff; }
-    .option.locked { cursor:default; }
-    .option.opt-correct { border-color:var(--success); background:rgba(46,160,67,0.15); color:#3fb950; font-weight:700; }
-    .option.opt-wrong { border-color:var(--danger); background:rgba(248,81,73,0.1); color:#ff7b72; }
-    .option.opt-dim { opacity:0.5; }
-    .explanation-box { margin-top:24px; padding:18px 22px; background:rgba(163,113,247,0.15); border:1px solid rgba(163,113,247,0.3); border-radius:8px; font-size:1em; color:#d2a8ff; line-height:1.6; }
-    .explanation-box strong { color:#e6ccff; }
-    .next-btn-wrap { text-align:center; margin-top:22px; }
-    .footer { background:var(--header); padding:14px 35px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
-    .btn { padding:11px 28px; border:none; border-radius:6px; font-size:1.05em; font-weight:700; cursor:pointer; color:white; font-family:'Source Sans 3',sans-serif; transition:all 0.2s; }
-    .btn:hover { transform:translateY(-1px); }
-    .btn-s { background:#21262d; border:1px solid rgba(240,246,252,0.1); } .btn-s:hover { background:#30363d; }
-    .btn-p { background:var(--primary); } .btn-p:hover { background:#388bfd; }
-    .btn-w { background:var(--warning); color:#111; } .btn-w:hover { background:#e3b341; }
-    .btn-g { background:var(--success); } .btn-g:hover { background:#3fb950; }
-    #start-screen, #results-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:2000; overflow-y:auto; }
-    .center-wrapper { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:40px; box-sizing:border-box; }
-    .start-box { background:var(--card); padding:60px; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.6); max-width:850px; text-align:center; border:1px solid var(--border); position:relative; overflow:hidden; }
-    .start-box::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--primary), var(--accent), var(--primary)); }
-    .start-box h1 { color:var(--white); margin-bottom:8px; font-size:2.8em; font-family:'JetBrains Mono',monospace; letter-spacing:2px; }
-    .start-box h1 span { color:var(--primary); }
-    .start-box .subtitle { font-size:1em; color:#8b949e; margin-bottom:30px; font-family:'JetBrains Mono',monospace; letter-spacing:3px; text-transform:uppercase; }
-    .start-box p { font-size:1.15em; line-height:1.7; color:#8b949e; margin:25px 0; }
-    .start-box .stats { display:flex; justify-content:center; gap:40px; margin:30px 0; }
-    .start-box .stat { text-align:center; }
-    .start-box .stat-num { font-size:2.2em; font-weight:900; color:var(--primary); font-family:'JetBrains Mono',monospace; }
-    .start-box .stat-label { font-size:0.85em; color:#8b949e; text-transform:uppercase; letter-spacing:2px; margin-top:4px; }
-    .score-circle { width:200px; height:200px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:3.8em; font-weight:900; color:white; margin:20px auto; box-shadow:0 10px 30px rgba(0,0,0,0.5); font-family:'JetBrains Mono',monospace; background:linear-gradient(135deg, var(--accent), var(--primary)); border:6px solid #161b22; }
-    .review-item { text-align:left; background:var(--card); padding:22px; margin-bottom:16px; border-radius:10px; border-left:6px solid #444; width:100%; max-width:800px; box-shadow:0 2px 10px rgba(0,0,0,0.3); border:1px solid var(--border); }
-    .review-item.correct { border-left-color:var(--success); }
-    .review-item.wrong { border-left-color:var(--danger); }
-    .review-item strong { color:var(--white); }
-    .review-explanation { margin-top:12px; font-size:0.92em; color:#8b949e; background:rgba(163,113,247,0.15); padding:14px; border-radius:6px; border:1px solid rgba(163,113,247,0.3); }
-    #status { font-weight:700; color:#8b949e; font-size:1.05em; font-family:'JetBrains Mono',monospace; }
-</style>
-</head>
-<body>
-
-<div id="start-screen">
-    <div class="center-wrapper">
-        <div class="start-box">
-            <h1><span>OWASP</span> Top 10:2025</h1>
-            <div class="subtitle">Web Application Security Risks</div>
-            <div class="stats">
-                <div class="stat"><div class="stat-num">120</div><div class="stat-label">Questions</div></div>
-                <div class="stat"><div class="stat-num">Self-paced</div><div class="stat-label">No Timer</div></div>
-            </div>
-            <p>
-                Covers all 10 categories: Broken Access Control, Security Misconfiguration, Software Supply Chain Failures, Cryptographic Failures, Injection, Insecure Design, Authentication Failures, Software or Data Integrity Failures, Security Logging &amp; Alerting Failures, &amp; Mishandling of Exceptional Conditions.<br>
-                <em style="color:#8b949e;">Questions selected dynamically. Explanation shown after each answer.</em>
-            </p>
-            <button class="btn btn-p" onclick="initExam()" style="padding:16px 55px; font-size:1.25em; margin-top:10px;">Start Quiz</button>
-        </div>
-    </div>
-</div>
-
-<div class="header">
-    <div class="header-title"><span>OWASP</span> Top 10:2025 Quiz</div>
-    <div id="progress-display" class="progress-text">0 / 120</div>
-</div>
-
-<div class="main" id="exam-ui" style="display:none;">
-    <div class="sidebar" id="sidebar"></div>
-    <div class="content" id="question-container"></div>
-</div>
-
-<div class="footer" id="footer" style="display:none;">
-    <div><button class="btn btn-s" onclick="nav(-1)">Previous</button> <button class="btn btn-w" onclick="flag()" style="margin-left:10px;">Flag</button></div>
-    <div id="status">Q 1 / 120</div>
-    <div><button class="btn btn-g" id="finish-btn" onclick="finish()" style="display:none;">Finish Quiz</button></div>
-</div>
-
-<div id="results-screen" style="display:none;">
-    <div class="center-wrapper" style="justify-content:flex-start; padding-top:50px;">
-        <div style="background:var(--card); padding:40px; border-radius:12px; max-width:800px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,0.5); text-align:center; border:1px solid var(--border);">
-            <h1 style="margin:0; color:var(--white); font-family:'JetBrains Mono',monospace;">Quiz Results</h1>
-            <div id="score-circle" class="score-circle">0%</div>
-            <div id="raw-score" style="font-size:1.2em; color:#8b949e; margin-bottom:25px; font-family:'JetBrains Mono',monospace;"></div>
-            <button class="btn btn-p" onclick="location.reload()">Take New Quiz</button>
-        </div>
-        <div id="review-list" style="width:100%; max-width:800px; margin-top:25px;"></div>
-    </div>
-</div>
-
-<script>
-// ==============================================================
-// PART 1 OF 2: QUESTIONS 1-60 (A01 to A05)
-// ==============================================================
 const pool_part_1 = [
     // --- A01: BROKEN ACCESS CONTROL (12) ---
     {c:"A01 Broken Access Control", q:"Which notable 2021 category was folded directly into A01:2025 Broken Access Control?", a:"A10:2021 Server-Side Request Forgery (SSRF).", d:["A04:2021 Insecure Application Design Flaws.", "A08:2021 Software and Data Integrity Issues.", "A03:2021 Cross-Site Scripting Injection (XSS)."], e:"SSRF was consolidated into Broken Access Control, as it fundamentally allows an attacker to bypass authorization to access internal resources."},
@@ -200,9 +69,6 @@ const pool_part_1 = [
     {c:"A05 Injection", q:"Which injection type targets the operating system through an application?", a:"OS command injection, where user input is passed to system shell commands.", d:["SQL injection, where user input is embedded in database query statements.", "XPath injection, where user input is inserted into XML query expressions.", "Expression Language injection, where input reaches a template engine evaluator."], e:"OS command injection targets the operating system layer and is part of A05."},
     {c:"A05 Injection", q:"What role does output encoding play in preventing injection according to OWASP?", a:"It prevents injected data from being interpreted as commands or markup in output.", d:["It replaces the need for parameterized queries entirely in all injection cases.", "It is only useful for preventing SQL injection, not other injection categories.", "It converts malicious input into safe binary before it enters the data store."], e:"Output encoding ensures that user-supplied data is treated as display text rather than executable code in the output context."}
 ];
-// ==============================================================
-// PART 2 OF 2: QUESTIONS 61-120 (A06 to A10 + Supplemental)
-// ==============================================================
 const pool_part_2 = [
     // --- A06: INSECURE DESIGN (12) ---
     {c:"A06 Insecure Design", q:"What is the absolute core focus of the A06:2025 Insecure Design category?", a:"Risks directly introduced by poor architectural decisions and lack of threat modeling.", d:["Risks directly introduced by relying entirely upon unverified third-party code libraries.", "Risks directly introduced by failing to sanitize user inputs before rendering them on-screen.", "Risks directly introduced by failing to log administrative authentication attempts properly."], e:"Insecure Design focuses on foundational architectural flaws and missing threat modeling rather than implementation bugs."},
@@ -210,7 +76,7 @@ const pool_part_2 = [
     {c:"A06 Insecure Design", q:"Which security practice is absolutely essential for preventing insecure design flaws?", a:"Conducting thorough threat modeling exercises long before any code is actually written.", d:["Implementing robust web application firewalls immediately after application deployment.", "Relying strictly on runtime application self-protection mechanisms in the production phase.", "Performing automated static code analysis during the final stages of the build pipeline."], e:"Threat modeling during the design phase is critical to identifying and mitigating architectural risks before they are codified."},
     {c:"A06 Insecure Design", q:"Which prominent Common Weakness Enumeration is associated with Insecure Design?", a:"CWE-209: Generation of Error Messages Containing Highly Sensitive Internal Information.", d:["CWE-89: Improper Neutralization of Special Elements utilized within SQL Commands.", "CWE-352: Cross-Site Request Forgery allowing unauthorized state-changing actions.", "CWE-502: Deserialization of Untrusted Data originating from External User Input."], e:"CWE-209 is mapped to Insecure Design, highlighting that poorly designed error handling logic exposes internal system details."},
     {c:"A06 Insecure Design", q:"What does OWASP recommend for limiting resource consumption in secure design?", a:"Implement resource limits per user or service to prevent excessive infrastructure consumption.", d:["Allow unlimited resource usage and scale infrastructure horizontally instead of throttling.", "Apply resource limits only to unauthenticated sessions, ignoring logged-in premium users.", "Restrict resource limits to database queries only, not general API or static file requests."], e:"OWASP recommends limiting resource consumption by user or service as a design-level control against DoS."},
-    {c:"A06 Insecure Design", q:"How does OWASP recommend validating business logic flows to prevent abuse?", a:"Use strict plausibility checks at each tier to validate that actions make business sense.", d:["Validate only the final step of a multi-page flow to ensure the end state is fully correct.", "Rely primarily on client-side form validation to enforce rigid business logic constraints.", "Allow all actions natively and use post-hoc log analysis to detect potential abuse patterns."], e:"OWASP recommends plausibility checks at the tier level to verify business logic consistency and prevent flow bypasses."},
+    {c:"A06 Insecure Design", q:"How does OWASP recommend validating business logic flows to prevent abuse?", a:"Use strict plausibility checks at each tier to validate that actions make business sense.", d:["Validate only the final step of a multi-page flow to ensure the end state is fully correct.", "Rely primarily on client-side form validation to enforce gaming logic constraints.", "Allow all actions natively and use post-hoc log analysis to detect potential abuse patterns."], e:"OWASP recommends plausibility checks at the tier level to verify business logic consistency and prevent flow bypasses."},
     {c:"A06 Insecure Design", q:"What does OWASP recommend using to establish a secure development lifecycle?", a:"A secure development lifecycle supported by AppSec professionals for design evaluation.", d:["A waterfall development process containing a single security gate right before final release.", "An agile process that completely defers security reviews until the very last sprint cycle.", "A DevOps pipeline focused strictly on automated scanning without any manual design review."], e:"OWASP recommends a secure development lifecycle with AppSec professionals to help evaluate and design security controls."},
     {c:"A06 Insecure Design", q:"What type of development patterns does OWASP recommend establishing for secure design?", a:"A robust library of secure design patterns or paved road components ready for developer use.", d:["A library of automated penetration testing scripts to verify designs after production deployment.", "A library of specialized incident response playbooks to handle sophisticated design flaw exploits.", "A library of compliance checklists meant to rigorously audit designs against industry regulations."], e:"OWASP recommends creating a library of secure design patterns or 'paved road' ready-to-use components."},
     {c:"A06 Insecure Design", q:"What does OWASP recommend regarding user stories in a secure development lifecycle?", a:"Integrate security constraints and specific controls directly into each user story definition.", d:["Keep security requirements in an entirely separate document from functional user stories.", "Add specialized security stories only after all core functional stories are fully completed.", "Defer defining security constraints until the formal penetration testing phase officially begins."], e:"OWASP recommends integrating security language and controls directly into user stories to shift security left."},
@@ -229,7 +95,7 @@ const pool_part_2 = [
     {c:"A07 Authentication Failures", q:"What does OWASP say about session identifier handling immediately after a successful login?", a:"Generate a completely new random session ID after login; do not reuse the pre-login session.", d:["Reuse the existing pre-login session ID to maintain seamless continuity for the authenticated user.", "Store the active session ID directly in the URL query string for easy browser bookmarking functionality.", "Use a highly predictable session ID derived directly from the username for easier backend debugging."], e:"OWASP recommends generating new random session IDs after login to prevent session fixation attacks."},
     {c:"A07 Authentication Failures", q:"According to OWASP, what should session identifiers NOT be present in?", a:"The URL — session IDs should not be included in the address bar or within any URL parameters.", d:["The Set-Cookie response header — session IDs should utilize local browser storage mechanisms instead.", "The Authorization request header — session IDs should utilize standard query strings parameters instead.", "The HTTP response body — session IDs should be securely stored exclusively in the page title metadata."], e:"OWASP states that session identifiers should not be in the URL to prevent session leakage via referers or history."},
     {c:"A07 Authentication Failures", q:"What does OWASP recommend regarding minimum password length requirements?", a:"Enforce a minimum password length and strongly allow longer passphrases up to 64+ characters.", d:["Set a strict minimum of four characters and a maximum of twelve to prioritize user memorability.", "Set a strict minimum of eight characters and a maximum of sixteen to ensure backend consistency.", "Enforce absolutely no minimum length but require at least three complex special characters instead."], e:"OWASP aligns with NIST 800-63b in requiring adequate minimum length while allowing very long passphrases."},
-    {c:"A07 Authentication Failures", q:"What does OWASP recommend about session tokens upon user logout?", a:"Invalidate session tokens immediately on the backend server side upon a successful user logout.", d:["Keep session tokens fully valid for thirty minutes after logout to permit accidental tab recovery.", "Mark tokens as logged-out strictly on the client-side but maintain backend server-side validity.", "Delete the session cookie completely but leave the server session active as an optimization cache."], e:"OWASP recommends securely invalidating server-side sessions and tokens immediately upon logout."},
+    {c:"A07 Authentication Failures", q:"What does OWASP recommend about session tokens upon user logout?", a:"Invalidate session tokens immediately on the backend server side upon a successful user logout.", d:["Keep session tokens fully valid for thirty minutes after logout to permit accidental tab recovery.", "Mark tokens as logged-out strictly on the client-side but maintain backend server-side validity.", "Delete the session cookie but leave the server session active as an optimization cache."], e:"OWASP recommends securely invalidating server-side sessions and tokens immediately upon logout."},
     {c:"A07 Authentication Failures", q:"According to OWASP, what role does a credential recovery process play in A07?", a:"A weak recovery process such as knowledge-based answers completely undermines authentication.", d:["Recovery processes have absolutely no impact on authentication security when MFA is fully enabled.", "Recovery processes only genuinely matter for administrative accounts, not for regular user accounts.", "Recovery processes are entirely outside the scope of A07 and strictly belong under Insecure Design."], e:"OWASP notes that weak credential recovery (e.g., knowledge-based questions) directly bypasses strong authentication."},
 
     // --- A08: SOFTWARE OR DATA INTEGRITY FAILURES (12) ---
@@ -262,7 +128,7 @@ const pool_part_2 = [
 
     // --- A10: MISHANDLING OF EXCEPTIONAL CONDITIONS (12) ---
     {c:"A10 Exceptional Conditions", q:"What is the primary focus of the new A10:2025 Mishandling of Exceptional Conditions?", a:"Unsafe system error handling, failing open, and a general lack of overall resilience.", d:["The complete inability to correctly configure basic cloud infrastructure access permissions.", "The utilization of outdated, highly vulnerable third-party components within the application.", "The unintentional exposure of sensitive data transmitted entirely over unencrypted channels."], e:"A10 focuses on how applications behave during errors or edge cases, emphasizing secure failure and resilience."},
-    {c:"A10 Exceptional Conditions", q:"Which Common Weakness Enumeration is highly notable in the new A10:2025 category?", a:"CWE-636: Not Failing Securely, which is more commonly known as system 'Failing Open'.", d:["CWE-89: Improper Neutralization of Special Elements utilized within SQL Commands.", "CWE-352: Cross-Site Request Forgery allowing unauthorized state-changing actions.", "CWE-502: Deserialization of Untrusted Data originating from External User Input."], e:"CWE-636 (Failing Open) occurs when an application encounters an error and defaults to granting access rather than denying it."},
+    {c:"A10 Exceptional Conditions", q:"Which Common Weakness Enumeration is highly notable in the new A10:2025 category?", a:"CWE-636: Not Failing Securely, which is more commonly known as system 'Failing Open'.", d:["CWE-89: Improper Neutralization of Special Elements utilized within SQL Commands.", "CWE-352: Cross-Site Request Forgery allowing unauthorized state-changing actions.", "CWE-502: Deserialization of Untrusted data originating from External User Input."], e:"CWE-636 (Failing Open) occurs when an application encounters an error and defaults to granting access rather than denying it."},
     {c:"A10 Exceptional Conditions", q:"What specific attack vector is very commonly enabled by mishandled system exceptions?", a:"Applications crashing unexpectedly and subsequently exposing sensitive stack traces.", d:["Applications encrypting data automatically utilizing deprecated cryptographic algorithms.", "Applications rendering untrusted HTML code directly within the user's internet browser.", "Applications granting administrative privileges silently to newly registered user accounts."], e:"Unhandled exceptions frequently result in the application crashing and dumping sensitive internal stack traces to the user."},
     {c:"A10 Exceptional Conditions", q:"How does OWASP explicitly recommend handling exceptional system conditions securely?", a:"Ensure the application fails securely, universally defaulting to a denied access state.", d:["Ensure the application ignores the exception entirely and attempts to continue executing.", "Ensure the application immediately restarts the backend server to resolve the condition.", "Ensure the application automatically grants access temporarily to prevent user frustration."], e:"Applications should 'fail closed', meaning that if a security check or critical function fails, access is securely denied."},
     {c:"A10 Exceptional Conditions", q:"Which precise scenario represents a critical mishandling of an exceptional condition?", a:"A backend database timeout causes the authorization check to automatically approve access.", d:["A highly predictable session identifier allows an attacker to easily hijack a user session.", "An application incorporates a vulnerable third-party logging library into its build process.", "An attacker successfully modifies a URL parameter to view another customer's invoice data."], e:"A database timeout causing the system to 'fail open' and grant access is the exact definition of mishandling an exceptional condition."},
@@ -275,150 +141,4 @@ const pool_part_2 = [
     {c:"A10 Exceptional Conditions", q:"What role does proper logging play specifically in mitigating A10 Exceptional Conditions?", a:"It guarantees that edge cases and unexpected states are recorded for subsequent architectural review.", d:["It actively and automatically patches the underlying vulnerability immediately upon first detection.", "It physically prevents the application from returning detailed stack traces directly to the end user.", "It inherently encrypts the resulting error state to completely shield it from any external observation."], e:"Properly logging exceptions allows teams to identify unstable edge cases and improve the system's resilience architecture."}
 ];
 
-// --- QUIZ LOGIC ---
 const MASTER_POOL = pool_part_1.concat(pool_part_2);
-let examQs = [], userAns = {}, flagged = {}, curr = 0, answered = {};
-
-function initExam() {
-    let pool = [...MASTER_POOL];
-    for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-    }
-    // Select all 120 questions
-    examQs = pool.slice(0, 120);
-    userAns = {}; flagged = {}; answered = {}; curr = 0;
-
-    // Pre-shuffle options for each question
-    examQs.forEach((q, i) => {
-        let opts = [q.a, ...q.d];
-        for (let j = opts.length - 1; j > 0; j--) {
-            const k = Math.floor(Math.random() * (j + 1));
-            [opts[j], opts[k]] = [opts[k], opts[j]];
-        }
-        examQs[i]._opts = opts;
-    });
-
-    document.getElementById('start-screen').style.display='none';
-    document.getElementById('results-screen').style.display='none';
-    document.getElementById('exam-ui').style.display='flex';
-    document.getElementById('footer').style.display='flex';
-
-    renderSide(); loadQ(0); updateProgress();
-}
-
-function updateProgress() {
-    const cnt = Object.keys(answered).length;
-    document.getElementById('progress-display').innerText = `${cnt} / 120`;
-    document.getElementById('finish-btn').style.display = cnt === 120 ? 'inline-block' : 'none';
-}
-
-function renderSide() {
-    const sb = document.getElementById('sidebar'); sb.innerHTML='';
-    examQs.forEach((q,i) => {
-        const b = document.createElement('button');
-        b.className = 'nav-btn'; b.innerText = i+1;
-        b.id = `nav-${i}`; b.onclick = () => loadQ(i);
-        sb.appendChild(b);
-    });
-}
-
-function loadQ(i) {
-    curr = i;
-    const q = examQs[i];
-
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`nav-${i}`).classList.add('active');
-    document.getElementById('status').innerText = `Q ${i+1} / 120`;
-
-    const con = document.getElementById('question-container'); con.innerHTML='';
-    const card = document.createElement('div'); card.className='card';
-
-    let html = `<div class="q-meta"><span class="tag">${q.c}</span><span class="q-num">#${i+1}</span></div><div class="q-text">${q.q}</div>`;
-
-    const isAnswered = answered[i] !== undefined;
-
-    q._opts.forEach((o, oi) => {
-        let cls = 'option';
-        if (isAnswered) {
-            cls += ' locked';
-            if (o === q.a) cls += ' opt-correct';
-            else if (o === userAns[i]) cls += ' opt-wrong';
-            else cls += ' opt-dim';
-        }
-        const clickHandler = isAnswered ? '' : `onclick="ans(${i}, ${oi})"`;
-        html += `<div class="${cls}" ${clickHandler}>${o}</div>`;
-    });
-
-    if (isAnswered) {
-        const wasCorrect = userAns[i] === q.a;
-        html += `<div class="explanation-box"><strong>${wasCorrect ? '✓ Correct' : '✗ Incorrect'}</strong><br>${q.e}</div>`;
-        if (i < 119) {
-            html += `<div class="next-btn-wrap"><button class="btn btn-p" onclick="loadQ(${i+1})">Next Question →</button></div>`;
-        }
-    }
-
-    card.innerHTML = html; con.appendChild(card);
-    con.scrollTop = 0;
-}
-
-function ans(qi, optIdx) {
-    const q = examQs[qi];
-    userAns[qi] = q._opts[optIdx];
-    answered[qi] = true;
-
-    const navBtn = document.getElementById(`nav-${qi}`);
-    if (userAns[qi] === q.a) {
-        navBtn.classList.add('answered-correct');
-    } else {
-        navBtn.classList.add('answered-wrong');
-    }
-
-    loadQ(qi);
-    updateProgress();
-}
-
-function nav(d) {
-    const n = curr + d;
-    if(n >= 0 && n < 120) loadQ(n);
-}
-
-function flag() {
-    flagged[curr] = !flagged[curr];
-    const b = document.getElementById(`nav-${curr}`);
-    if(flagged[curr]) b.classList.add('flagged'); else b.classList.remove('flagged');
-}
-
-function finish() {
-    if(!confirm('Finish the quiz and see your results?')) return;
-    document.getElementById('exam-ui').style.display='none';
-    document.getElementById('footer').style.display='none';
-
-    const resScreen = document.getElementById('results-screen');
-    resScreen.style.display='block';
-    resScreen.scrollTop = 0;
-
-    let score = 0;
-    let html = '';
-
-    examQs.forEach((q, i) => {
-        const correct = userAns[i] === q.a;
-        if(correct) score++;
-        html += `<div class="review-item ${correct?'correct':'wrong'}">
-            <strong>Q${i+1} [${q.c}]: ${q.q}</strong><br>
-            Your Answer: <b style="color:${correct?'#3fb950':'#ff7b72'}">${userAns[i]||'Skipped'}</b><br>
-            ${!correct ? `Correct Answer: <b style="color:#3fb950">${q.a}</b>` : ''}
-            <div class="review-explanation">Rationale: ${q.e}</div>
-        </div>`;
-    });
-
-    const pct = Math.round((score/120)*100);
-
-    document.getElementById('score-circle').innerText = `${pct}%`;
-    document.getElementById('raw-score').innerText = `You answered ${score} out of 120 questions correctly.`;
-    document.getElementById('review-list').innerHTML = html;
-}
-</script>
-</body>
-</html>
-</script>
