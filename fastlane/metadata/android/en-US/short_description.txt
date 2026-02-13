@@ -1,0 +1,1 @@
+Hardened, zero-permission offline quizzes for cybersecurity exam preparation.
