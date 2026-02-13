@@ -1,4 +1,4 @@
-package com.example.cyberquizzes;
+package com.cycloarcane.cyberquizzes;
 
 import android.os.Bundle;
 import android.webkit.WebResourceRequest;
