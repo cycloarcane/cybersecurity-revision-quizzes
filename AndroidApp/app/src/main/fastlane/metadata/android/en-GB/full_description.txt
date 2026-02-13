@@ -1,0 +1,10 @@
+Cybersecurity Revision Quizzes is an interactive educational tool designed to support self‑study and exam preparation across a range of cybersecurity domains.
+
+Key Features:
+- Hardened Security: Zero system permissions required. No network, no file access, and no tracking.
+- Strict Privacy: Operates entirely offline with no backend communication.
+- Comprehensive Content: Includes quizzes for CREST CRT, OWASP Top 10 (2021 & 2025), OWASP MAS, Active Directory Pentesting, MITRE ATT&CK, and OWASP Agentic AI.
+- Modern Architecture: Built using a hardened WebView with virtual HTTPS and a strict Content-Security-Policy (CSP) to mitigate injection risks.
+- User-Friendly Design: Responsive interface with Home and Restart controls, optimized for both mobile and tablet devices.
+
+This application prioritizes security and privacy, providing a safe environment for learners to reinforce their knowledge of protocols, standards, and security concepts.
