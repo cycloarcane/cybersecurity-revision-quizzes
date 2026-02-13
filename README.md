@@ -17,6 +17,7 @@ The Android app is built with a focus on security and privacy:
 - **Strict Content-Security-Policy (CSP)**: A robust CSP blocks all inline scripts and styles, mitigating potential XSS risks.
 - **Data Isolation**: Quiz datasets are isolated into standalone JS modules, ensuring a clean separation between the logic engine and content.
 - **R8 Obfuscation**: Release builds are automatically obfuscated and shrunk to protect source code and minimize the attack surface.
+- **Native Navigation**: Integration with Android's `WebChromeClient` allows native confirmation dialogs for a seamless mobile experience.
 
 ### Build Instructions
 Refer to the [Android Build & Security Guide](AndroidApp/BUILD_GUIDE.md) for detailed instructions on compiling, signing, and verifying the APK.
@@ -29,8 +30,10 @@ The quizzes are also available as a hardened web application for use in desktop 
 
 ### Features
 - **CSP Compliant**: Full protection against inline script execution.
-- **Unified Engine**: Shared logic between web and mobile platforms.
-- **Responsive Design**: Optimized for both large screens and mobile browsers.
+- **Unified Engine**: Shared JavaScript logic engine between web and mobile platforms for consistent behavior.
+- **Navigation Controls**: Quick-access **Home** (🏠) and **Restart** (🔄) buttons with safety confirmation prompts.
+- **Responsive Design**: Optimized for both large desktop screens and mobile browser views.
+- **Mobile Optimized**: Full scrolling support and toggleable sidebar drawer for smaller viewports.
 
 ### How to Use
 1. **Clone the repository**
@@ -57,18 +60,23 @@ The quizzes are also available as a hardened web application for use in desktop 
 
 ---
 
-## Contributing
+## 🛠 Contributing & Bug Reporting
 
-Contributions are welcome, particularly for:
-- Additional quiz content
-- Accuracy corrections
-- Improved UI/UX components
+Contributions are welcome! If you encounter any issues or want to improve the content:
+
+### Reporting Content Issues
+If you find any **incorrect question/answer pairs** or factual errors in the quiz data, please **[open a GitHub Issue](https://github.com/cycloarcane/cybersecurity-revision-quizzes/issues)**. Provide the quiz name and the specific question text to help us identify and fix it quickly.
+
+### Code Contributions
+- Additional quiz content (JSON format in `assets/data/`).
+- Accuracy corrections.
+- Improved UI/UX components.
 
 Please fork the repository and submit a pull request with a clear description of your changes.
 
 ---
 
-## Contact
+## ✉️ Contact
 
 - **GitHub**: [https://github.com/cycloarcane](https://github.com/cycloarcane)
 - **Email**: [cycloarkane@gmail.com](mailto:cycloarkane@gmail.com)
