@@ -1,6 +1,9 @@
 .main-menu {
     justify-content: flex-start;
     padding-top: 50px;
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
 }
 
 .menu-title {
