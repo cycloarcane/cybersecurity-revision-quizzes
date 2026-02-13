@@ -9,6 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const flagBtn = document.getElementById('flag-btn');
     const finishBtn = document.getElementById('finish-btn');
     const reloadBtn = document.getElementById('reload-btn');
+    const homeBtn = document.getElementById('home-btn');
+    const restartBtn = document.getElementById('restart-btn');
+
+    if (homeBtn) {
+        homeBtn.addEventListener('click', () => {
+            if (confirm("Go back to the main menu? Progress will be lost.")) {
+                window.location.href = 'index.html';
+            }
+        });
+    }
+
+    if (restartBtn) {
+        restartBtn.addEventListener('click', () => {
+            if (confirm("Restart this quiz?")) {
+                location.reload();
+            }
+        });
+    }
 
     if (startBtn) {
         console.log("Attaching listener to start-btn");

@@ -40,6 +40,16 @@ body {
     border-bottom: 2px solid var(--primary);
 }
 
+.header-container {
+    display: flex;
+    align-items: center;
+}
+
+#home-btn, #restart-btn, #menu-toggle {
+    margin-right: 8px;
+    padding: 6px 10px;
+}
+
 .header-title {
     font-family: 'JetBrains Mono', monospace;
     font-size: 1.1em;
