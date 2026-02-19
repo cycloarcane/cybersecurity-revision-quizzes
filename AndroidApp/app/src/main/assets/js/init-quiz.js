@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const reloadBtn = document.getElementById('reload-btn');
     const homeBtn = document.getElementById('home-btn');
     const restartBtn = document.getElementById('restart-btn');
+    const nextFooterBtn = document.getElementById('next-footer-btn');
+
+    if (nextFooterBtn) {
+        nextFooterBtn.addEventListener('click', () => nav(1));
+    }
 
     if (homeBtn) {
         homeBtn.addEventListener('click', () => {

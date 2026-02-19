@@ -254,6 +254,15 @@ body {
     font-family: 'JetBrains Mono', monospace;
 }
 
+#next-footer-btn {
+    display: none;
+    margin-left: 10px;
+}
+
+.show {
+    display: inline-block !important;
+}
+
 .btn {
     padding: 8px 16px;
     border: none;

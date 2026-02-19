@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
-    <title>OWASP MAS Quiz</title>
+    <title>Networking & Subnetting Quiz</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,15 +12,14 @@
 <div id="start-screen">
     <div class="center-wrapper">
         <div class="start-box">
-            <h1><span>OWASP</span> MAS</h1>
-            <div class="subtitle">Mobile Application Security</div>
+            <h1><span>Networking</span> Fundamentals</h1>
+            <div class="subtitle">IP, Subnets, VLANs & Protocols</div>
             <div class="stats">
                 <div class="stat"><div class="stat-num">120</div><div class="stat-label">Questions</div></div>
                 <div class="stat"><div class="stat-num">Self-paced</div><div class="stat-label">No Timer</div></div>
             </div>
             <p>
-                Covers all 8 MASVS categories: Storage, Cryptography, Authentication &amp; Authorization,
-                Network Communication, Platform Interaction, Code Quality, Resilience &amp; Privacy.
+                Test your knowledge of the OSI Model, IPv4/IPv6 addressing, RFC 1918 private ranges, CIDR subnetting, VLAN tagging (802.1Q), Spanning Tree, and core protocols like TCP, UDP, DNS, ARP, and DHCP.
             </p>
             <button class="btn btn-p" id="start-btn">Start Quiz</button>
         </div>
@@ -30,9 +29,9 @@
 <div class="header">
     <div class="header-container"><button class="btn btn-s" id="home-btn" title="Main Menu">🏠</button><button class="btn btn-s" id="restart-btn" title="Restart Quiz" >🔄</button>
         <button class="btn btn-s" id="menu-toggle">☰</button>
-        <div class="header-title"><span>OWASP</span> MAS Quiz</div>
+        <div class="header-title"><span>Networking</span> Fundamentals Quiz</div>
     </div>
-    <div id="progress-display" class="progress-text">0 / 120</div>
+    <div id="progress-display" class="progress-text">0 / 35</div>
 </div>
 
 <div class="main" id="exam-ui">
@@ -45,24 +44,25 @@
         <button class="btn btn-s" id="prev-btn">Previous</button> 
         <button class="btn btn-w" id="flag-btn">Flag</button><button class="btn btn-p" id="next-footer-btn" >Next</button>
     </div>
-    <div id="status">Q 1 / 120</div>
+    <div id="status">Q 1 / 35</div>
     <div><button class="btn btn-g" id="finish-btn">Finish Quiz</button></div>
 </div>
 
-<div id="results-screen">
+<div id="results-screen" style="display: none;">
     <div class="center-wrapper">
-        <div class="results-content">
-            <h1>Quiz Results</h1>
-            <div id="score-circle" class="score-circle">0%</div>
-            <div id="raw-score"></div>
-            <button class="btn btn-p" id="reload-btn">Take New Quiz</button>
+        <div class="start-box">
+            <h1>Quiz <span>Results</span></h1>
+            <div id="score-display" style="font-size: 2em; margin: 20px 0;"></div>
+            <div id="results-summary"></div>
+            <button class="btn btn-p" id="review-btn" style="margin-top: 20px;">Review Answers</button>
+            <button class="btn btn-s" id="results-home-btn" style="margin-top: 10px;">Main Menu</button>
         </div>
-        <div id="review-list"></div>
     </div>
 </div>
 
-<script src="data/owasp-mas.js"></script>
+<script src="data/networking.js"></script>
 <script src="js/quiz.js"></script>
+<script src="js/init-networking.js"></script>
 <script src="js/init-quiz.js"></script>
 </body>
 </html>

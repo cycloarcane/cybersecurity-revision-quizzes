@@ -45,7 +45,11 @@ function initQuiz(pool, total) {
 function updateProgress() {
     const cnt = Object.keys(answered).length;
     document.getElementById('progress-display').innerText = `${cnt} / ${TOTAL_QUESTIONS}`;
-    document.getElementById('finish-btn').style.display = cnt === TOTAL_QUESTIONS ? 'inline-block' : 'none';
+    const fb = document.getElementById('finish-btn');
+    if (fb) {
+        if (cnt === TOTAL_QUESTIONS) fb.classList.add('show');
+        else fb.classList.remove('show');
+    }
 }
 
 function renderSide() {
@@ -120,21 +124,16 @@ function loadQ(i) {
         expBox.className = 'explanation-box';
         expBox.innerHTML = `<strong>${wasCorrect ? '✓ Correct' : '✗ Incorrect'}</strong><br>${q.e}`;
         card.appendChild(expBox);
-        
-        if (i < TOTAL_QUESTIONS - 1) {
-            const nextWrap = document.createElement('div');
-            nextWrap.className = 'next-btn-wrap';
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'btn btn-p';
-            nextBtn.innerText = 'Next Question →';
-            nextBtn.addEventListener('click', () => loadQ(i+1));
-            nextWrap.appendChild(nextBtn);
-            card.appendChild(nextWrap);
-        }
     }
 
     con.appendChild(card);
     con.scrollTop = 0;
+
+    const nfb = document.getElementById('next-footer-btn');
+    if (nfb) {
+        if (isAnswered && i < TOTAL_QUESTIONS - 1) nfb.classList.add('show');
+        else nfb.classList.remove('show');
+    }
 }
 
 function ans(qi, optIdx) {
