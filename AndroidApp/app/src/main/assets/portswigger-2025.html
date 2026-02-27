@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
+    <title>PortSwigger Top 10:2025 Quiz</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="start-screen">
+    <div class="center-wrapper">
+        <div class="start-box">
+            <h1><span>PortSwigger</span> Top 10:2025</h1>
+            <div class="subtitle">Top Web Hacking Techniques</div>
+            <div class="stats">
+                <div class="stat"><div class="stat-num">120</div><div class="stat-label">Questions</div></div>
+                <div class="stat"><div class="stat-num">Self-paced</div><div class="stat-label">No Timer</div></div>
+            </div>
+            <p>
+                Based on the community-voted Top 10 Web Hacking Techniques of 2024 (published in 2025). Covers SSTI Successful Errors, ORM Leaking, Novel SSRF, Unicode Normalization, SOAPwn, XS-Leaks, Next.js Cache Poisoning, HTTP/2 CONNECT, and Parser Differentials.
+            </p>
+            <button class="btn btn-p" id="start-btn">Start Quiz</button>
+        </div>
+    </div>
+</div>
+
+<div class="header">
+    <div class="header-container"><button class="btn btn-s" id="home-btn" title="Main Menu">🏠</button><button class="btn btn-s" id="restart-btn" title="Restart Quiz" >🔄</button>
+        <button class="btn btn-s" id="menu-toggle">☰</button>
+        <div class="header-title"><span>PortSwigger</span> Top 10:2025 Quiz</div>
+    </div>
+    <div id="progress-display" class="progress-text">0 / 120</div>
+</div>
+
+<div class="main" id="exam-ui">
+    <div class="sidebar" id="sidebar"></div>
+    <div class="content" id="question-container"></div>
+</div>
+
+<div class="footer" id="footer">
+    <div>
+        <button class="btn btn-s" id="prev-btn">Previous</button> 
+        <button class="btn btn-w" id="flag-btn">Flag</button><button class="btn btn-p" id="next-footer-btn" >Next</button>
+    </div>
+    <div id="status">Q 1 / 120</div>
+    <div><button class="btn btn-g" id="finish-btn">Finish Quiz</button></div>
+</div>
+
+<div id="results-screen" style="display: none;">
+    <div class="center-wrapper">
+        <div class="start-box">
+            <h1>Quiz <span>Results</span></h1>
+            <div id="score-display" style="font-size: 2em; margin: 20px 0;"></div>
+            <div id="results-summary"></div>
+            <button class="btn btn-p" id="review-btn" style="margin-top: 20px;">Review Answers</button>
+            <button class="btn btn-s" id="results-home-btn" style="margin-top: 10px;">Main Menu</button>
+        </div>
+    </div>
+</div>
+
+<script src="data/portswigger-2025.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/init-quiz.js"></script>
+</body>
+</html>
