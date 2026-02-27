@@ -16,8 +16,23 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            Properties props = new Properties()
+            def propFile = project.rootProject.file('local.properties')
+            if (propFile.exists()) {
+                props.load(new FileInputStream(propFile))
+                storeFile file(props['signing.store.file'])
+                storePassword props['signing.store.password']
+                keyAlias props['signing.key.alias']
+                keyPassword props['signing.key.password']
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
