@@ -13,61 +13,105 @@
         <div class="header-title"><span>Cybersecurity</span> Quizzes</div>
     </div>
     <div class="center-wrapper main-menu">
-        <h1 class="menu-title">Select a Quiz</h1>
-        <ul class="quiz-list">
-            <li class="quiz-item" data-href="ptes.html">
-                <h2>PTES Methodology</h2>
-                <p>Penetration Testing Execution Standard</p>
-            </li>
-            <li class="quiz-item" data-href="encryption-pqc.html">
-                <h2>Encryption & PQC</h2>
-                <p>Modern Standards & Quantum-Safe Math</p>
-            </li>
-            <li class="quiz-item" data-href="git-security.html">
-                <h2>Git & Git Security</h2>
-                <p>Internals, Secrets & CFOR Attacks</p>
-            </li>
-            <li class="quiz-item" data-href="portswigger-2025.html">
-                <h2>PortSwigger Top 10:2025</h2>
-                <p>Top Web Hacking Techniques</p>
-            </li>
-            <li class="quiz-item" data-href="networking.html">
-                <h2>Networking & Subnetting</h2>
-                <p>IP, Subnets, VLANs & Protocols</p>
-            </li>
-            <li class="quiz-item" data-href="owasp-top10-2025.html">
-                <h2>OWASP Top 10:2025</h2>
-                <p>Web Application Security Risks</p>
-            </li>
-            <li class="quiz-item" data-href="owasp-mas.html">
-                <h2>OWASP MAS</h2>
-                <p>Mobile Application Security</p>
-            </li>
-            <li class="quiz-item" data-href="active-directory-pentest.html">
-                <h2>Active Directory Pentest</h2>
-                <p>Penetration Testing Knowledge</p>
-            </li>
-            <li class="quiz-item" data-href="crest-crt.html">
-                <h2>CREST CRT</h2>
-                <p>Registered Penetration Tester</p>
-            </li>
-            <li class="quiz-item" data-href="mitre-attack.html">
-                <h2>MITRE ATT&CK</h2>
-                <p>Enterprise Framework Knowledge</p>
-            </li>
-            <li class="quiz-item" data-href="owasp-agentic.html">
-                <h2>OWASP Agentic AI</h2>
-                <p>Top 10 for Agentic Applications: 2026</p>
-            </li>
-            <li class="quiz-item" data-href="owasp-top10-2021.html">
-                <h2>OWASP Top 10:2021</h2>
-                <p>Web Application Security Risks</p>
-            </li>
-            <li class="quiz-item" data-href="owasp-wstg.html">
-                <h2>OWASP WSTG v4.2</h2>
-                <p>Web Security Testing Guide</p>
-            </li>
-        </ul>
+        <h1 class="menu-title">Select a Category</h1>
+        
+        <div class="category-container">
+            <!-- Category 1 -->
+            <div class="category-header" data-target="cat-standards">
+                <span>Standards & Methodologies</span>
+                <svg class="chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <ul class="quiz-list collapsed" id="cat-standards">
+                <li class="quiz-item" data-href="ptes.html">
+                    <h2>PTES Methodology</h2>
+                    <p>Penetration Testing Execution Standard</p>
+                </li>
+                <li class="quiz-item" data-href="ptes-technical.html">
+                    <h2>PTES Technical</h2>
+                    <p>Technical Guidelines & Tooling</p>
+                </li>
+                <li class="quiz-item" data-href="mitre-attack.html">
+                    <h2>MITRE ATT&CK</h2>
+                    <p>Enterprise Framework Knowledge</p>
+                </li>
+            </ul>
+
+            <!-- Category 2 -->
+            <div class="category-header" data-target="cat-web">
+                <span>Web Application Security</span>
+                <svg class="chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <ul class="quiz-list collapsed" id="cat-web">
+                <li class="quiz-item" data-href="portswigger-2025.html">
+                    <h2>PortSwigger Top 10:2025</h2>
+                    <p>Top Web Hacking Techniques</p>
+                </li>
+                <li class="quiz-item" data-href="owasp-top10-2025.html">
+                    <h2>OWASP Top 10:2025</h2>
+                    <p>Web Application Security Risks</p>
+                </li>
+                <li class="quiz-item" data-href="owasp-wstg.html">
+                    <h2>OWASP WSTG v4.2</h2>
+                    <p>Web Security Testing Guide</p>
+                </li>
+                <li class="quiz-item" data-href="owasp-top10-2021.html">
+                    <h2>OWASP Top 10:2021</h2>
+                    <p>Legacy Web Security Risks</p>
+                </li>
+            </ul>
+
+            <!-- Category 3 -->
+            <div class="category-header" data-target="cat-infra">
+                <span>Network & Infrastructure</span>
+                <svg class="chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <ul class="quiz-list collapsed" id="cat-infra">
+                <li class="quiz-item" data-href="networking.html">
+                    <h2>Networking & Subnetting</h2>
+                    <p>IP, Subnets, VLANs & Protocols</p>
+                </li>
+                <li class="quiz-item" data-href="active-directory-pentest.html">
+                    <h2>Active Directory Pentest</h2>
+                    <p>Windows Domain Environments</p>
+                </li>
+                <li class="quiz-item" data-href="encryption-pqc.html">
+                    <h2>Encryption & PQC</h2>
+                    <p>Modern Standards & Quantum-Safe Math</p>
+                </li>
+                <li class="quiz-item" data-href="git-security.html">
+                    <h2>Git & Git Security</h2>
+                    <p>Internals, Secrets & CFOR Attacks</p>
+                </li>
+            </ul>
+
+            <!-- Category 4 -->
+            <div class="category-header" data-target="cat-specialized">
+                <span>Mobile & Emerging Tech</span>
+                <svg class="chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <ul class="quiz-list collapsed" id="cat-specialized">
+                <li class="quiz-item" data-href="owasp-mas.html">
+                    <h2>OWASP MAS</h2>
+                    <p>Mobile Application Security</p>
+                </li>
+                <li class="quiz-item" data-href="owasp-agentic.html">
+                    <h2>OWASP Agentic AI</h2>
+                    <p>Top 10 for Agentic Applications: 2026</p>
+                </li>
+            </ul>
+
+            <!-- Category 5 -->
+            <div class="category-header" data-target="cat-certs">
+                <span>Professional Certifications</span>
+                <svg class="chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <ul class="quiz-list collapsed" id="cat-certs">
+                <li class="quiz-item" data-href="crest-crt.html">
+                    <h2>CREST CRT</h2>
+                    <p>Registered Penetration Tester Prep</p>
+                </li>
+            </ul>
+        </div>
     </div>
     <script src="js/init-index.js"></script>
 </body>
