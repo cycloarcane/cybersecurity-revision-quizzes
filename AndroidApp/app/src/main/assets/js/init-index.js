@@ -1,14 +1,22 @@
 console.log("init-index.js loaded");
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM Content Loaded in index.html");
     const items = document.querySelectorAll('.quiz-item');
-    console.log("Found " + items.length + " quiz items");
+    
     items.forEach(item => {
+        const href = item.getAttribute('data-href');
+        const quizId = href.substring(href.lastIndexOf('/') + 1) || 'index.html';
+        const highScore = localStorage.getItem(`high_score_${quizId}`);
+        if (highScore !== null) {
+            const scoreBadge = document.createElement('div');
+            scoreBadge.className = 'high-score-badge';
+            scoreBadge.innerText = `Best: ${highScore}%`;
+            item.appendChild(scoreBadge);
+        }
+
         item.addEventListener('click', () => {
-            const href = item.getAttribute('data-href');
-            console.log("Navigating to: " + href);
             if (href) {
+                console.log("Navigating to: " + href);
                 window.location.href = href;
             }
         });

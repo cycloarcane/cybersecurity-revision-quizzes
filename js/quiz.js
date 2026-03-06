@@ -3,6 +3,30 @@ console.log("quiz.js loaded");
 let examQs = [], userAns = {}, flagged = {}, curr = 0, answered = {};
 let TOTAL_QUESTIONS = 0;
 
+function getQuizId() {
+    let path = window.location.pathname;
+    let file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+    // Remove query params or hashes just in case
+    file = file.split('?')[0].split('#')[0];
+    return file;
+}
+
+function displayHighScore() {
+    const quizId = getQuizId();
+    const highScore = localStorage.getItem(`high_score_${quizId}`);
+    const highScoreDiv = document.getElementById('high-score');
+    if (highScoreDiv) {
+        if (highScore !== null) {
+            highScoreDiv.innerText = `Best Score: ${highScore}%`;
+            highScoreDiv.style.display = 'block';
+        } else {
+            highScoreDiv.style.display = 'none';
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', displayHighScore);
+
 function initQuiz(pool, total) {
     console.log("Initializing quiz with pool size:", pool.length);
     // Reset state
@@ -215,6 +239,12 @@ function finish() {
     });
 
     const pct = Math.round((score/TOTAL_QUESTIONS)*100);
+
+    const quizId = getQuizId();
+    const oldHigh = localStorage.getItem(`high_score_${quizId}`);
+    if (oldHigh === null || pct > parseInt(oldHigh)) {
+        localStorage.setItem(`high_score_${quizId}`, pct);
+    }
 
     document.getElementById('score-circle').innerText = `${pct}%`;
     document.getElementById('raw-score').innerText = `You answered ${score} out of ${TOTAL_QUESTIONS} questions correctly.`;

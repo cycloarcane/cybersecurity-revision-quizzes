@@ -12,6 +12,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const homeBtn = document.getElementById('home-btn');
     const restartBtn = document.getElementById('restart-btn');
     const nextFooterBtn = document.getElementById('next-footer-btn');
+    const reviewBtn = document.getElementById('review-btn');
+    const resultsHomeBtn = document.getElementById('results-home-btn');
+    const backBtn = document.getElementById('back-btn');
+
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    }
+
+    if (reviewBtn) {
+        reviewBtn.addEventListener('click', () => {
+            document.getElementById('results-screen').style.display = 'none';
+            document.getElementById('exam-ui').style.display = 'flex';
+            document.getElementById('footer').style.display = 'flex';
+            loadQ(0);
+        });
+    }
+
+    if (resultsHomeBtn) {
+        resultsHomeBtn.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    }
 
     if (nextFooterBtn) {
         nextFooterBtn.addEventListener('click', () => nav(1));
@@ -50,8 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (flagBtn) flagBtn.addEventListener('click', flag);
     if (finishBtn) finishBtn.addEventListener('click', finish);
     if (reloadBtn) reloadBtn.addEventListener('click', () => {
-        console.log("Reloading...");
-        location.reload();
+        window.location.href = 'index.html';
     });
     
     const menuToggle = document.getElementById('menu-toggle');

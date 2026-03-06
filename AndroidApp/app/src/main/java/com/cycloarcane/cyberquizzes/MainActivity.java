@@ -24,14 +24,15 @@ public class MainActivity extends AppCompatActivity {
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setDatabaseEnabled(true);
         
-        // Harden WebView
-        webSettings.setAllowFileAccess(false);
-        webSettings.setAllowContentAccess(false);
-        webSettings.setGeolocationEnabled(false);
+        // Cache management - Disable for dev/testing to ensure assets update
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         
         // Use WebViewAssetLoader for virtual HTTPS
         final WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
+                .setDomain("appassets.androidplatform.net")
                 .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
                 .build();
 
@@ -39,6 +40,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 return assetLoader.shouldInterceptRequest(request.getUrl());
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                // Allow all internal navigation within the appassets domain
+                if (request.getUrl().getHost().equals("appassets.androidplatform.net")) {
+                    return false;
+                }
+                return super.shouldOverrideUrlLoading(view, request);
             }
         });
 
