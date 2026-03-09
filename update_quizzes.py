@@ -37,7 +37,7 @@ def update_file(file_path):
         new_content = p_part + '\n            <div id="high-score" class="high-score-box">Best Score: --</div>\n'
         new_content += '            <div class="start-actions">\n'
         new_content += '                ' + button_part + '\n'
-        new_content += '                <button class="btn btn-s" onclick="location.href=\'index.html\'">Back to Menu</button>\n'
+        new_content += '                <button class="btn btn-s" id="back-btn">Back to Menu</button>\n'
         new_content += '            </div>'
         return new_content
 

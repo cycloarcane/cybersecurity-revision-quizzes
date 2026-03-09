@@ -3,6 +3,13 @@ console.log("quiz.js loaded");
 let examQs = [], userAns = {}, flagged = {}, curr = 0, answered = {};
 let TOTAL_QUESTIONS = 0;
 
+function esc(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
 function getQuizId() {
     let path = window.location.pathname;
     let file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
@@ -153,7 +160,7 @@ function loadQ(i) {
 
     const meta = document.createElement('div');
     meta.className = 'q-meta';
-    meta.innerHTML = `<span class="tag">${q.c}</span><span class="q-num">#${i+1}</span>`;
+    meta.innerHTML = `<span class="tag">${esc(q.c)}</span><span class="q-num">#${i+1}</span>`;
     card.appendChild(meta);
 
     const qText = document.createElement('div');
@@ -183,7 +190,7 @@ function loadQ(i) {
     if (userAns[i]) {
         const exp = document.createElement('div');
         exp.className = 'explanation-box';
-        exp.innerHTML = `<strong>Explanation:</strong> ${q.e}`;
+        exp.innerHTML = `<strong>Explanation:</strong> ${esc(q.e)}`;
         card.appendChild(exp);
 
         const nextWrap = document.createElement('div');
@@ -258,12 +265,12 @@ function finish() {
         if (isCorrect) score++;
 
         const item = document.createElement('div');
-        item.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
+        item.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
         item.innerHTML = `
-            <div class="review-q">${i+1}. ${q.q}</div>
-            <div class="review-ans">Your Answer: ${userAns[i] || 'None'}</div>
-            <div class="review-correct">Correct Answer: ${q.a}</div>
-            <div class="review-explanation">${q.e}</div>
+            <div class="review-q">${i+1}. ${esc(q.q)}</div>
+            <div class="review-ans">Your Answer: ${esc(userAns[i] || 'None')}</div>
+            <div class="review-correct">Correct Answer: ${esc(q.a)}</div>
+            <div class="review-explanation">${esc(q.e)}</div>
         `;
         reviewList.appendChild(item);
     });
