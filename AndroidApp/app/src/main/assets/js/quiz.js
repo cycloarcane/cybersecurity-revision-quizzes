@@ -6,9 +6,29 @@ let TOTAL_QUESTIONS = 0;
 function getQuizId() {
     let path = window.location.pathname;
     let file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-    // Remove query params or hashes just in case
+    // Ensure we handle file:/// paths correctly by taking only the last part
+    if (file.includes('\\')) file = file.substring(file.lastIndexOf('\\') + 1);
     file = file.split('?')[0].split('#')[0];
     return file;
+}
+
+function saveProgress() {
+    const quizId = getQuizId();
+    const state = {
+        examQs: examQs,
+        userAns: userAns,
+        flagged: flagged,
+        curr: curr,
+        answered: answered,
+        TOTAL_QUESTIONS: TOTAL_QUESTIONS,
+        timestamp: Date.now()
+    };
+    localStorage.setItem(`state_${quizId}`, JSON.stringify(state));
+}
+
+function clearProgress() {
+    const quizId = getQuizId();
+    localStorage.removeItem(`state_${quizId}`);
 }
 
 function displayHighScore() {
@@ -25,36 +45,58 @@ function displayHighScore() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', displayHighScore);
-
-function initQuiz(pool, total) {
-    console.log("Initializing quiz with pool size:", pool.length);
-    // Reset state
-    examQs = [];
-    userAns = {};
-    flagged = {};
-    curr = 0;
-    answered = {};
+// Auto-Resume check
+document.addEventListener('DOMContentLoaded', () => {
+    displayHighScore();
     
-    TOTAL_QUESTIONS = total || pool.length;
-    if (TOTAL_QUESTIONS > pool.length) TOTAL_QUESTIONS = pool.length;
-
-    let shuffledPool = [...pool];
-    for (let i = shuffledPool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledPool[i], shuffledPool[j]] = [shuffledPool[j], shuffledPool[i]];
-    }
-    
-    examQs = shuffledPool.slice(0, TOTAL_QUESTIONS);
-
-    examQs.forEach((q, i) => {
-        let opts = [q.a, ...q.d];
-        for (let j = opts.length - 1; j > 0; j--) {
-            const k = Math.floor(Math.random() * (j + 1));
-            [opts[j], opts[k]] = [opts[k], opts[j]];
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('resume') === 'true') {
+        const quizId = getQuizId();
+        const saved = localStorage.getItem(`state_${quizId}`);
+        if (saved) {
+            const state = JSON.parse(saved);
+            if (typeof MASTER_POOL !== 'undefined') {
+                initQuiz(MASTER_POOL, state.TOTAL_QUESTIONS, state);
+            }
         }
-        examQs[i]._opts = opts;
-    });
+    }
+});
+
+function initQuiz(pool, total, resumeState = null) {
+    if (resumeState) {
+        examQs = resumeState.examQs;
+        userAns = resumeState.userAns;
+        flagged = resumeState.flagged;
+        curr = resumeState.curr;
+        answered = resumeState.answered;
+        TOTAL_QUESTIONS = resumeState.TOTAL_QUESTIONS || total;
+    } else {
+        examQs = [];
+        userAns = {};
+        flagged = {};
+        curr = 0;
+        answered = {};
+        
+        TOTAL_QUESTIONS = total || pool.length;
+        if (TOTAL_QUESTIONS > pool.length) TOTAL_QUESTIONS = pool.length;
+
+        let shuffledPool = [...pool];
+        for (let i = shuffledPool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledPool[i], shuffledPool[j]] = [shuffledPool[j], shuffledPool[i]];
+        }
+        
+        examQs = shuffledPool.slice(0, TOTAL_QUESTIONS);
+
+        examQs.forEach((q, i) => {
+            let opts = [q.a, ...q.d];
+            for (let j = opts.length - 1; j > 0; j--) {
+                const k = Math.floor(Math.random() * (j + 1));
+                [opts[j], opts[k]] = [opts[k], opts[j]];
+            }
+            examQs[i]._opts = opts;
+        });
+    }
 
     document.getElementById('start-screen').style.display='none';
     document.getElementById('results-screen').style.display='none';
@@ -62,8 +104,10 @@ function initQuiz(pool, total) {
     document.getElementById('footer').style.display='flex';
 
     renderSide();
-    loadQ(0);
+    loadQ(curr);
     updateProgress();
+    
+    if (!resumeState) saveProgress();
 }
 
 function updateProgress() {
@@ -83,6 +127,8 @@ function renderSide() {
     examQs.forEach((q,i) => {
         const b = document.createElement('button');
         b.className = 'nav-btn';
+        if (flagged[i]) b.classList.add('flagged');
+        if (answered[i] !== undefined) b.classList.add('answered');
         b.innerText = i+1;
         b.id = `nav-${i}`;
         b.addEventListener('click', () => {
@@ -99,142 +145,126 @@ function renderSide() {
 function loadQ(i) {
     curr = i;
     const q = examQs[i];
+    const container = document.getElementById('question-container');
+    container.innerHTML = '';
 
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    const activeNav = document.getElementById(`nav-${i}`);
-    if (activeNav) activeNav.classList.add('active');
-    
-    document.getElementById('status').innerText = `Q ${i+1} / ${TOTAL_QUESTIONS}`;
-
-    const con = document.getElementById('question-container');
-    if (!con) return;
-    con.innerHTML='';
     const card = document.createElement('div');
-    card.className='card';
+    card.className = 'card';
 
-    // Metadata
     const meta = document.createElement('div');
     meta.className = 'q-meta';
     meta.innerHTML = `<span class="tag">${q.c}</span><span class="q-num">#${i+1}</span>`;
     card.appendChild(meta);
 
-    // Question Text
     const qText = document.createElement('div');
     qText.className = 'q-text';
     qText.innerText = q.q;
     card.appendChild(qText);
 
-    const isAnswered = answered[i] !== undefined;
+    const optsDiv = document.createElement('div');
+    optsDiv.className = 'options';
 
-    q._opts.forEach((o, oi) => {
-        const optDiv = document.createElement('div');
-        optDiv.className = 'option';
-        optDiv.innerText = o;
-        
-        if (isAnswered) {
-            optDiv.classList.add('locked');
-            if (o === q.a) optDiv.classList.add('opt-correct');
-            else if (o === userAns[i]) optDiv.classList.add('opt-wrong');
-            else optDiv.classList.add('opt-dim');
-        } else {
-            optDiv.addEventListener('click', () => ans(i, oi));
+    q._opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        if (userAns[i] === opt) {
+            btn.classList.add('selected');
+            if (opt === q.a) btn.classList.add('opt-correct');
+            else btn.classList.add('opt-wrong');
         }
-        card.appendChild(optDiv);
+        btn.innerText = opt;
+        btn.addEventListener('click', () => select(opt, btn));
+        optsDiv.appendChild(btn);
     });
 
-    if (isAnswered) {
-        const wasCorrect = userAns[i] === q.a;
-        const expBox = document.createElement('div');
-        expBox.className = 'explanation-box';
-        expBox.innerHTML = `<strong>${wasCorrect ? '✓ Correct' : '✗ Incorrect'}</strong><br>${q.e}`;
-        card.appendChild(expBox);
+    card.appendChild(optsDiv);
+
+    // Explanation Box (Hidden until answer selected)
+    if (userAns[i]) {
+        const exp = document.createElement('div');
+        exp.className = 'explanation-box';
+        exp.innerHTML = `<strong>Explanation:</strong> ${q.e}`;
+        card.appendChild(exp);
+
+        const nextWrap = document.createElement('div');
+        nextWrap.className = 'next-btn-wrap';
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'btn btn-p';
+        nextBtn.innerText = (i === TOTAL_QUESTIONS - 1) ? 'Finish' : 'Next Question';
+        nextBtn.addEventListener('click', () => {
+            if (i === TOTAL_QUESTIONS - 1) finish();
+            else nav(1);
+        });
+        nextWrap.appendChild(nextBtn);
+        card.appendChild(nextWrap);
     }
 
-    con.appendChild(card);
-    con.scrollTop = 0;
+    container.appendChild(card);
 
-    const nfb = document.getElementById('next-footer-btn');
-    if (nfb) {
-        if (isAnswered && i < TOTAL_QUESTIONS - 1) nfb.classList.add('show');
-        else nfb.classList.remove('show');
-    }
+    document.getElementById('status').innerText = `Q ${i+1} / ${TOTAL_QUESTIONS}`;
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    const activeNav = document.getElementById(`nav-${i}`);
+    if (activeNav) activeNav.classList.add('active');
+    
+    saveProgress();
 }
 
-function ans(qi, optIdx) {
-    const q = examQs[qi];
-    userAns[qi] = q._opts[optIdx];
-    answered[qi] = true;
+function select(opt, btn) {
+    if (userAns[curr]) return; // Prevent changing answer
 
-    const navBtn = document.getElementById(`nav-${qi}`);
-    if (navBtn) {
-        if (userAns[qi] === q.a) {
-            navBtn.classList.add('answered-correct');
-        } else {
-            navBtn.classList.add('answered-wrong');
-        }
-    }
-
-    loadQ(qi);
+    userAns[curr] = opt;
+    answered[curr] = true;
+    
+    // Refresh the card to show explanation and correct/wrong colors
+    loadQ(curr);
     updateProgress();
+    saveProgress();
 }
 
-function nav(d) {
-    const n = curr + d;
-    if(n >= 0 && n < TOTAL_QUESTIONS) loadQ(n);
+function nav(dir) {
+    let next = curr + dir;
+    if (next >= 0 && next < TOTAL_QUESTIONS) {
+        loadQ(next);
+    }
 }
 
 function flag() {
-    flagged[curr] = !flagged[curr];
-    const b = document.getElementById(`nav-${curr}`);
-    if (b) {
-        if(flagged[curr]) b.classList.add('flagged');
-        else b.classList.remove('flagged');
+    const navBtn = document.getElementById(`nav-${curr}`);
+    if (flagged[curr]) {
+        delete flagged[curr];
+        if (navBtn) navBtn.classList.remove('flagged');
+    } else {
+        flagged[curr] = true;
+        if (navBtn) navBtn.classList.add('flagged');
     }
+    saveProgress();
 }
 
 function finish() {
-    if(!confirm('Finish the quiz and see your results?')) return;
-    document.getElementById('exam-ui').style.display='none';
-    document.getElementById('footer').style.display='none';
+    if (Object.keys(answered).length < TOTAL_QUESTIONS) {
+        if (!confirm("You haven't answered all questions. Finish anyway?")) return;
+    }
 
-    const resScreen = document.getElementById('results-screen');
-    resScreen.style.display='block';
-    resScreen.scrollTop = 0;
+    document.getElementById('exam-ui').style.display = 'none';
+    document.getElementById('footer').style.display = 'none';
+    document.getElementById('results-screen').style.display = 'flex';
 
     let score = 0;
     const reviewList = document.getElementById('review-list');
-    if (!reviewList) return;
     reviewList.innerHTML = '';
 
     examQs.forEach((q, i) => {
-        const correct = userAns[i] === q.a;
-        if(correct) score++;
-        
+        const isCorrect = userAns[i] === q.a;
+        if (isCorrect) score++;
+
         const item = document.createElement('div');
-        item.className = `review-item ${correct?'correct':'wrong'}`;
-        
-        const title = document.createElement('strong');
-        title.innerText = `Q${i+1} [${q.c}]: ${q.q}`;
-        item.appendChild(title);
-        item.appendChild(document.createElement('br'));
-        
-        const yourAns = document.createElement('span');
-        yourAns.innerHTML = `Your Answer: <b style="color:${correct?'#3fb950':'#ff7b72'}">${userAns[i]||'Skipped'}</b>`;
-        item.appendChild(yourAns);
-        item.appendChild(document.createElement('br'));
-        
-        if (!correct) {
-            const correctAns = document.createElement('span');
-            correctAns.innerHTML = `Correct Answer: <b style="color:#3fb950">${q.a}</b>`;
-            item.appendChild(correctAns);
-            item.appendChild(document.createElement('br'));
-        }
-        
-        const rationale = document.createElement('div');
-        rationale.className = 'review-explanation';
-        rationale.innerText = `Rationale: ${q.e}`;
-        item.appendChild(rationale);
-        
+        item.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
+        item.innerHTML = `
+            <div class="review-q">${i+1}. ${q.q}</div>
+            <div class="review-ans">Your Answer: ${userAns[i] || 'None'}</div>
+            <div class="review-correct">Correct Answer: ${q.a}</div>
+            <div class="review-explanation">${q.e}</div>
+        `;
         reviewList.appendChild(item);
     });
 
@@ -248,6 +278,8 @@ function finish() {
 
     document.getElementById('score-circle').innerText = `${pct}%`;
     document.getElementById('raw-score').innerText = `You answered ${score} out of ${TOTAL_QUESTIONS} questions correctly.`;
+    
+    clearProgress();
 }
 
 function toggleSidebar() {
