@@ -13,7 +13,6 @@ function esc(str) {
 function getQuizId() {
     let path = window.location.pathname;
     let file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-    // Ensure we handle file:/// paths correctly by taking only the last part
     if (file.includes('\\')) file = file.substring(file.lastIndexOf('\\') + 1);
     file = file.split('?')[0].split('#')[0];
     return file;
@@ -52,21 +51,36 @@ function displayHighScore() {
     }
 }
 
-// Auto-Resume check
+// Auto-Resume UI logic
+function checkResume() {
+    const quizId = getQuizId();
+    const saved = localStorage.getItem(`state_${quizId}`);
+    if (saved) {
+        try {
+            const state = JSON.parse(saved);
+            const answeredCount = Object.keys(state.answered || {}).length;
+            if (answeredCount > 0) {
+                // Create or reveal a resume button on the start screen
+                const actionsDiv = document.querySelector('.start-actions');
+                if (actionsDiv && !document.getElementById('resume-btn')) {
+                    const resumeBtn = document.createElement('button');
+                    resumeBtn.id = 'resume-btn';
+                    resumeBtn.className = 'btn btn-g'; // Success green/red theme
+                    resumeBtn.style.marginTop = '10px';
+                    resumeBtn.innerText = `Resume Quiz (${answeredCount} / ${state.TOTAL_QUESTIONS})`;
+                    resumeBtn.addEventListener('click', () => {
+                        initQuiz(MASTER_POOL, state.TOTAL_QUESTIONS, state);
+                    });
+                    actionsDiv.appendChild(resumeBtn);
+                }
+            }
+        } catch (e) { console.error("Error checking resume", e); }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     displayHighScore();
-    
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('resume') === 'true') {
-        const quizId = getQuizId();
-        const saved = localStorage.getItem(`state_${quizId}`);
-        if (saved) {
-            const state = JSON.parse(saved);
-            if (typeof MASTER_POOL !== 'undefined') {
-                initQuiz(MASTER_POOL, state.TOTAL_QUESTIONS, state);
-            }
-        }
-    }
+    checkResume();
 });
 
 function initQuiz(pool, total, resumeState = null) {
@@ -186,7 +200,6 @@ function loadQ(i) {
 
     card.appendChild(optsDiv);
 
-    // Explanation Box (Hidden until answer selected)
     if (userAns[i]) {
         const exp = document.createElement('div');
         exp.className = 'explanation-box';
@@ -217,12 +230,9 @@ function loadQ(i) {
 }
 
 function select(opt, btn) {
-    if (userAns[curr]) return; // Prevent changing answer
-
+    if (userAns[curr]) return; 
     userAns[curr] = opt;
     answered[curr] = true;
-    
-    // Refresh the card to show explanation and correct/wrong colors
     loadQ(curr);
     updateProgress();
     saveProgress();

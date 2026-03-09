@@ -1,82 +1,58 @@
 # Cybersecurity Revision Quizzes
 
-This repository contains a set of **interactive cybersecurity revision quizzes** designed to support self‑study, exam preparation, and general knowledge reinforcement.
+A comprehensive collection of interactive revision quizzes for cybersecurity professionals, penetration testers, and security analysts. This tool is designed to help you master various security frameworks, methodologies, and technical standards.
 
-The project features both a **local web-based version** and a **hardened Android application**, providing a secure and flexible environment for learners.
-
----
+## 🌐 Live Web Version
+Take the quizzes directly in your browser:
+**[https://cycloarcane.github.io/cybersecurity-revision-quizzes/](https://cycloarcane.github.io/cybersecurity-revision-quizzes/)**
 
 ## 📱 Android Application
+A high-performance, offline-first Android application is available.
+- **Zero Permissions:** Privacy-first architecture with no network or storage permissions required.
+- **Persistent Progress:** Automatically saves your session so you can resume mid-quiz.
+- **High Score Tracking:** Keeps track of your best performance for each category.
+- **Red & Black Theme:** Modern, high-contrast aesthetic with custom SVG icons.
 
-The repository includes a complete Android Studio project (`/AndroidApp`) that compiles into a hardened, zero-permission mobile application.
-
-### Security Architecture
-The Android app is built with a focus on security and privacy:
-- **Zero Permissions**: The app requests no Android permissions (no network, no file access, no location).
-- **WebView Hardening**: Uses `WebViewAssetLoader` to serve local content via virtual HTTPS (`https://appassets.androidplatform.net/assets/`), preventing common `file://` scheme vulnerabilities.
-- **Strict Content-Security-Policy (CSP)**: A robust CSP blocks all inline scripts and styles, mitigating potential XSS risks.
-- **Data Isolation**: Quiz datasets are isolated into standalone JS modules, ensuring a clean separation between the logic engine and content.
-- **R8 Obfuscation**: Release builds are automatically obfuscated and shrunk to protect source code and minimize the attack surface.
-- **Native Navigation**: Integration with Android's `WebChromeClient` allows native confirmation dialogs for a seamless mobile experience.
-
-### Build Instructions
-Refer to the [Android Build & Security Guide](AndroidApp/BUILD_GUIDE.md) for detailed instructions on compiling, signing, and verifying the APK.
-
----
-
-## 🌐 Web Version (Hardened)
-
-The quizzes are also available as a hardened web application for use in desktop browsers. This version uses the exact same secure architecture as the Android app.
-
-### Features
-- **CSP Compliant**: Full protection against inline script execution.
-- **Unified Engine**: Shared JavaScript logic engine between web and mobile platforms for consistent behavior.
-- **Navigation Controls**: Quick-access **Home** (🏠) and **Restart** (🔄) buttons with safety confirmation prompts.
-- **Responsive Design**: Optimized for both large desktop screens and mobile browser views.
-- **Mobile Optimized**: Full scrolling support and toggleable sidebar drawer for smaller viewports.
-
-### How to Use
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/cycloarcane/cybersecurity-revision-quizzes.git
-   ```
-2. **Open locally**
-   Navigate to the directory and open `index.html` in your browser.
-
-> **Note**
-> While the web version is hardened with a strict Content-Security-Policy, it is still recommended for local use. If deploying to a web server, ensure you configure appropriate server-side security headers.
+**Download the latest APK from the [Releases](https://github.com/cycloarcane/cybersecurity-revision-quizzes/releases) page.**
 
 ---
 
 ## 📚 Included Quizzes
 
-- **CREST CRT**: Based on Syllabus v2.0 (Core Skills, Networks, Windows/Linux, Web).
-- **OWASP Top 10 (2025 & 2021)**: Web Application Security Risks.
-- **OWASP MAS**: Mobile Application Security (MASVS categories).
-- **Active Directory Pentest**: 12 domains of AD security and enumeration.
-- **MITRE ATT&CK**: Enterprise Tactics and Techniques.
-- **OWASP Agentic AI**: Top 10 for Agentic Applications (2026).
-- **OWASP WSTG v4.2**: Web Security Testing Guide categories.
+### 🛡️ Standards & Methodologies
+- **PTES Methodology:** Penetration Testing Execution Standard (7 Phases).
+- **PTES Technical:** Technical Guidelines & specific security tooling.
+- **MITRE ATT&CK:** Advanced Enterprise Framework knowledge.
+
+### 🌐 Web Application Security
+- **PortSwigger Top 10:2025:** Latest web hacking techniques from PortSwigger Research.
+- **OWASP Top 10:2025:** Modern web application security risks.
+- **OWASP WSTG v4.2:** Web Security Testing Guide.
+- **OWASP Top 10:2021:** Legacy web security risks for historical context.
+
+### 🔌 Network & Infrastructure
+- **Networking & Subnetting:** IP, Subnets (CIDR/VLSM), VLANs, and Protocols.
+- **Active Directory Pentest:** Windows Domain environments and escalation paths.
+- **Encryption & PQC:** Modern standards and NIST Post-Quantum Cryptography.
+- **Git & Git Security:** Internals, secrets prevention, and platform-specific attacks.
+
+### 📱 Mobile & Emerging Tech
+- **OWASP MAS:** Mobile Application Security.
+- **OWASP Agentic AI:** Top 10 risks for Agentic AI applications (2026).
+
+### 🎓 Professional Certifications
+- **CREST CPSA:** Practitioner Security Analyst (Advanced Revision).
+- **CREST CRT:** Registered Penetration Tester preparation.
 
 ---
 
-## 🛠 Contributing & Bug Reporting
+## 🛠️ Technology Stack
+- **Frontend:** Vanilla HTML5, CSS3 (with Flexbox/Grid), and pure JavaScript.
+- **Architecture:** Static, client-side rendering with `localStorage` persistence.
+- **Android:** Hybrid container using `WebView` and `WebViewAssetLoader` for security.
 
-Contributions are welcome! If you encounter any issues or want to improve the content:
-
-### Reporting Content Issues
-If you find any **incorrect question/answer pairs** or factual errors in the quiz data, please **[open a GitHub Issue](https://github.com/cycloarcane/cybersecurity-revision-quizzes/issues)**. Provide the quiz name and the specific question text to help us identify and fix it quickly.
-
-### Code Contributions
-- Additional quiz content (JSON format in `assets/data/`).
-- Accuracy corrections.
-- Improved UI/UX components.
-
-Please fork the repository and submit a pull request with a clear description of your changes.
+## 🤝 Contributing
+If you find any incorrect question/answer pairs or factual errors, please **[open a GitHub Issue](https://github.com/cycloarcane/cybersecurity-revision-quizzes/issues)**.
 
 ---
-
-## ✉️ Contact
-
-- **GitHub**: [https://github.com/cycloarcane](https://github.com/cycloarcane)
-- **Email**: [cycloarkane@gmail.com](mailto:cycloarkane@gmail.com)
+**Maintained by [cycloarcane](https://github.com/cycloarcane)**

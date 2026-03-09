@@ -8,46 +8,52 @@ function getQuizId(href) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Handle High Score Badges and Resume Buttons
     const items = document.querySelectorAll('.quiz-item');
+    
     items.forEach(item => {
         const href = item.getAttribute('data-href');
         const quizId = getQuizId(href);
         
+        // Wrap existing content into a quiz-info container
+        const title = item.querySelector('h2');
+        const desc = item.querySelector('p');
+        
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'quiz-info';
+        if (title) infoDiv.appendChild(title);
+        if (desc) infoDiv.appendChild(desc);
+        
+        const statsDiv = document.createElement('div');
+        statsDiv.className = 'quiz-stats';
+        
+        item.innerHTML = ''; // Clear original
+        item.appendChild(infoDiv);
+        item.appendChild(statsDiv);
+
         // 1. High Score Badge
         const highScore = localStorage.getItem(`high_score_${quizId}`);
         if (highScore !== null) {
             const scoreBadge = document.createElement('div');
             scoreBadge.className = 'high-score-badge';
             scoreBadge.innerText = `Best: ${highScore}%`;
-            item.appendChild(scoreBadge);
+            statsDiv.appendChild(scoreBadge);
         }
 
-        // 2. Resume Session Button
+        // 2. Progress Badge
         const savedState = localStorage.getItem(`state_${quizId}`);
         if (savedState) {
             try {
                 const state = JSON.parse(savedState);
                 const answeredCount = Object.keys(state.answered || {}).length;
-                
                 if (answeredCount > 0) {
-                    const resumeBtn = document.createElement('button');
-                    resumeBtn.className = 'resume-btn';
-                    resumeBtn.innerText = `Resume Progress (${answeredCount} / ${state.TOTAL_QUESTIONS})`;
-                    
-                    resumeBtn.addEventListener('click', (e) => {
-                        e.stopPropagation(); // Prevent the parent .quiz-item click
-                        window.location.href = `${href}?resume=true`;
-                    });
-                    
-                    item.appendChild(resumeBtn);
+                    const progressBadge = document.createElement('div');
+                    progressBadge.className = 'progress-badge';
+                    progressBadge.innerText = `In Progress: ${answeredCount}/${state.TOTAL_QUESTIONS}`;
+                    statsDiv.appendChild(progressBadge);
                 }
-            } catch (err) {
-                console.error("Error parsing saved state", err);
-            }
+            } catch (e) { console.error("Error parsing state for badge", e); }
         }
 
-        // Parent click starts fresh
         item.addEventListener('click', () => {
             if (href) {
                 window.location.href = href;
