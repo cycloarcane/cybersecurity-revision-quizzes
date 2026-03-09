@@ -264,7 +264,7 @@ function finish() {
 
     document.getElementById('exam-ui').style.display = 'none';
     document.getElementById('footer').style.display = 'none';
-    document.getElementById('results-screen').style.display = 'flex';
+    document.getElementById('results-screen').style.display = 'block';
 
     let score = 0;
     const reviewList = document.getElementById('review-list');
