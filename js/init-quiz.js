@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.addEventListener('click', () => {
             console.log("Start button clicked");
             if (typeof MASTER_POOL !== 'undefined') {
-                initQuiz(MASTER_POOL, 120);
+                initQuiz(MASTER_POOL, 60);
             } else {
                 console.error("MASTER_POOL is not defined. Data file might have failed to load.");
                 alert("Error: Quiz data not found.");
