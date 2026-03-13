@@ -120,6 +120,7 @@ function initQuiz(pool, total, resumeState = null) {
 
     document.getElementById('start-screen').style.display='none';
     document.getElementById('results-screen').style.display='none';
+    document.querySelector('.header').style.display='flex';
     document.getElementById('exam-ui').style.display='flex';
     document.getElementById('footer').style.display='flex';
 
