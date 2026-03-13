@@ -16,55 +16,56 @@
         <h1 class="menu-title">Select a Category</h1>
         
         <div class="category-container">
-            <!-- Category 1 -->
-            <div class="category-header" data-target="cat-standards">
-                <span>Standards & Methodologies</span>
+            <!-- Category 1: OWASP -->
+            <div class="category-header" data-target="cat-owasp">
+                <span>OWASP & Software Security</span>
                 <svg class="chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>
-            <ul class="quiz-list collapsed" id="cat-standards">
-                <li class="quiz-item" data-href="jargon-frameworks.html">
-                    <h2>Jargon & Frameworks</h2>
-                    <p>Industry Terms & Principles</p>
-                </li>
-                <li class="quiz-item" data-href="ptes.html">
-                    <h2>PTES Methodology</h2>
-                    <p>Penetration Testing Execution Standard</p>
-                </li>
-                <li class="quiz-item" data-href="ptes-technical.html">
-                    <h2>PTES Technical</h2>
-                    <p>Technical Guidelines & Tooling</p>
-                </li>
-                <li class="quiz-item" data-href="mitre-attack.html">
-                    <h2>MITRE ATT&CK</h2>
-                    <p>Enterprise Framework Knowledge</p>
-                </li>
-            </ul>
-
-            <!-- Category 2 -->
-            <div class="category-header" data-target="cat-web">
-                <span>Web Application Security</span>
-                <svg class="chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </div>
-            <ul class="quiz-list collapsed" id="cat-web">
-                <li class="quiz-item" data-href="portswigger-2025.html">
-                    <h2>PortSwigger Top 10:2025</h2>
-                    <p>Top Web Hacking Techniques</p>
-                </li>
+            <ul class="quiz-list collapsed" id="cat-owasp">
                 <li class="quiz-item" data-href="owasp-top10-2025.html">
                     <h2>OWASP Top 10:2025</h2>
                     <p>Web Application Security Risks</p>
+                </li>
+                <li class="quiz-item" data-href="owasp-mas.html">
+                    <h2>OWASP MAS</h2>
+                    <p>Mobile Application Security</p>
+                </li>
+                <li class="quiz-item" data-href="owasp-agentic.html">
+                    <h2>OWASP Agentic AI</h2>
+                    <p>Agentic Applications: 2026</p>
                 </li>
                 <li class="quiz-item" data-href="owasp-wstg.html">
                     <h2>OWASP WSTG v4.2</h2>
                     <p>Web Security Testing Guide</p>
                 </li>
+                
+                <!-- SUB-CATEGORY: Fine Grain -->
+                <div class="sub-category-header" data-target="cat-owasp-fine">
+                    <span>OWASP 2025 Fine-Grain</span>
+                    <svg class="chevron" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <ul class="sub-quiz-list collapsed" id="cat-owasp-fine">
+                    <li class="quiz-item" data-href="owasp-2025-a1.html">
+                        <h2>A01: Broken Access Control</h2>
+                        <p>IDOR, Escalation & SSRF</p>
+                    </li>
+                    <li class="quiz-item" data-href="owasp-2025-a2.html">
+                        <h2>A02: Security Misconfiguration</h2>
+                        <p>Hardening & Cloud Gaps</p>
+                    </li>
+                    <li class="quiz-item" data-href="owasp-2025-a3.html">
+                        <h2>A03: Software Supply Chain</h2>
+                        <p>SCA, SBOM & CI/CD Security</p>
+                    </li>
+                </ul>
+
                 <li class="quiz-item" data-href="owasp-top10-2021.html">
                     <h2>OWASP Top 10:2021</h2>
                     <p>Legacy Web Security Risks</p>
                 </li>
             </ul>
 
-            <!-- Category 3 -->
+            <!-- Category 2: Infrastructure -->
             <div class="category-header" data-target="cat-infra">
                 <span>Network & Infrastructure</span>
                 <svg class="chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -88,23 +89,35 @@
                 </li>
             </ul>
 
-            <!-- Category 4 -->
-            <div class="category-header" data-target="cat-specialized">
-                <span>Mobile & Emerging Tech</span>
+            <!-- Category 3: Standards -->
+            <div class="category-header" data-target="cat-standards">
+                <span>Standards & Methodologies</span>
                 <svg class="chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>
-            <ul class="quiz-list collapsed" id="cat-specialized">
-                <li class="quiz-item" data-href="owasp-mas.html">
-                    <h2>OWASP MAS</h2>
-                    <p>Mobile Application Security</p>
+            <ul class="quiz-list collapsed" id="cat-standards">
+                <li class="quiz-item" data-href="jargon-frameworks.html">
+                    <h2>Jargon & Frameworks</h2>
+                    <p>Industry Terms & Principles</p>
                 </li>
-                <li class="quiz-item" data-href="owasp-agentic.html">
-                    <h2>OWASP Agentic AI</h2>
-                    <p>Top 10 for Agentic Applications: 2026</p>
+                <li class="quiz-item" data-href="ptes.html">
+                    <h2>PTES Methodology</h2>
+                    <p>Penetration Testing Execution Standard</p>
+                </li>
+                <li class="quiz-item" data-href="ptes-technical.html">
+                    <h2>PTES Technical</h2>
+                    <p>Technical Guidelines & Tooling</p>
+                </li>
+                <li class="quiz-item" data-href="mitre-attack.html">
+                    <h2>MITRE ATT&CK</h2>
+                    <p>Enterprise Framework Knowledge</p>
+                </li>
+                <li class="quiz-item" data-href="portswigger-2025.html">
+                    <h2>PortSwigger Top 10:2025</h2>
+                    <p>Top Web Hacking Techniques</p>
                 </li>
             </ul>
 
-            <!-- Category 5 -->
+            <!-- Category 4: Certifications -->
             <div class="category-header" data-target="cat-certs">
                 <span>Professional Certifications</span>
                 <svg class="chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>

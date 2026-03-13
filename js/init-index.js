@@ -62,9 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle Category Expansion
-    const headers = document.querySelectorAll('.category-header');
+    const headers = document.querySelectorAll('.category-header, .sub-category-header');
     headers.forEach(header => {
-        header.addEventListener('click', () => {
+        header.addEventListener('click', (e) => {
+            e.stopPropagation();
             const targetId = header.getAttribute('data-target');
             const targetList = document.getElementById(targetId);
             header.classList.toggle('active');

@@ -68,6 +68,51 @@
     display: none;
 }
 
+/* Sub-category styling */
+.sub-category-header {
+    background: rgba(248, 81, 73, 0.05);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin: 10px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.sub-category-header:hover {
+    background: rgba(248, 81, 73, 0.1);
+}
+
+.sub-category-header span {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 0.9em;
+}
+
+.sub-category-header .chevron {
+    width: 16px;
+    height: 16px;
+}
+
+.sub-category-header.active {
+    border-color: var(--primary);
+}
+
+.sub-quiz-list {
+    list-style: none;
+    padding: 0 0 0 15px;
+    margin-bottom: 10px;
+    border-left: 2px solid var(--border);
+}
+
+.sub-quiz-list.collapsed {
+    display: none;
+}
+
 /* New Layout for Quiz Items */
 .quiz-item {
     background: var(--card);
