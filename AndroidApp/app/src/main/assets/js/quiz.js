@@ -60,12 +60,11 @@ function checkResume() {
             const state = JSON.parse(saved);
             const answeredCount = Object.keys(state.answered || {}).length;
             if (answeredCount > 0) {
-                // Create or reveal a resume button on the start screen
                 const actionsDiv = document.querySelector('.start-actions');
                 if (actionsDiv && !document.getElementById('resume-btn')) {
                     const resumeBtn = document.createElement('button');
                     resumeBtn.id = 'resume-btn';
-                    resumeBtn.className = 'btn btn-g'; // Success green/red theme
+                    resumeBtn.className = 'btn btn-g';
                     resumeBtn.style.marginTop = '10px';
                     resumeBtn.innerText = `Resume Quiz (${answeredCount} / ${state.TOTAL_QUESTIONS})`;
                     resumeBtn.addEventListener('click', () => {
@@ -174,7 +173,12 @@ function loadQ(i) {
 
     const meta = document.createElement('div');
     meta.className = 'q-meta';
-    meta.innerHTML = `<span class="tag">${esc(q.c)}</span><span class="q-num">#${i+1}</span>`;
+    
+    let metaHTML = `<div style="display:flex; align-items:center; gap:10px;"><span class="tag">${esc(q.c)}</span><span class="q-num">#${i+1}</span></div>`;
+    if (flagged[i]) {
+        metaHTML += `<span class="tag" style="background:var(--warning); color:#111;">FLAGGED</span>`;
+    }
+    meta.innerHTML = metaHTML;
     card.appendChild(meta);
 
     const qText = document.createElement('div');
@@ -188,11 +192,17 @@ function loadQ(i) {
     q._opts.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = 'option';
-        if (userAns[i] === opt) {
-            btn.classList.add('selected');
-            if (opt === q.a) btn.classList.add('opt-correct');
-            else btn.classList.add('opt-wrong');
+        
+        // Highlighting Logic
+        if (userAns[i]) {
+            if (opt === q.a) {
+                btn.classList.add('opt-correct'); // Always show correct answer
+            } else if (userAns[i] === opt) {
+                btn.classList.add('opt-wrong'); // Show user's wrong choice
+            }
+            if (userAns[i] === opt) btn.classList.add('selected');
         }
+        
         btn.innerText = opt;
         btn.addEventListener('click', () => select(opt, btn));
         optsDiv.appendChild(btn);
@@ -226,6 +236,12 @@ function loadQ(i) {
     const activeNav = document.getElementById(`nav-${i}`);
     if (activeNav) activeNav.classList.add('active');
     
+    // Update Flag button text
+    const flagBtn = document.getElementById('flag-btn');
+    if (flagBtn) {
+        flagBtn.innerText = flagged[i] ? 'Unflag' : 'Flag';
+    }
+    
     saveProgress();
 }
 
@@ -254,6 +270,7 @@ function flag() {
         flagged[curr] = true;
         if (navBtn) navBtn.classList.add('flagged');
     }
+    loadQ(curr); // Re-render to show "FLAGGED" tag on card
     saveProgress();
 }
 
