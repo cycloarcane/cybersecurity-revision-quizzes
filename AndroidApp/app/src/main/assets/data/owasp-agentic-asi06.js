@@ -4,7 +4,7 @@ var pool = [
     "q": "What is 'Memory & Context Poisoning' (ASI06)?",
     "a": "Injecting malicious data into an agent's long-term memory or short-term context to influence future decisions.",
     "d": [
-      "The agent's physical RAM being corrupted by a magnet.",
+      "A denial-of-service attack on the agent's memory storage.",
       "The agent forgetting the user's name due to a bug.",
       "An attacker deleting the agent's database entirely."
     ],
@@ -15,7 +15,7 @@ var pool = [
     "q": "How does 'Long-Term Memory' (Vector DB) become poisoned?",
     "a": "An attacker provides malicious documents or web pages that the agent 'memorizes' and later retrieves as 'facts'.",
     "d": [
-      "By physically hacking into the database server.",
+      "By exploiting a race condition in the agent's tool-calling logic.",
       "By training the model on a small number of tokens.",
       "By changing the agent's system prompt."
     ],
@@ -37,7 +37,7 @@ var pool = [
     "q": "What is 'Memory-Based Privilege Escalation'?",
     "a": "An attacker injects a fake 'identity' or 'permission' into the agent's memory, tricking it into thinking the attacker is an administrator.",
     "d": [
-      "The agent's RAM being upgraded by a technician.",
+      "The agent's model weights being stored in an insecure repository.",
       "A user giving the agent their admin password.",
       "The agent's database having a weak password."
     ],
@@ -49,7 +49,7 @@ var pool = [
     "a": "Attacker-controlled data is indexed into the vector store, ensuring it is 'retrieved' when the agent asks about a specific topic.",
     "d": [
       "RAG is a way to make the agent's responses more colorful.",
-      "RAG is a type of hardware accelerator for AI.",
+      "RAG is a methodology for secure application lifecycle management.",
       "RAG is a technique for compressing the model's weights."
     ],
     "e": "This is a form of 'indirect injection' where the malicious payload is not in the prompt itself, but in the data the agent is 'helpful' enough to go look up."
@@ -70,7 +70,7 @@ var pool = [
     "q": "What is 'Persona Drift' in a poisoned context?",
     "a": "The agent's tone and security posture change over time because it has 'learned' from a series of malicious user interactions.",
     "d": [
-      "The agent's avatar changing its appearance.",
+      "The agent's training logs being stored in a public S3 bucket.",
       "The agent's name being changed in the configuration.",
       "The agent's developer changing its code."
     ],
@@ -103,7 +103,7 @@ var pool = [
     "q": "How does 'Context Overflow' facilitate poisoning?",
     "a": "By flooding the context with irrelevant data to 'flush out' the original system instructions and replace them with malicious ones.",
     "d": [
-      "The agent's server running out of RAM.",
+      "The agent's inference temperature being set to zero.",
       "The agent's code using too many nested loops.",
       "The user sending a message that is 100 pages long."
     ],
@@ -115,7 +115,7 @@ var pool = [
     "a": "A security setting that automatically expires or deletes agent memories after a certain period to prevent long-term poisoning.",
     "d": [
       "The amount of time the agent's server takes to reboot.",
-      "The battery life of the mobile device running the agent.",
+      "The agent's API returns a 403 Forbidden error.",
       "The speed at which the agent can read from its database."
     ],
     "e": "TTL ensures that 'poisoned' data cannot stay in the agent's knowledge base forever, forcing a regular refresh from trusted sources."
@@ -147,8 +147,8 @@ var pool = [
     "q": "What is 'Knowledge Base Scoping'?",
     "a": "Restricting an agent to only retrieve information from a specific, pre-verified 'trusted' folder or database tag.",
     "d": [
-      "Giving the agent a physical telescope to read books.",
-      "Making the agent's font size smaller to fit more data.",
+      "The agent's model weights being leaked to a public repository.",
+      "The agent's developer losing the administrative password.",
       "Using a smaller model to search the database."
     ],
     "e": "By limiting the 'search space,' you prevent the agent from accidentally retrieving poisoned data from 'public' or 'untrusted' parts of its memory."
@@ -169,7 +169,7 @@ var pool = [
     "q": "How can 'Source Attribution' mitigate ASI06?",
     "a": "By requiring the agent to always cite which document its memory came from, allowing for manual verification of the 'truth'.",
     "d": [
-      "By having the agent name the person who wrote its code.",
+      "The agent's training logs being stored in a public S3 bucket.",
       "By giving the agent a unique ID number.",
       "By checking the agent's server location."
     ],
@@ -180,7 +180,7 @@ var pool = [
     "q": "What is 'Memory Sanitization'?",
     "a": "A background process that periodically scans the vector database for malicious patterns or 'instruction-like' text strings.",
     "d": [
-      "Cleaning the physical memory chips with a specialized cloth.",
+      "The agent's developer losing the administrative password.",
       "Deleting all memories that have not been used in a week.",
       "Making the agent's memory read-only for all users."
     ],
@@ -191,7 +191,7 @@ var pool = [
     "q": "What is 'Context Pinning'?",
     "a": "Keeping the most important system instructions at the top (and sometimes the bottom) of the context window so they are never 'lost'.",
     "d": [
-      "Attaching the agent's chat window to the top of the screen.",
+      "The agent's developer using an unencrypted database.",
       "Using a very short context window to avoid confusion.",
       "Encrypting the agent's context window."
     ],
@@ -246,7 +246,7 @@ var pool = [
     "q": "What is 'Metadata Validation' for memory?",
     "a": "Checking the timestamp, author, and source of a document before trusting its content in an agentic workflow.",
     "d": [
-      "Making sure the document has a nice title and description.",
+      "The agent's model being hosted on a public cloud provider.",
       "Analyzing the file size of the document.",
       "Checking if the document is written in a common font."
     ],
@@ -268,7 +268,7 @@ var pool = [
     "q": "What is 'Memory Snapshotting'?",
     "a": "Periodically saving a 'known-good' version of the agent's knowledge base so it can be restored if poisoning is detected.",
     "d": [
-      "Taking a picture of the physical RAM chips.",
+      "The agent's developer losing the administrative password.",
       "A way to make the agent's searches faster.",
       "Giving the agent a new ID number every day."
     ],
@@ -279,7 +279,7 @@ var pool = [
     "q": "What is the risk of 'Agent Self-Poisoning'?",
     "a": "The agent makes a mistake (hallucinates), then 'memorizes' its own mistake and treats it as a fact in all future tasks.",
     "d": [
-      "The agent accidentally deleting its own code.",
+      "The agent's API tokens being rotated every hour.",
       "The agent using too much of its own RAM.",
       "The agent's developer making a mistake in the code."
     ],
@@ -290,9 +290,9 @@ var pool = [
     "q": "What is 'Out-of-Distribution' (OOD) memory detection?",
     "a": "Identifying retrieved documents that are mathematically 'too different' from the agent's normal knowledge base.",
     "d": [
-      "The agent forgetting where its server is located.",
+      "The agent's response latency increasing due to high network traffic.",
       "The agent's memory being full of old data.",
-      "Checking the agent's server for physical damage."
+      "Using a more robust hashing algorithm for storing agent states."
     ],
     "e": "Poisoned payloads often look like outliers in vector space. Detecting these OOD entries can help catch injections before they are processed."
   },
@@ -323,7 +323,7 @@ var pool = [
     "q": "What is 'Memory Auditing'?",
     "a": "A process where a human or 'Judge AI' reviews a sample of the agent's memories to ensure they are accurate and safe.",
     "d": [
-      "Making the agent's memory database run faster.",
+      "The agent's model being fine-tuned on a biased dataset.",
       "Counting the number of memories the agent has.",
       "Ensuring the agent's responses are polite."
     ],

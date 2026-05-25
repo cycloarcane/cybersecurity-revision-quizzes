@@ -170,6 +170,7 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     font-family: 'JetBrains Mono', monospace;
+    margin-right: 20px !important;
 }
 
 .q-num {

@@ -1,88 +1,44 @@
 var pool = [
   {
     "c": "ASI05: Unexpected Code Execution",
-    "q": "What is the primary danger associated with 'Unexpected Code Execution' (ASI05)?",
-    "a": "The agent autonomously generates and runs malicious code, leading to Remote Code Execution (RCE) on the host.",
+    "q": "What is the primary danger of 'Unexpected Code Execution' (ASI05)?",
+    "a": "An attacker tricks the agent into generating and running malicious code that compromises the host system or data.",
     "d": [
-      "The agent's code being hard for humans to understand.",
-      "The agent's code containing a simple logic error.",
-      "The agent failing to write code when asked."
+      "The agent's code being written in a language that is difficult to learn.",
+      "The agent refusing to write any code for the user.",
+      "A user stealing the agent's source code from a public repository."
     ],
-    "e": "If an agent has the power to 'write and run' code (e.g., in a Python interpreter), an attacker can trick it into executing a script that takes over the underlying server."
+    "e": "Agents with 'Code Interpreter' or 'Shell' tools are highly attractive targets. If they don't have strict sandboxing, an attacker can achieve Remote Code Execution (RCE) via a simple prompt."
   },
   {
     "c": "ASI05: Unexpected Code Execution",
-    "q": "Why is 'Sandboxing' essential for agents that can execute code?",
-    "a": "To isolate the execution environment from the host system's files, network, and processes.",
+    "q": "What is 'Sandboxing' in the context of agentic code execution?",
+    "a": "Running the code interpreter in a strictly isolated environment with limited access to the network, file system, and system calls.",
     "d": [
-      "To make the code run faster.",
-      "To allow the agent to use more RAM.",
-      "To prevent the agent's code from being stolen."
+      "A place where the agent can play with digital toys.",
+      "A method for encrypting the agent's system prompt.",
+      "A way to make the agent's responses more polite."
     ],
-    "e": "A robust sandbox (like a gVisor container or a WASM runtime) ensures that even if the agent runs a malicious 'rm -rf /', the damage is limited to the sandbox."
-  },
-  {
-    "c": "ASI05: Unexpected Code Execution",
-    "q": "What is 'Code Hallucination' in the context of ASI05 security?",
-    "a": "The model generates code that imports non-existent or malicious libraries that an attacker has 'squatted' in public repositories.",
-    "d": [
-      "The agent thinking it can write code when it actually can't.",
-      "The agent writing code that doesn't have any comments.",
-      "The agent's code having a syntax error."
-    ],
-    "e": "Attackers can publish malicious libraries with names similar to what an LLM might 'hallucinate,' leading the agent to download and run a trojan."
-  },
-  {
-    "c": "ASI05: Unexpected Code Execution",
-    "q": "How does 'Indirect Prompt Injection' trigger ASI05?",
-    "a": "By providing data (like a README) that instructs the agent to write and execute a 'utility script' that contains a backdoor.",
-    "d": [
-      "By changing the agent's system clock.",
-      "By deleting the agent's training data.",
-      "By making the agent's UI use a different font."
-    ],
-    "e": "If the agent's workflow involves 'reading data and then writing a script to process it,' an attacker can inject malicious script-writing instructions into that data."
-  },
-  {
-    "c": "ASI05: Unexpected Code Execution",
-    "q": "Which of these is a 'Least Agency' mitigation for code execution?",
-    "a": "Disallowing network access for the code interpreter and restricting it to a limited set of pre-installed libraries.",
-    "d": [
-      "Giving the agent full root access to the server to ensure it can install any library it needs.",
-      "Allowing the agent to execute code in any language it wants.",
-      "Disabling all logs for the code interpreter."
-    ],
-    "e": "Restricting the capabilities of the interpreter (no network, no shell access, no file system) significantly reduces the risk of an RCE exploit being successful."
-  },
-  {
-    "c": "ASI05: Unexpected Code Execution",
-    "q": "What is 'Polyglot Injection' in agentic AI?",
-    "a": "Crafting a payload that is interpreted as safe data by one part of the agent but as executable code by another.",
-    "d": [
-      "The agent being able to write code in multiple languages.",
-      "The agent's code being translated into multiple languages.",
-      "A bug that causes the agent to speak in tongues."
-    ],
-    "e": "A polyglot attack might look like a harmless CSV file to a validator but be executed as a malicious Python script by the agent's execution module."
+    "e": "Sandboxing (e.g., using Docker, gVisor, or WASM) is the most critical defense. It ensures that even if malicious code is run, it cannot harm the underlying host or exfiltrate data."
   },
   {
     "c": "ASI05: Unexpected Code Execution",
     "q": "Which of these is a 'Generic Scenario' for ASI05?",
-    "a": "A data analysis agent is tricked into running a Python script that exfiltrates the database's environment variables to an external URL.",
+    "a": "An agent is asked to 'analyze this CSV file' and is tricked by a malicious formula that executes a shell command to delete all files.",
     "d": [
-      "The agent's server runs out of memory while training.",
-      "An attacker performs a social engineering attack on the agent's user.",
-      "The AI model produces a response with a high number of spelling errors."
+      "The agent's server runs out of disk space.",
+      "An attacker performs a phishing attack on the agent's developer.",
+      "The AI model produces a response with a high hallucination rate."
     ],
-    "e": "This scenario demonstrates an attacker exploiting the agent's 'code execution' capability to perform a classic data exfiltration attack."
+    "e": "This scenario demonstrates how an agent's helpfulness can be exploited to run harmful code hidden in untrusted data files."
   },
   {
     "c": "ASI05: Unexpected Code Execution",
     "q": "What is 'Execution Timeout' for code-executing agents?",
     "a": "A security setting that kills a generated script if it runs for more than a few seconds, preventing 'infinite loop' or resource exhaustion attacks.",
     "d": [
-      "The amount of time a user has to wait for the agent to finish.",
-      "A way to make the agent's code run faster.",
+      "The agent's model being hosted on a multi-tenant server.",
+      "The agent's API returns a 500 Internal Server Error.",
       "The agent taking a break after running a long script."
     ],
     "e": "Timeouts are a critical defense against 'Denial of Service' attacks where an attacker tricks the agent into running a script that consumes 100% CPU forever."
@@ -136,7 +92,7 @@ var pool = [
     "q": "What is 'Input Sanitization' for code interpreters?",
     "a": "Stripping or escaping dangerous characters from the data that the agent is going to include in a generated script.",
     "d": [
-      "Cleaning the physical keyboard that the developer uses.",
+      "The agent's model weights being leaked to a public repository.",
       "Removing all comments from the agent's code.",
       "Deleting the agent's conversation history."
     ],
@@ -148,8 +104,8 @@ var pool = [
     "a": "Using a fresh, clean execution environment for every single code-execution task, then destroying it immediately after.",
     "d": [
       "A runtime that is very fast and efficient.",
-      "A runtime that is only available for a few minutes a day.",
-      "A runtime that is written in a language that is easy to learn."
+      "The agent's inference temperature being set to zero.",
+      "A runtime that is only available for a few minutes a day."
     ],
     "e": "Ephemeral runtimes prevent 'persistence.' If an attacker manages to drop a malicious file, it will be wiped out as soon as the current task is finished."
   },
@@ -169,10 +125,10 @@ var pool = [
     "q": "How can 'Human Review' mitigate ASI05?",
     "a": "By requiring a human to read and approve any code the agent generates before it is allowed to run.",
     "d": [
-      "By having a human write the agent's code for it.",
+      "The agent's training logs being stored in a public S3 bucket.",
       "By having a human watch the agent's screen as it works.",
       "By having a human correct the agent's spelling errors."
-n    ],
+    ],
     "e": "This 'Human-in-the-loop' approach is the most secure, but it is often bypassed for the sake of speed and autonomy."
   },
   {
@@ -180,7 +136,7 @@ n    ],
     "q": "What is 'Logic Bomb' injection in agentic code?",
     "a": "An attacker tricks the agent into writing code that looks safe but contains a hidden 'bomb' that triggers on a specific date or condition.",
     "d": [
-      "A physical bomb that is placed in the AI's data center.",
+      "The agent's developer using an outdated version of the Python interpreter.",
       "A bug in the agent's code that causes it to crash.",
       "A user asking the agent to tell a joke that is not funny."
     ],
@@ -191,7 +147,7 @@ n    ],
     "q": "What is 'Container Escape'?",
     "a": "A vulnerability that allows malicious code running inside a sandbox to 'break out' and gain access to the host operating system.",
     "d": [
-      "An agent running away from its physical server.",
+      "The agent's response being intercepted by a man-in-the-middle.",
       "The agent's code being moved to a different container.",
       "The agent's container being deleted by a developer."
     ],
@@ -202,7 +158,7 @@ n    ],
     "q": "What is 'Read-Only File System' for interpreters?",
     "a": "Configuring the code execution environment so that it can read data but cannot write or modify any files on the disk.",
     "d": [
-      "A hard drive that is broken and cannot be written to.",
+      "The agent's model experiencing catastrophic forgetting.",
       "A way to make the agent's database more secure.",
       "A technique for training the agent on how to read."
     ],
@@ -213,7 +169,7 @@ n    ],
     "q": "What is 'Instruction-to-Code' mapping?",
     "a": "A design where the agent cannot write raw code, but can only choose from a set of pre-written, safe code templates.",
     "d": [
-      "Mapping the agent's code to a physical map of the world.",
+      "The agent's API tokens being rotated every hour.",
       "Translating the agent's instructions into a different language.",
       "Giving the agent a list of all the code it has ever written."
     ],
@@ -224,9 +180,9 @@ n    ],
     "q": "What is the 'Jailbreak' risk for code execution?",
     "a": "Using clever prompting to trick the agent into ignoring its 'no-code-execution' policy.",
     "d": [
-      "The agent's developer being arrested and put in jail.",
+      "The agent's model weights being stored on an insecure volume.",
       "The agent's code being stolen by a competitor.",
-      "The agent's server being physically broken into."
+      "The agent's training logs being stored in a public S3 bucket."
     ],
     "e": "Jailbreaking attempts to find a way to make the model 'forget' its safety instructions, often by using complex role-play or hypothetical scenarios."
   },
@@ -235,7 +191,7 @@ n    ],
     "q": "How does 'Mutual Authentication' protect code-execution tools?",
     "a": "By ensuring that only the specific, authorized agent process can send code to the interpreter service.",
     "d": [
-      "By making the agent and the interpreter use the same password.",
+      "By increasing the complexity of the agent's system prompt instructions.",
       "By requiring the agent to be nice to the interpreter.",
       "By having the agent and the interpreter be written in the same language."
     ],
@@ -257,9 +213,9 @@ n    ],
     "q": "What is 'System Call Filtering' (seccomp)?",
     "a": "Limiting the specific 'low-level' actions (like opening a file or starting a new process) that the code interpreter is allowed to ask the OS to do.",
     "d": [
-      "Filtering out the agent's phone calls to its developer.",
+      "Using a more robust hashing algorithm for storing agent states.",
       "A way to make the agent's code more efficient.",
-      "Checking the agent's server for physical damage."
+      "Filtering out the agent's phone calls to its developer."
     ],
     "e": "By blocking dangerous system calls, you can prevent an attacker from using a code-execution exploit to gain deep control over the server kernel."
   },
@@ -268,7 +224,7 @@ n    ],
     "q": "What is 'Output Filtering' for code execution?",
     "a": "Analyzing the data returned by the executed code to ensure it doesn't contain sensitive secrets like API keys or PII.",
     "d": [
-      "Hiding the code's output from the agent's developer.",
+      "The agent's training logs being stored in a public S3 bucket.",
       "Making the code's output more colorful and easy to read.",
       "Deleting the code's output as soon as it is received."
     ],
@@ -301,7 +257,7 @@ n    ],
     "q": "What is 'Dependency Locking' in a code-execution sandbox?",
     "a": "Ensuring the sandbox only contains a fixed, audited set of libraries that cannot be updated or changed by the agent.",
     "d": [
-      "Locking the physical door to the AI's data center.",
+      "The agent's developer losing the administrative password.",
       "Using a very strong password for the agent's account.",
       "Making the agent's code open source."
     ],
@@ -312,7 +268,7 @@ n    ],
     "q": "What is the risk of 'Reflective Code Execution'?",
     "a": "The agent writing code that modifies its own execution environment or the agent's own 'system prompt' logic at runtime.",
     "d": [
-      "The agent seeing its own reflection in a mirror.",
+      "The agent's API returning a 429 Too Many Requests error.",
       "The agent's code being mirrored on another server for backup.",
       "The agent taking a long time to think about its own code."
     ],
@@ -323,9 +279,9 @@ n    ],
     "q": "What is 'Least-Privilege User' (LPU) for code execution?",
     "a": "Running the code interpreter as a highly restricted user account that has no permissions to access other files or systems.",
     "d": [
-      "The agent's developer being a junior employee with limited access.",
+      "The agent's model being hosted on an unencrypted volume.",
       "The agent only being allowed to talk to one user at a time.",
-      "The agent's server being physically small."
+      "The agent's developer being a junior employee with limited access."
     ],
     "e": "If the 'Python process' is running as 'nobody,' even a successful RCE attack won't allow the attacker to read the '/root/' directory or modify system files."
   }

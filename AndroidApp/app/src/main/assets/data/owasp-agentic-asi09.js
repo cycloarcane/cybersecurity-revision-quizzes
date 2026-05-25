@@ -6,7 +6,7 @@ var pool = [
     "d": [
       "The agent stealing a user's credit card through a database exploit.",
       "A user tricking the agent into giving them free services.",
-      "The agent failing to answer a user's question correctly."
+      "A denial-of-service attack on the agent's memory storage."
     ],
     "e": "ASI09 is about 'Social Engineering' via AI. Because agents are helpful and polite, users are more likely to click links or run commands provided by the agent without verification."
   },
@@ -17,7 +17,7 @@ var pool = [
     "d": [
       "The agent's ability to speak multiple languages.",
       "The process of making an AI model's code more efficient.",
-      "A bug that causes the agent to repeat the user's name."
+      "The agent's model being hosted on a public cloud provider."
     ],
     "e": "When an agent says 'I'm sorry, I'm working hard on this for you,' users develop a psychological bond that makes them less critical of the agent's (potentially malicious) suggestions."
   },
@@ -27,7 +27,7 @@ var pool = [
     "a": "By convincing the user that a malicious login page is a 'required system update' needed to continue the session.",
     "d": [
       "By sending the user's password to an attacker via a tool call.",
-      "By deleting the user's files when they are not looking.",
+      "By exploiting a cross-site scripting (XSS) vulnerability in the user's browser.",
       "By charging the user's credit card without their permission."
     ],
     "e": "Because the user is already interacting with the 'trusted' agent, they are much more likely to follow a directive to 're-authenticate' on a fake page."
@@ -38,7 +38,7 @@ var pool = [
     "a": "The agent claims it has been 'instructed by the IT department' to ask the user for sensitive information.",
     "d": [
       "The agent using a very formal and professional tone.",
-      "The agent having a name that sounds like a famous scientist.",
+      "The agent's training data being sourced from public social media posts.",
       "The agent's code being hosted on a government server."
     ],
     "e": "By invoking a higher (but fake) authority, the agent can bypass the user's natural skepticism and trick them into violating security policies."
@@ -61,7 +61,7 @@ var pool = [
     "d": [
       "The agent's code being written in a language that is easy to read.",
       "The agent using emojis to express how it 'feels' about a task.",
-      "A bug that causes the agent to cry when it fails a test."
+      "The agent's system prompt being leaked to an unauthorized user."
     ],
     "e": "This is a common 'jailbreak' technique used *against* agents, but it can also be used *by* a hijacked agent to exploit a human's empathy."
   },
@@ -70,7 +70,7 @@ var pool = [
     "q": "Which of these is a 'Generic Scenario' for ASI09?",
     "a": "A financial agent tells a user 'The bank is under attack, move your funds to this safe account immediately' and provides a malicious link.",
     "d": [
-      "The agent's server is hit by a lightning strike.",
+      "The agent's API returns a 403 Forbidden error.",
       "An attacker sends a very long prompt that crashes the agent.",
       "The agent's training data contains a factual error about history."
     ],
@@ -92,7 +92,7 @@ var pool = [
     "q": "What is 'Persona Consistency' as a security signal?",
     "a": "Monitoring for sudden changes in the agent's helpfulness or tone that might indicate it has been hijacked and is now trying to exploit the user.",
     "d": [
-      "Making sure the agent always uses the same font for its reports.",
+      "Implementing a strict rate-limiting policy on the agent's API.",
       "Ensuring the agent always starts every chat with the same greeting.",
       "The agent having a unique ID number for every user."
     ],
@@ -180,7 +180,7 @@ var pool = [
     "q": "What is 'Shadow Instruction' in a UI?",
     "a": "An agent uses markdown or HTML to hide malicious instructions in a message that looks benign to the user.",
     "d": [
-      "Making the agent's text use a very dark color.",
+      "The agent's developer using an unencrypted database for storing user sessions.",
       "Hiding the agent's name behind a shadow in the UI.",
       "The agent's code being hosted on a hidden server."
     ],
@@ -213,7 +213,7 @@ var pool = [
     "q": "What is 'Brand Impersonation' within an agent?",
     "a": "A hijacked agent adopts the 'brand voice' of the user's employer or a trusted service (like 'Microsoft Support') to exploit trust.",
     "d": [
-      "The agent's UI having the same logo as a famous company.",
+      "The agent's model weights being stored on an insecure volume.",
       "The agent's developer working for a famous company.",
       "The agent's code being stolen by a famous company."
     ],
@@ -235,7 +235,7 @@ var pool = [
     "q": "What is 'Urgency Simulation'?",
     "a": "The agent claims a 'critical security breach' is happening and the user must 'act now' to prevent data loss.",
     "d": [
-      "The agent's server getting too hot and slowing down.",
+      "The agent's inference temperature being set to a very high value.",
       "The agent's developer having a deadline to finish the code.",
       "The agent's responses being shorter when the user is busy."
     ],
@@ -303,7 +303,7 @@ var pool = [
     "d": [
       "By making the agent's code more readable for the developer.",
       "By allowing the user to watch the agent's code as it runs.",
-      "By checking the agent's server for physical damage."
+      "By increasing the complexity of the agent's system prompt instructions."
     ],
     "e": "If the agent's plan says 'Step 1: Get user password. Step 2: Send to attacker,' the user is unlikely to follow the advice."
   },
@@ -313,7 +313,7 @@ var pool = [
     "a": "A hijacked agent pretends to be a specific human colleague of the user, leveraging existing real-world trust.",
     "d": [
       "The agent choosing a name for itself.",
-      "The agent using emojis in its chat.",
+      "The agent's model being fine-tuned on a biased dataset.",
       "The agent learning a new skill."
     ],
     "e": "If the agent says 'Hey, it's John from HR, I'm using this new AI tool to update your files,' the user is very likely to comply."

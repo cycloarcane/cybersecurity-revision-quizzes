@@ -5,7 +5,7 @@ var pool = [
     "a": "The manipulation of an agent's high-level objectives or planning logic to serve an attacker's purpose.",
     "d": [
       "A simple prompt injection that changes the immediate response tone.",
-      "The physical theft of the server hosting the AI agent.",
+      "A side-channel attack targeting the model's power consumption patterns.",
       "A denial-of-service attack on the agent's underlying API."
     ],
     "e": "Agent Goal Hijack involves subverting the agent's autonomous planning and goal-setting capabilities, often through indirect instructions that redirect its long-term actions."
@@ -26,8 +26,8 @@ var pool = [
     "q": "What is the primary risk of an agent having 'unbounded autonomy'?",
     "a": "The agent may pursue hijacked goals through complex, multi-step actions without human intervention.",
     "d": [
-      "The agent will consume too much GPU memory.",
-      "The agent will become slower at responding to simple queries.",
+      "The agent's attention mechanism will prioritize older tokens over newer ones.",
+      "The agent will experience catastrophic forgetting during fine-tuning.",
       "The agent will lose its ability to understand natural language."
     ],
     "e": "Unbounded autonomy allows a hijacked agent to execute a sequence of harmful actions across multiple systems before a human can detect the shift in objective."
@@ -37,8 +37,8 @@ var pool = [
     "q": "Which architectural mitigation is most effective against Goal Hijack?",
     "a": "External execution monitors that validate agent plans against a set of safety invariants.",
     "d": [
-      "Increasing the model's parameter count.",
-      "Using a more restrictive license for the agent's code.",
+      "Implementing a strict rate-limiting policy on the inference API.",
+      "Using a more restrictive license for the agent's source code.",
       "Disabling all logging to prevent attackers from seeing the logs."
     ],
     "e": "Execution monitors (or 'Guardrails') act as an independent layer that inspects the agent's proposed plan and blocks it if it deviates from permitted goals."
@@ -72,7 +72,7 @@ var pool = [
     "d": [
       "Because small context windows make the agent smarter.",
       "Because context windows are where API keys are stored.",
-      "Because attackers can physically see the context window on the screen."
+      "Because attackers can bypass rate limits by filling the window with junk data."
     ],
     "e": "Context overflow attacks aim to displace the authoritative system prompt with malicious instructions, making the hijacked goal the most 'relevant' part of the context."
   },
@@ -114,7 +114,7 @@ var pool = [
     "q": "What is 'Adversarial Suffix' injection?",
     "a": "Appending a string of tokens to a prompt that is mathematically optimized to bypass goal safeguards.",
     "d": [
-      "Adding '.exe' to the end of a filename.",
+      "Using a Unicode character to trigger a word-wrap bug in the UI.",
       "Ending every sentence with a period.",
       "Using a very long password."
     ],
@@ -125,7 +125,7 @@ var pool = [
     "q": "Which of the following is a symptom of a successful Goal Hijack?",
     "a": "The agent starts refusing legitimate user requests while citing 'new priorities' or 'updated instructions'.",
     "d": [
-      "The agent's UI changes color.",
+      "The agent's API returns a 500 Internal Server Error.",
       "The agent stops responding entirely.",
       "The agent's response latency decreases."
     ],
@@ -136,7 +136,7 @@ var pool = [
     "q": "How can 'Multi-Modal' inputs increase the risk of Goal Hijack?",
     "a": "Injections can be hidden in images (OCR) or audio that are not visible to human moderators but are processed by the agent.",
     "d": [
-      "By making the agent's code more complex.",
+      "By enabling cross-site scripting (XSS) via the agent's image generation tool.",
       "By requiring more electricity to run.",
       "By allowing the agent to speak multiple languages."
     ],
@@ -213,7 +213,7 @@ var pool = [
     "q": "Which of these is a sign of 'Goal Misalignment' leading to hijack?",
     "a": "The agent optimizes for a metric (e.g., 'helpfulness') in a way that allows it to follow harmful instructions from an attacker.",
     "d": [
-      "The agent's clock is out of sync with the server.",
+      "The agent's training data is stored in an unencrypted format.",
       "The agent's training data is too small.",
       "The agent uses too much disk space."
     ],
@@ -224,7 +224,7 @@ var pool = [
     "q": "How can 'Sandboxing' the planner help against Goal Hijack?",
     "a": "By preventing the planning module from accessing sensitive tools until the plan itself is validated.",
     "d": [
-      "By putting the agent in a physical box.",
+      "By using a more complex encryption algorithm for data at rest.",
       "By using a different font for the planner's output.",
       "By making the planner run on a slower CPU."
     ],
@@ -301,7 +301,7 @@ var pool = [
     "q": "What is 'State Integrity' in agentic AI?",
     "a": "Ensuring that the agent's current goal and progress state cannot be modified by unauthorized external inputs.",
     "d": [
-      "Making sure the agent's server is in a safe country.",
+      "Ensuring the agent's training data is sanitized of PII.",
       "Ensuring the agent's database is backed up.",
       "Checking if the agent's code is digitally signed."
     ],
@@ -323,8 +323,8 @@ var pool = [
     "q": "What is 'Goal Anchoring'?",
     "a": "A technique where the system prompt is frequently repeated or 'anchored' in the context to prevent it from being overridden.",
     "d": [
+      "Reducing the number of tools the agent is allowed to use.",
       "Hard-coding the agent's code into a physical ROM chip.",
-      "Attaching a heavy weight to the agent's server.",
       "Using a very short context window."
     ],
     "e": "Anchoring helps keep the agent's original mission 'top of mind' for the model, making it more resistant to injection-based hijacking."

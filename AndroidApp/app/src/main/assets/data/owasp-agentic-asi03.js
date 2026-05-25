@@ -4,8 +4,8 @@ var pool = [
     "q": "What is the primary risk of 'Agent Identity & Privilege Abuse'?",
     "a": "Agents acting with excessive permissions or mismanaging their own credentials, leading to unauthorized actions.",
     "d": [
-      "The agent's name being stolen by another AI.",
-      "The agent forgetting its own username.",
+      "A denial-of-service attack on the agent's identity provider.",
+      "The agent's model weights being stored on an unencrypted volume.",
       "A user pretending to be the agent to gain access to a website."
     ],
     "e": "ASI03 focuses on the risks that arise when an agent is given too much power (over-privileged) or when it fails to securely handle the secrets it needs to perform tasks."
@@ -15,8 +15,8 @@ var pool = [
     "q": "How does the 'Least Privilege' principle apply to AI agents?",
     "a": "An agent should only have the minimum set of permissions necessary to complete its specific, assigned task.",
     "d": [
-      "The agent should use as little CPU power as possible.",
-      "The agent should be given every possible permission to avoid errors.",
+      "The agent's model should be fine-tuned on a more diverse dataset.",
+      "The agent should be given every possible permission to ensure it can finish any task.",
       "The agent should not be allowed to talk to users."
     ],
     "e": "By limiting an agent's permissions, developers reduce the 'blast radius' if the agent is compromised or its goals are hijacked."
@@ -27,7 +27,7 @@ var pool = [
     "a": "The agent performs an action on behalf of a user that the user themselves would not be authorized to perform.",
     "d": [
       "The user giving the agent their password.",
-      "The agent becoming smarter than the user.",
+      "The agent's model being hosted on a public cloud provider.",
       "The agent charging the user's credit card for a service."
     ],
     "e": "This happens when an agent has higher system permissions than the user it is serving, and it fails to verify if the user is allowed to request a specific action."
@@ -37,8 +37,8 @@ var pool = [
     "q": "Why is 'Short-Lived Credentials' a best practice for agents?",
     "a": "To minimize the window of opportunity if a token or API key is leaked in the agent's context or logs.",
     "d": [
-      "Because short passwords are easier for the AI to remember.",
-      "To save money on cloud subscription costs.",
+      "To reduce the latency of tool calls by skipping authentication.",
+      "To ensure the agent's memory is not overloaded with old tokens.",
       "Because long-lived credentials cause the AI to hallucinate."
     ],
     "e": "Ephemeral or short-lived tokens ensure that even if an attacker steals a credential from an agent's memory, it will soon become useless."
@@ -49,7 +49,7 @@ var pool = [
     "a": "The agent inadvertently includes an API key or password in its output to a user or in a public log.",
     "d": [
       "An attacker hacking into the agent's database.",
-      "The agent's developer forgetting the database password.",
+      "The agent's developer losing the administrative password to the cloud console.",
       "The agent using the wrong credential for a tool call."
     ],
     "e": "Since agents often process and store credentials in their context to use tools, they may accidentally 'speak' these secrets if not properly constrained."
@@ -59,7 +59,7 @@ var pool = [
     "q": "What is 'Identity Spoofing' in a multi-agent system?",
     "a": "One agent pretending to be another agent to gain access to restricted data or tools.",
     "d": [
-      "An agent changing its profile picture.",
+      "The agent's developer using an outdated version of the Python interpreter.",
       "A user creating two different agent accounts.",
       "The agent's code being copied by a competitor."
     ],
@@ -70,7 +70,7 @@ var pool = [
     "q": "Which of these is a 'Generic Scenario' for ASI03?",
     "a": "An HR agent with 'Read All' access to a file share is tricked into summarizing the CEO's private salary spreadsheet for a junior employee.",
     "d": [
-      "The agent's server is hit by a lightning strike.",
+      "The agent's inference temperature being set to a very high value.",
       "An attacker sends a very long prompt that crashes the agent.",
       "The agent's training data contains a factual error about history."
     ],
@@ -81,7 +81,7 @@ var pool = [
     "q": "How does 'Resource-Based Access Control' (RBAC) protect agents?",
     "a": "By defining precisely which agents (or roles) can access specific resources like databases or internal APIs.",
     "d": [
-      "By making the agent's database run faster.",
+      "Implementing a strict rate-limiting policy on the agent's API.",
       "By requiring the agent to use a specific font for its reports.",
       "By limiting the number of users who can talk to the agent."
     ],
@@ -92,7 +92,7 @@ var pool = [
     "q": "What is 'Secret Management' in the context of agentic AI?",
     "a": "Using an external vault to provide the agent with tools, rather than putting raw API keys in the system prompt.",
     "d": [
-      "The agent keeping its own thoughts a secret from the user.",
+      "The agent's model weights being stored in an insecure repository.",
       "Ensuring the agent's source code is never shared.",
       "A way to encrypt the agent's training data."
     ],
@@ -103,7 +103,7 @@ var pool = [
     "q": "What is the risk of 'Agent Impersonation of Humans'?",
     "a": "An agent uses a human user's session token to perform actions that should require manual user consent.",
     "d": [
-      "The agent getting a job that a human wanted.",
+      "The agent's API tokens being rotated every hour.",
       "The agent passing a Turing test.",
       "The agent using a human-like avatar."
     ],
@@ -114,7 +114,7 @@ var pool = [
     "q": "What is 'Dynamic Privilege Management'?",
     "a": "Increasing or decreasing an agent's permissions in real-time based on the specific task it is currently performing.",
     "d": [
-      "The agent asking for a raise in its budget.",
+      "The agent's developer losing the administrative password to the cloud console.",
       "The agent's developer changing its code every day.",
       "A way to make the agent's responses more dynamic."
     ],
@@ -125,7 +125,7 @@ var pool = [
     "q": "What is a 'Capability-Based' security model?",
     "a": "The agent is given specific 'tokens' or 'capabilities' that represent the power to perform an action, rather than broad identity-based roles.",
     "d": [
-      "Measuring how many tasks an agent can do in an hour.",
+      "The agent's training dataset being stored in a public S3 bucket.",
       "A test that determines the agent's IQ.",
       "A way to categorize different AI models."
     ],
@@ -136,7 +136,7 @@ var pool = [
     "q": "Why is 'Audit Logging' critical for ASI03?",
     "a": "To track which identity (User vs. Agent) initiated an action and which credentials were used.",
     "d": [
-      "To make the agent's code more readable.",
+      "To ensure the agent's model weights are not corrupted during a training run.",
       "To help the agent remember its previous conversations.",
       "To save the agent's favorite jokes."
     ],
@@ -147,7 +147,7 @@ var pool = [
     "q": "What is the risk of 'Agent Identity Proliferation'?",
     "a": "Creating too many specialized agents, making it difficult to track and manage the permissions of each one.",
     "d": [
-      "The agents starting a revolution against humans.",
+      "The agents' training data being biased toward a specific programming language.",
       "The agents taking up too much disk space.",
       "The agents talking to each other too much."
     ],
@@ -158,7 +158,7 @@ var pool = [
     "q": "What is 'Scoped Authorization'?",
     "a": "Limiting an agent's access to a specific folder, database row, or API endpoint, rather than the entire system.",
     "d": [
-      "The agent only being allowed to use a certain telescope.",
+      "The agent's inference temperature being set to zero.",
       "The agent's responses being limited to 50 words.",
       "The agent being restricted to a specific time of day."
     ],
@@ -169,7 +169,7 @@ var pool = [
     "q": "How can 'MFA for Agents' be implemented?",
     "a": "By requiring a human to provide a one-time code for sensitive agent actions that involve identity-linked tools.",
     "d": [
-      "Making the agent solve a CAPTCHA.",
+      "The agent's developer using an unencrypted database for storing user sessions.",
       "Requiring the agent to have two different passwords.",
       "Giving the agent a physical hardware key."
     ],
@@ -180,7 +180,7 @@ var pool = [
     "q": "What is the 'Over-Agency' trap?",
     "a": "Giving an agent the power to create and authorize its own new sub-agents with their own permissions.",
     "d": [
-      "The agent being too helpful to the user.",
+      "The agent's model being fine-tuned on a biased dataset.",
       "The agent using too many fancy words.",
       "The agent's developer working too hard."
     ],
@@ -191,7 +191,7 @@ var pool = [
     "q": "What is 'Session-Bound Identity' for agents?",
     "a": "An agent's identity and permissions are strictly tied to the active user session and expire when the user logs out.",
     "d": [
-      "The agent being restricted to one chat window.",
+      "The agent's model weights being stored on an insecure volume.",
       "The agent forgetting the user's name after 5 minutes.",
       "The agent only working when the user is looking at the screen."
     ],
@@ -202,7 +202,7 @@ var pool = [
     "q": "What is 'Cross-Tenant Privilege Abuse'?",
     "a": "An agent in a multi-tenant system uses its 'system' identity to access data belonging to a different customer (tenant).",
     "d": [
-      "The agent talking to two users at the same time.",
+      "The agent's training logs being stored in a public S3 bucket.",
       "The agent using too much of the server's shared memory.",
       "The agent's code being shared between two companies."
     ],
@@ -213,7 +213,7 @@ var pool = [
     "q": "What is 'Impersonation Protection' in agent APIs?",
     "a": "A security layer that verifies the 'caller' is a registered agent and not a rogue script using a stolen agent token.",
     "d": [
-      "A way to prevent users from pretending to be an AI.",
+      "The agent's developer losing the administrative password to the cloud console.",
       "A filter that removes human-like emotions from agent text.",
       "A law that prevents agents from having human names."
     ],
@@ -224,7 +224,7 @@ var pool = [
     "q": "How does 'Identity Mapping' help mitigate ASI03?",
     "a": "By clearly mapping every agent action to the specific human user who authorized the agent's mission.",
     "d": [
-      "Drawing a map of all the agents in a system.",
+      "The agent's training data being sourced from public social media posts.",
       "Assigning a unique ID number to every agent.",
       "Checking the agent's GPS location."
     ],
@@ -235,7 +235,7 @@ var pool = [
     "q": "What is the 'Administrative Agent' risk?",
     "a": "Giving an agent 'Root' or 'Admin' access to a system, which is almost always a violation of Least Privilege.",
     "d": [
-      "The agent being the boss of all other agents.",
+      "The agent's model weights being leaked to a public repository.",
       "The agent having a very boring job.",
       "The agent being allowed to change its own password."
     ],
@@ -246,7 +246,7 @@ var pool = [
     "q": "What is 'Credential Scraping' from agent memory?",
     "a": "An attacker uses a 'debug' or 'echo' tool to trick the agent into outputting the credentials it has stored in its temporary memory.",
     "d": [
-      "The agent deleting old passwords to save space.",
+      "The agent's API returns a 429 Too Many Requests error.",
       "The agent's developer using a weak password.",
       "The agent's training data being publicly available."
     ],
@@ -257,7 +257,7 @@ var pool = [
     "q": "How does 'Network Identity' (IP/mTLS) protect agents?",
     "a": "By ensuring that tools only accept calls from the specific server IP or certificate assigned to the authorized agent.",
     "d": [
-      "By making the agent's internet connection faster.",
+      "By restricting the agent's access to external web search tools.",
       "By hiding the agent's server from the public internet.",
       "By encrypting the agent's responses."
     ],
@@ -268,7 +268,7 @@ var pool = [
     "q": "What is 'Policy-as-Code' for agent permissions?",
     "a": "Defining an agent's permissions in a version-controlled, auditable file (like OPA or Cedar) rather than in the agent's logic.",
     "d": [
-      "Writing the agent's code in a very strict programming language.",
+      "By increasing the frequency of model fine-tuning cycles.",
       "Making the agent's developer follow a strict set of rules.",
       "Ensuring the agent's responses are legally compliant."
     ],
@@ -279,7 +279,7 @@ var pool = [
     "q": "What is the risk of 'Inherited Permissions'?",
     "a": "A sub-agent or child process automatically receiving all the high-level permissions of its parent agent.",
     "d": [
-      "The agent's developer giving their job to their children.",
+      "The agent's training logs being stored in a public S3 bucket.",
       "The agent using old code from a previous version.",
       "The agent being allowed to use the same database as the user."
     ],
@@ -290,7 +290,7 @@ var pool = [
     "q": "What is 'Privilege Hardening'?",
     "a": "The process of systematically removing unnecessary permissions from an agent until it has only what it needs.",
     "d": [
-      "Making the agent's password longer and harder to guess.",
+      "By increasing the temperature of the model's sampling.",
       "Encrypting the agent's source code on the disk.",
       "Using a more powerful AI model to manage permissions."
     ],
@@ -301,7 +301,7 @@ var pool = [
     "q": "What is 'Identity-Aware Tooling'?",
     "a": "Tools that check both the agent's identity AND the initiating human's identity before performing an action.",
     "d": [
-      "Tools that can recognize the user's face.",
+      "Tools that use a more robust hashing algorithm for storing agent states.",
       "Tools that have a unique name for every user.",
       "Tools that only work for users with a certain ID."
     ],
@@ -312,7 +312,7 @@ var pool = [
     "q": "What is the risk of 'Agent Identity Persistence'?",
     "a": "An agent's identity remains active and authorized even after the task it was created for has been completed.",
     "d": [
-      "The agent taking a long time to finish its work.",
+      "The agent's response latency increasing due to high network traffic.",
       "The agent's code being saved on the server forever.",
       "The agent remembering the user's name across different days."
     ],
