@@ -295,12 +295,15 @@ function finish() {
     const reviewList = document.getElementById('review-list');
     reviewList.innerHTML = '';
 
-    // Create a data array for sorting
-    const reviewData = examQs.map((q, i) => {
-        const isCorrect = userAns[i] === q.a;
-        if (isCorrect) score++;
-        return { q, i, isCorrect };
+    // Calculate score for all questions
+    examQs.forEach((q, i) => {
+        if (userAns[i] === q.a) score++;
     });
+
+    // Create a data array for the review list, filtering out unanswered questions
+    const reviewData = examQs
+        .map((q, i) => ({ q, i, isCorrect: userAns[i] === q.a }))
+        .filter(item => userAns[item.i] !== undefined);
 
     // Sort: Incorrect answers (isCorrect=false) at the top
     reviewData.sort((a, b) => {
