@@ -202,18 +202,21 @@ body {
 
 .option.opt-correct {
     border-color: var(--success);
-    background: rgba(46, 160, 67, 0.15);
+    background: rgba(35, 134, 54, 0.2);
     color: #3fb950;
+    font-weight: 700;
 }
 
 .option.opt-wrong {
     border-color: var(--danger);
-    background: rgba(248, 81, 73, 0.1);
+    background: rgba(218, 54, 51, 0.2);
     color: #ff7b72;
+    font-weight: 700;
 }
 
 .option.opt-dim {
-    opacity: 0.5;
+    opacity: 0.3;
+    filter: grayscale(0.5);
 }
 
 .option.locked {

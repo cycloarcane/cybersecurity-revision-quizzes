@@ -203,11 +203,15 @@ function loadQ(i) {
         
         // Highlighting Logic
         if (userAns[i]) {
+            btn.classList.add('locked');
             if (opt === q.a) {
                 btn.classList.add('opt-correct'); // Always show correct answer
             } else if (userAns[i] === opt) {
                 btn.classList.add('opt-wrong'); // Show user's wrong choice
+            } else {
+                btn.classList.add('opt-dim'); // Dim others
             }
+            
             if (userAns[i] === opt) btn.classList.add('selected');
         }
         
