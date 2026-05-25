@@ -149,7 +149,14 @@ function renderSide() {
         const b = document.createElement('button');
         b.className = 'nav-btn';
         if (flagged[i]) b.classList.add('flagged');
-        if (answered[i] !== undefined) b.classList.add('answered');
+        
+        if (userAns[i] !== undefined) {
+            const isCorrect = userAns[i] === q.a;
+            b.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+        } else if (answered[i] !== undefined) {
+            b.classList.add('answered');
+        }
+        
         b.innerText = i+1;
         b.id = `nav-${i}`;
         b.addEventListener('click', () => {
@@ -196,11 +203,15 @@ function loadQ(i) {
         
         // Highlighting Logic
         if (userAns[i]) {
+            btn.classList.add('locked');
             if (opt === q.a) {
                 btn.classList.add('opt-correct'); // Always show correct answer
             } else if (userAns[i] === opt) {
                 btn.classList.add('opt-wrong'); // Show user's wrong choice
+            } else {
+                btn.classList.add('opt-dim'); // Dim others
             }
+            
             if (userAns[i] === opt) btn.classList.add('selected');
         }
         
@@ -288,10 +299,23 @@ function finish() {
     const reviewList = document.getElementById('review-list');
     reviewList.innerHTML = '';
 
+    // Calculate score for all questions
     examQs.forEach((q, i) => {
-        const isCorrect = userAns[i] === q.a;
-        if (isCorrect) score++;
+        if (userAns[i] === q.a) score++;
+    });
 
+    // Create a data array for the review list, filtering out unanswered questions
+    const reviewData = examQs
+        .map((q, i) => ({ q, i, isCorrect: userAns[i] === q.a }))
+        .filter(item => userAns[item.i] !== undefined);
+
+    // Sort: Incorrect answers (isCorrect=false) at the top
+    reviewData.sort((a, b) => {
+        if (a.isCorrect === b.isCorrect) return a.i - b.i; // Maintain original order for same status
+        return a.isCorrect ? 1 : -1;
+    });
+
+    reviewData.forEach(({ q, i, isCorrect }) => {
         const item = document.createElement('div');
         item.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
         item.innerHTML = `
@@ -313,6 +337,16 @@ function finish() {
 
     document.getElementById('score-circle').innerText = `${pct}%`;
     document.getElementById('raw-score').innerText = `You answered ${score} out of ${TOTAL_QUESTIONS} questions correctly.`;
+    
+    // Color score circle based on pass/fail (70% threshold)
+    const scoreCircle = document.getElementById('score-circle');
+    if (pct >= 70) {
+        scoreCircle.style.background = 'linear-gradient(135deg, #3fb950, var(--success))';
+        document.getElementById('raw-score').style.color = '#3fb950';
+    } else {
+        scoreCircle.style.background = 'linear-gradient(135deg, var(--accent), var(--danger))';
+        document.getElementById('raw-score').style.color = '#ff7b72';
+    }
     
     clearProgress();
 }

@@ -5,7 +5,7 @@
     --border: #30363d;
     --primary: #f85149;
     --accent: #ff7b72;
-    --success: #f85149;
+    --success: #238636;
     --danger: #da3633;
     --warning: #d29922;
     --text: #c9d1d9;
@@ -200,29 +200,32 @@ body {
     color: #c9d1d9;
 }
 
+.option.selected {
+    border-color: var(--primary);
+    background: rgba(248, 81, 73, 0.1);
+}
+
 .option.opt-correct {
-    border-color: var(--success);
-    background: rgba(46, 160, 67, 0.15);
-    color: #3fb950;
+    border-color: var(--success) !important;
+    background: rgba(35, 134, 54, 0.2) !important;
+    color: #3fb950 !important;
+    font-weight: 700;
 }
 
 .option.opt-wrong {
-    border-color: var(--danger);
-    background: rgba(248, 81, 73, 0.1);
-    color: #ff7b72;
+    border-color: var(--danger) !important;
+    background: rgba(218, 54, 51, 0.2) !important;
+    color: #ff7b72 !important;
+    font-weight: 700;
 }
 
 .option.opt-dim {
-    opacity: 0.5;
+    opacity: 0.3;
+    filter: grayscale(0.5);
 }
 
 .option.locked {
     cursor: default;
-}
-
-.option.selected {
-    border-color: var(--primary);
-    background: rgba(248, 81, 73, 0.1);
 }
 
 .options {
@@ -450,8 +453,14 @@ body {
     border: 1px solid var(--border);
 }
 
-.review-item.correct { border-left-color: var(--success); }
-.review-item.wrong { border-left-color: var(--danger); }
+.review-item.correct { 
+    border-left-color: var(--success); 
+    background: rgba(35, 134, 54, 0.05);
+}
+.review-item.wrong { 
+    border-left-color: var(--danger); 
+    background: rgba(218, 54, 51, 0.05);
+}
 
 .review-item strong { color: var(--white); font-size: 0.95em; }
 
