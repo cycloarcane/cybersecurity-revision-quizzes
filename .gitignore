@@ -34,3 +34,4 @@ Thumbs.db
 *.log
 *.swp
 **/TROUBLESHOOTING.md
+app-release/

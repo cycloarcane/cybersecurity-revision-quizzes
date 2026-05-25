@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (backBtn) {
         backBtn.addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = '../../index.html';
         });
     }
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (resultsHomeBtn) {
         resultsHomeBtn.addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = '../../index.html';
         });
     }
 
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (homeBtn) {
         homeBtn.addEventListener('click', () => {
             if (confirm("Go back to the main menu? Progress will be lost.")) {
-                window.location.href = 'index.html';
+                window.location.href = '../../index.html';
             }
         });
     }
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (flagBtn) flagBtn.addEventListener('click', flag);
     if (finishBtn) finishBtn.addEventListener('click', finish);
     if (reloadBtn) reloadBtn.addEventListener('click', () => {
-        window.location.href = 'index.html';
+        window.location.href = '../../index.html';
     });
     
     const menuToggle = document.getElementById('menu-toggle');
