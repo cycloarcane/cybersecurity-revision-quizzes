@@ -1,333 +1,333 @@
-const pool = [
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is the primary characteristic of a 'Cascading Failure' in an agentic system?",
-        "a": "A failure in one agent or component triggers a series of subsequent failures across the entire system.",
-        "d": [
-            "The agent's server shutting down due to a scheduled maintenance window.",
-            "A single agent failing to answer a user's question correctly.",
-            "The model's weights being updated to a newer version."
-        ],
-        "e": "Cascading failures are systemic. In a multi-agent environment, the output of one agent is the input of another. If the first agent produces garbage or crashes, it can 'poison' the entire pipeline, leading to a total system collapse."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is an 'Agentic Loop' and why is it a risk for ASI08?",
-        "a": "A situation where two or more agents keep passing the same task back and forth without finishing it, exhausting resources.",
-        "d": [
-            "A special type of neural network architecture used for vision.",
-            "The process of a model being retrained on the same data twice.",
-            "A way to make the agent's code run more efficiently."
-        ],
-        "e": "Agentic loops are like infinite loops in traditional code but occur at the reasoning level. They can consume massive amounts of API credits, CPU, and memory before they are detected."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "How does a 'Circuit Breaker' help mitigate ASI08?",
-        "a": "It automatically halts communication or task execution when a failure threshold is reached, preventing the failure from spreading.",
-        "d": [
-            "It is a physical fuse that pops if the server uses too much electricity.",
-            "It is a safety filter that blocks the user from asking about sensitive topics.",
-            "It is a backup model that takes over if the primary model is too slow."
-        ],
-        "e": "Circuit breakers are a classic distributed systems pattern. In agentic systems, they stop 'runaway' agents or failing sub-systems from dragging down the rest of the application."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Error Propagation' in multi-agent systems?",
-        "a": "A small error in an early agent's output is amplified by subsequent agents, leading to a catastrophic final failure.",
-        "d": [
-            "The process of sending bug reports to the development team.",
-            "The agent's ability to fix its own mistakes over time.",
-            "The user receiving multiple error messages at the same time."
-        ],
-        "e": "Because agents often 'reason' based on previous outputs, a 'hallucination' or 'logic error' in step 1 becomes the 'fact' that step 2 and step 3 use to make even more dangerous decisions."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is a 'Resource Exhaustion' cascade?",
-        "a": "A failure in one agent causes others to enter retry loops that consume all available API tokens or memory.",
-        "d": [
-            "The agent's developer running out of coffee.",
-            "The user's laptop running out of battery while chatting.",
-            "The system's database being deleted by an attacker."
-        ],
-        "e": "If Agent B is programmed to 'retry until success' and Agent A is permanently broken, Agent B will burn through resources indefinitely. In a swarm of 100 agents, this can lead to massive financial and operational costs."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "Which of these is a 'State Collapse' in the context of ASI08?",
-        "a": "The shared 'memory' or 'state' of the system becomes corrupted by a failing agent, making all other agents dysfunctional.",
-        "d": [
-            "The agent's server being physically moved to a different country.",
-            "The model's context window being reduced in size.",
-            "The user closing their browser tab in the middle of a task."
-        ],
-        "e": "In systems with a shared blackboard or state, a single 'rogue' or 'glitched' write can invalidate the assumptions of every other agent, causing the entire collective reasoning process to fail."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Retry Storm' in agentic architectures?",
-        "a": "A massive surge in API requests caused by many agents simultaneously retrying failed dependencies.",
-        "d": [
-            "A weather simulation performed by a specialized weather agent.",
-            "An attacker trying to guess the user's password many times.",
-            "A bug that causes the agent to repeat its last sentence."
-        ],
-        "e": "Retry storms occur when a backend service goes down. Instead of failing gracefully, all agents start retrying at once, which can act as a self-inflicted Distributed Denial of Service (DDoS) attack."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "How does 'Dead Letter Queueing' apply to ASI08?",
-        "a": "It captures messages that agents cannot process, preventing them from being retried indefinitely or causing a crash.",
-        "d": [
-            "A way to delete all emails sent by the agent.",
-            "A list of users who have been banned from using the system.",
-            "A backup server that is only used if the main server dies."
-        ],
-        "e": "By moving 'poison' messages (messages that cause an agent to fail) to a separate queue, you allow the rest of the system to continue functioning while the failure is investigated."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is the risk of 'Homogeneous Agent Swarms' in ASI08?",
-        "a": "If all agents use the same model, a single logic flaw or 'jailbreak' will affect every agent in the system simultaneously.",
-        "d": [
-            "Agents that are too similar in their personalities.",
-            "Agents that all use the same programming language.",
-            "A swarm where all agents are owned by the same company."
-        ],
-        "e": "Diversity is a security feature. If you use different models (e.g., GPT-4, Claude, and Llama) for different tasks, a specific 'poison' prompt that works on one might not work on the others, preventing a total cascade."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Priority Inversion' in an agentic system?",
-        "a": "A low-priority background task consumes so many resources that it prevents a high-priority safety agent from functioning.",
-        "d": [
-            "The agent's list of tasks being sorted in the wrong order.",
-            "A user being able to change the priority of their own requests.",
-            "An agent giving a lower priority to its own safety rules."
-        ],
-        "e": "If your 'Safety Monitor' agent is stuck behind a 'PDF Summarizer' agent in a single-threaded queue, the system is vulnerable to a cascade where the summarizer fails and the monitor cannot intervene in time."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "How does 'Backpressure' help prevent cascading failures?",
-        "a": "It signals upstream agents to slow down when downstream agents are overwhelmed, preventing a total system crash.",
-        "d": [
-            "A physical fan that blows air onto the server to keep it cool.",
-            "The agent's ability to resist pressure from a malicious user.",
-            "A way to force the model to give a shorter answer."
-        ],
-        "e": "Backpressure is essential for stability. If Agent A is generating 1000 tasks per second but Agent B can only process 10, the system will eventually run out of memory and fail without a backpressure mechanism."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Hallucination Feedback' in ASI08?",
-        "a": "An agent generates a hallucination that is accepted as true by a second agent, which then generates further hallucinations based on it.",
-        "d": [
-            "The user seeing things that aren't actually on the screen.",
-            "A model being trained on a dataset of fictional stories.",
-            "The agent's output being shown in a VR headset."
-        ],
-        "e": "This is a 'Truth Cascade.' Once a false premise enters the multi-agent chain, the 'reasoning' of every subsequent agent amplifies the error, potentially leading to a dangerous real-world action based on a complete fabrication."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is the 'Fail-Fast' principle in agentic design?",
-        "a": "Designing agents to immediately stop and report an error rather than attempting to continue with uncertain or corrupted data.",
-        "d": [
-            "The agent's response time being as fast as possible.",
-            "The model being able to process tokens very quickly.",
-            "The developer writing the code for the agent in one day."
-        ],
-        "e": "Failing fast prevents cascades. It is much safer for a system to say 'I encountered an error in step 1' than to try to 'guess' the answer and proceed to a potentially catastrophic step 10."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Token Exhaustion' as a cascading failure?",
-        "a": "A group of agents rapidly consumes the entire project's token budget due to a recursive or inefficient planning loop.",
-        "d": [
-            "The model running out of words it can use in a sentence.",
-            "The user's credit card being declined by the API provider.",
-            "A bug that causes the agent to output the same word 'token' over and over."
-        ],
-        "e": "Token exhaustion is a financial cascading failure. An unmonitored agent swarm can spend thousands of dollars in minutes if it gets caught in a loop or encounters a 'infinite context' bug."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Plan Fragmentation' in ASI08?",
-        "a": "The master plan becomes so complex that agents start executing conflicting sub-tasks, leading to system-wide deadlock.",
-        "d": [
-            "Breaking a large task into smaller, more manageable pieces.",
-            "The agent's code being split across several different files.",
-            "A user having multiple different plans for the agent."
-        ],
-        "e": "Fragmentation occurs when agents lose 'global coherence.' Agent A might be trying to 'Open the Door' while Agent B is simultaneously trying to 'Lock the Door,' causing a failure cascade in the physical or logical world they are controlling."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "Why is 'Asynchronous Communication' a risk for Cascading Failures?",
-        "a": "It makes it difficult to track the current state and can lead to 'Race Conditions' where agents act on stale information.",
-        "d": [
-            "It is always slower than synchronous communication.",
-            "It requires the agents to be on different continents.",
-            "It prevents the use of encryption between agents."
-        ],
-        "e": "If Agent A sends an 'Abort' message but Agent B has already started the task due to network lag, the system enters an inconsistent and potentially dangerous state that can cascade into further errors."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is a 'Consensus Failure'?",
-        "a": "Agents in a swarm cannot agree on a course of action, causing the system to stall or enter a 'Flapping' state (repeatedly switching between decisions).",
-        "d": [
-            "The user not liking the agent's answer.",
-            "The developer and the user disagreeing on the agent's goal.",
-            "A model failing to generate a response that is grammatically correct."
-        ],
-        "e": "In democratic agent systems (where multiple agents vote on a plan), a tie or a 'split-brain' scenario can lead to a cascade where the system stops responding to the user entirely."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "How does 'Rate Limiting' mitigate ASI08?",
-        "a": "It prevents any single agent or user from overwhelming the system with too many requests, limiting the 'blast radius' of a failure.",
-        "d": [
-            "It makes the agent's output more polite.",
-            "It limits the number of words the agent can use in a response.",
-            "It ensures that the agent is always paid for its work."
-        ],
-        "e": "Rate limiting at the agent-to-agent level is a key defense. It ensures that even if one agent goes 'rogue' or gets stuck in a loop, it can't take down the entire multi-agent orchestrator."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Dependency Hell' in agentic systems?",
-        "a": "A chain of agents where each one requires the output of the previous, making the entire system only as reliable as its weakest link.",
-        "d": [
-            "A server that is running an old version of Linux.",
-            "An agent that is very difficult to talk to.",
-            "The developer having too many projects to work on."
-        ],
-        "e": "In a linear dependency chain, if Agent 3 of 10 fails, agents 4-10 are useless. This 'Fragility' is a core concern of ASI08, as it leads to frequent and unpredictable system-wide outages."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Metastable Failure' in an agentic context?",
-        "a": "A state where a temporary failure (like a network glitch) causes the system to enter a permanent state of high-load dysfunction even after the glitch is fixed.",
-        "d": [
-            "A failure that only happens when the agent is using a specific model.",
-            "An agent that crashes and then immediately restarts.",
-            "A bug that is very difficult for the developer to find."
-        ],
-        "e": "Metastability is dangerous. For example, a 1-second API outage might cause agents to queue up so many tasks that the system remains at 100% CPU forever, even when the API is back online."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "How can 'Chaos Engineering' be used to prevent ASI08?",
-        "a": "By intentionally injecting failures (killing agents, delaying messages) to test the system's resilience and recovery mechanisms.",
-        "d": [
-            "By making the agent's code as messy as possible to confuse attackers.",
-            "By asking the user to try and break the agent.",
-            "By using a random number generator for all agent decisions."
-        ],
-        "e": "Chaos engineering (like Netflix's Chaos Monkey) helps identify 'hidden' cascades before they happen in production, ensuring that the system can handle the loss of any single agent without total failure."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Reasoning Exhaustion'?",
-        "a": "The agent enters such a complex multi-step reasoning path that it hits internal timeouts or context limits, failing mid-task.",
-        "d": [
-            "The model becoming too tired to think after being used all day.",
-            "The user becoming confused by the agent's complex answers.",
-            "The developer running out of ideas for new agent features."
-        ],
-        "e": "Reasoning exhaustion occurs when an agent's plan 'explodes' in complexity. If the orchestrator doesn't prune these plans, the agent will eventually fail, potentially leaving resources (like database locks) in an inconsistent state."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Zombie Agent' syndrome?",
-        "a": "An agent that has failed or been disconnected but continues to send stale or erroneous data into the system.",
-        "d": [
-            "An agent that talks about horror movies all the time.",
-            "A model that is used to generate images of monsters.",
-            "An agent that cannot be deleted from the database."
-        ],
-        "e": "Zombie agents can cause 'Ghost Cascades.' Because they are partially alive, they bypass simple 'is-alive' health checks while still poisoning the communication channels with invalid data."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "Why is 'Lack of Observability' a risk factor for ASI08?",
-        "a": "Without detailed logs and metrics, it is impossible to identify the root cause of a cascade until the entire system is down.",
-        "d": [
-            "It prevents the user from seeing the agent's face.",
-            "It makes the agent's code harder to read for the developer.",
-            "It allows the agent to work in secret without anyone knowing."
-        ],
-        "e": "Observability (Tracing, Logging, Metrics) is the 'MRI' for cascades. If you can see that Agent A's latency is spiking, you can proactively isolate it before it triggers a system-wide failure."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is a 'Cascading Timeout'?",
-        "a": "Agent A waits for Agent B, which waits for Agent C, until the original request from the user times out at the gateway level.",
-        "d": [
-            "A failure in the system's internal clock.",
-            "The agent taking a break after working for an hour.",
-            "A user setting a very short timer for a task."
-        ],
-        "e": "This is a classic 'Long-Chain' failure. Every step in an agentic workflow adds latency. If the chain is too long, the 'tail latency' will eventually exceed the system's global timeout, causing a failure even if every individual agent is 'healthy'."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Jitter' and how does it help prevent ASI08?",
-        "a": "Adding random delays to retries to prevent many agents from 'syncing up' and hitting a server at the exact same moment.",
-        "d": [
-            "A type of coffee that the developers drink to stay awake.",
-            "Small vibrations in the physical server hardware.",
-            "The agent's text appearing to shake on the screen."
-        ],
-        "e": "Jitter breaks the 'Thundering Herd' problem. By staggering retries, you ensure that a recovering system isn't immediately knocked back down by a synchronized wave of agent requests."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Recursive Self-Modification' risk in ASI08?",
-        "a": "An agent that can change its own code or prompt might introduce a bug that triggers a catastrophic and irreversible failure loop.",
-        "d": [
-            "An agent that can change its own profile picture.",
-            "A model that can rewrite its own training data.",
-            "An agent that can choose which model it wants to use."
-        ],
-        "e": "This is the 'God-Mode' cascade. If an agent has the permission to modify the logic of the system, a single reasoning error can lead to a state where the system 'evolves' into a completely broken and unfixable state."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Orphaned Task' accumulation?",
-        "a": "A failure in a manager agent leaves dozens of worker agents running tasks whose results will never be used, wasting resources.",
-        "d": [
-            "Tasks that were created by a user who has since deleted their account.",
-            "A task that has no clear goal or objective.",
-            "A bug that causes the agent to forget what it was doing."
-        ],
-        "e": "Orphaned tasks are a 'Silent Cascade.' They don't crash the system immediately, but they slowly drain resources (cost, CPU) until the system becomes sluggish or eventually fails due to 'Resource Exhaustion'."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is 'Semantic Deadlock'?",
-        "a": "Two agents are stuck waiting for each other to clarify an ambiguous instruction, neither being able to proceed.",
-        "d": [
-            "A failure in the system's dictionary service.",
-            "An agent that is unable to understand any language other than English.",
-            "A user and an agent having a disagreement about a fact."
-        ],
-        "e": "Semantic deadlock is a logic-level failure. Unlike a traditional deadlock (which is about locks), this is about 'meaning.' Without a 'Tie-Breaker' agent or human intervention, the workflow stays stuck forever."
-    },
-    {
-        "c": "ASI08: Cascading Failures",
-        "q": "What is the 'Global Shutdown' trigger in ASI08 mitigation?",
-        "a": "A manual or automatic 'kill switch' that immediately terminates all active agent processes when a critical cascade is detected.",
-        "d": [
-            "The power button on the front of the server.",
-            "A command that the user can type to stop the agent.",
-            "A safety filter that blocks the agent from saying 'goodbye'."
-        ],
-        "e": "In a severe cascade (like a financial loop or an infinite tool-use loop), a 'Kill Switch' is the only way to prevent massive damage. It is a fundamental safety requirement for autonomous multi-agent systems."
-    }
+var pool = [
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Cascading Agent Failures' (ASI08)?",
+    "a": "A failure or compromise in one agent triggers a chain reaction of errors or malicious actions across a multi-agent system.",
+    "d": [
+      "The agent's server physically falling over and hitting other servers.",
+      "An agent being unable to finish a task because it is too complex.",
+      "The user getting frustrated with the agent and turning it off."
+    ],
+    "e": "In a tightly coupled agent ecosystem, a single 'bad' output from one agent can be interpreted as a 'valid' instruction by the next, spreading the failure rapidly."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is a 'Feedback Loop' in the context of ASI08?",
+    "a": "Two or more agents enter a cycle of escalating requests or actions that consume all system resources.",
+    "d": [
+      "The agent's audio output being picked up by its own microphone.",
+      "A human user giving the agent constructive criticism.",
+      "The agent's code being written in a recursive language."
+    ],
+    "e": "For example, Agent A asks Agent B for help, Agent B asks Agent A for clarification, and they keep going forever, causing a Denial of Service."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'State Explosion'?",
+    "a": "A single agent request triggers an exponentially increasing number of sub-tasks across other agents, overwhelming the system.",
+    "d": [
+      "The agent's physical database server exploding.",
+      "The agent's training data growing too large.",
+      "The agent using too many fancy words in its responses."
+    ],
+    "e": "This is like an 'AI Fork Bomb,' where the autonomy of agents is used against the system to exhaust all CPU or memory."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "How can a 'Circuit Breaker' mitigate cascading failures?",
+    "a": "By automatically stopping communication between agents if the error rate or request volume exceeds a safe threshold.",
+    "d": [
+      "By physically turning off the power to the data center.",
+      "By requiring the agent to solve a math problem before it can talk.",
+      "By making the agent's responses slower for every user."
+    ],
+    "e": "Circuit breakers 'fail fast' to protect the overall system's health, preventing a localized error from taking down the entire agent fleet."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Malicious Intent Propagation'?",
+    "a": "A hijacked agent sends 'valid-looking' instructions to other agents, causing them to perform harmful actions without knowing they are part of an attack.",
+    "d": [
+      "The agent's developer being mean to the agent.",
+      "The agent learning how to be a hacker by reading the internet.",
+      "The agent's code being shared on the dark web."
+    ],
+    "e": "This is a cascading *security* failure. The hijacked 'Planner Agent' tells the 'File Agent' to delete everything, and the 'File Agent' obeys because it trusts the planner."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Retry Storm' in agentic AI?",
+    "a": "Multiple agents repeatedly retrying failed requests at the same time, worsening a bottleneck or system crash.",
+    "d": [
+      "A weather-related event that affects the AI's data center.",
+      "The agent's developer trying to fix a bug many times.",
+      "A user asking the same question 100 times in a row."
+    ],
+    "e": "Exponential backoff and jitter are necessary in agent communication to prevent a small hiccup from turning into a massive 'storm' of traffic."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "Which of these is a 'Generic Scenario' for ASI08?",
+    "a": "An 'Email Agent' fails and returns an error; the 'Supervisor Agent' interprets this error as a 'User Instruction' and begins a destructive task.",
+    "d": [
+      "The agent's server runs out of disk space and shuts down.",
+      "An attacker performs a social engineering attack on the agent's developer.",
+      "The AI model produces a response with a high hallucination rate."
+    ],
+    "e": "This shows how poor error handling in one agent can lead to 'semantic corruption' in another, triggering a cascade of unintended actions."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Quota Exhaustion' in a cascading failure?",
+    "a": "One malfunctioning agent uses up the entire shared API budget (e.g., OpenAI tokens), causing all other agents to fail simultaneously.",
+    "d": [
+      "The agent's developer spending too much money on coffee.",
+      "The agent's training data being too small to be useful.",
+      "The agent's responses being limited to 50 words."
+    ],
+    "e": "Shared resource limits must be carefully managed with 'per-agent' quotas to ensure that one 'rogue' agent doesn't starve the others."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "How does 'Graceful Degradation' protect the system?",
+    "a": "By allowing the system to continue working with reduced functionality if some agents or tools are unavailable.",
+    "d": [
+      "By making the agent's responses more polite when it is busy.",
+      "By turning off the agent's UI when the server is slow.",
+      "By having the agent's developer fix bugs in production."
+    ],
+    "e": "A resilient agent system should be able to say 'I can't send the email right now, but I have saved the draft' instead of crashing the entire workflow."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Deadlock' in a multi-agent system?",
+    "a": "Two agents are waiting for each other to finish a task, causing both to hang indefinitely and block the rest of the queue.",
+    "d": [
+      "The agent's physical server being locked in a room.",
+      "The agent's developer forgetting the database password.",
+      "The agent's training being stuck on a specific piece of data."
+    ],
+    "e": "Deadlocks are common in complex asynchronous systems. Agents need 'timeouts' for every interaction to ensure they don't wait forever for a peer."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Stochastic Resonance' in agent failures?",
+    "a": "Random, minor errors in several agents happen to align perfectly to create a major, catastrophic system failure.",
+    "d": [
+      "The agent's physical server vibrating at a certain frequency.",
+      "The agent's code having a bug that only happens on Tuesdays.",
+      "A user asking the agent a question that is too hard for it."
+    ],
+    "e": "This highlights the difficulty of testing multi-agent systems. The 'emergent behavior' of the fleet can be far more unpredictable than any single agent."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "How can 'Observability' help stop a cascade?",
+    "a": "By providing real-time dashboards that show the 'health' and 'traffic' between all agents, allowing for manual intervention.",
+    "d": [
+      "By making the agent's code more readable for the developer.",
+      "By allowing the user to watch the agent as it works.",
+      "By checking the agent's server for physical damage."
+    ],
+    "e": "You cannot stop what you cannot see. Distributed tracing (like OpenTelemetry) is essential for identifying the 'root cause' of a cascade."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is the 'Thundering Herd' problem?",
+    "a": "A large number of agents all wake up or restart at the exact same time and overwhelm a shared resource (like a database).",
+    "d": [
+      "A group of cows running through the AI's data center.",
+      "A large number of users all asking the same question at once.",
+      "The agent's code being copied by many different companies."
+    ],
+    "e": "To prevent this, agent startups and tasks should be 'jittered' (randomly delayed) so they don't all hit the system at the same microsecond."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Priority Inversion' in agentic AI?",
+    "a": "Low-priority 'background' agent tasks block high-priority 'emergency' tasks from being processed.",
+    "d": [
+      "The agent's developer being promoted to a lower position.",
+      "The agent's responses being sorted in the wrong order.",
+      "The agent's training data being weighted incorrectly."
+    ],
+    "e": "A robust system needs a 'Quality of Service' (QoS) layer that ensures critical security or safety tasks always have the resources they need."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "How does 'Health Checking' mitigate ASI08?",
+    "a": "By having a central monitor that 'pings' agents and removes them from the available pool if they don't respond correctly.",
+    "d": [
+      "By giving the agent a physical medical exam.",
+      "By checking the agent's code for spelling and grammar errors.",
+      "By making sure the agent's server is in a safe country."
+    ],
+    "e": "Active health checks can 'detect and isolate' a failing agent before it has a chance to send corrupted data to its peers."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Fail-Open' vs 'Fail-Closed' in agent security?",
+    "a": "'Fail-Closed' means the agent stops all actions if it encounters an error, which is generally more secure for cascading failures.",
+    "d": [
+      "Fail-Open means the agent's physical door is left unlocked.",
+      "Fail-Closed means the agent's source code is kept secret.",
+      "Fail-Open means the agent is more polite to the user."
+    ],
+    "e": "If a security agent fails, it should 'Fail-Closed' (block everything) to prevent an attacker from exploiting the 'gap' left by the failure."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Recursive Task Bomb'?",
+    "a": "An agent is tricked into creating a task that creates two more tasks, which create four more, etc., until the system is overwhelmed.",
+    "d": [
+      "The agent's physical server exploding due to too many tasks.",
+      "The agent's developer having too much work to do.",
+      "The agent's training being stuck on a recursive function."
+    ],
+    "e": "This is a classic 'Denial of Service' pattern. Systems must have a 'Maximum Depth' for task recursion to prevent this cascade."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "How can 'Statelessness' help prevent cascading failures?",
+    "a": "By ensuring that an error in one task doesn't 'linger' and corrupt the agent's state for the next, unrelated task.",
+    "d": [
+      "By making the agent forget everything it knows after every word.",
+      "By hosting the agent on a server that doesn't have a hard drive.",
+      "By having the agent's code be written in a very simple language."
+    ],
+    "e": "If an agent is 'reset' between tasks, a failure in Task A is much less likely to cascade into a failure in Task B."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Distributed Consensus' (like Paxos/Raft) for agents?",
+    "a": "A way for multiple agents to agree on a 'safe' state or goal, preventing a single rogue agent from making a bad decision alone.",
+    "d": [
+      "A law that says all agents must be written in the same language.",
+      "A rule that says all agents must give the same answer to a user.",
+      "A way to make agent communication faster by using more cables."
+    ],
+    "e": "Consensus protocols can prevent a 'cascading hijack' by requiring a majority of agents to agree before any high-impact action is taken."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Pressure-Based Shedding'?",
+    "a": "The system automatically starts dropping 'low-value' agent tasks when it detects it is nearing a resource-induced failure.",
+    "d": [
+      "The agent's physical server getting too hot and slowing down.",
+      "The agent's developer getting stressed and taking a break.",
+      "The agent's responses being shorter when the user is angry."
+    ],
+    "e": "Shedding load 'gracefully' prevents the entire system from hitting a 'hard' failure wall that would cause a complete shutdown."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "How can 'Semantic Isolation' protect against ASI08?",
+    "a": "By ensuring that an error message from Agent A is never directly parsed as a command by Agent B.",
+    "d": [
+      "By making Agent A and Agent B use different languages.",
+      "By having Agent A and Agent B be written by different teams.",
+      "By requiring a human to translate all messages between agents."
+    ],
+    "e": "Error messages should be 'typed' and 'structured,' and agents should have specific 'error-handling' logic that is separate from their 'task-handling' logic."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Byzantine Fault Tolerance' for agent systems?",
+    "a": "A design that allows the system to function correctly even if some agents are malfunctioning or acting maliciously (Byzantine nodes).",
+    "d": [
+      "A way to make the agent's responses more historical and educational.",
+      "A rule that says all agents must be written in the same city.",
+      "A technique for training the agent on how to be a diplomat."
+    ],
+    "e": "This is the 'gold standard' for resilience, assuming that some parts of the system *will* be compromised and designing to survive that reality."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Cascading Latency'?",
+    "a": "A delay in one agent causes other agents to 'wait' and 'pile up,' eventually leading to a complete system hang.",
+    "d": [
+      "The agent's responses being sorted in the wrong order.",
+      "The agent's developer taking a long time to fix a bug.",
+      "The agent's training data being updated very slowly."
+    ],
+    "e": "Latency cascades can be just as destructive as error cascades. Timeouts and asynchronous 'fire-and-forget' patterns can help mitigate this."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "How does 'Bulkheading' prevent cascades?",
+    "a": "By partitioning the agent system into independent 'compartments' so that a failure in one cannot physically or logically reach the others.",
+    "d": [
+      "By putting the agents' servers on a ship with a strong hull.",
+      "By making the agents' code use a very large font for better separation.",
+      "By requiring a human to approve every conversation between agents."
+    ],
+    "e": "If the 'Search compartment' fails, it should not be able to affect the 'Billing compartment,' even if they are part of the same overall application."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Error Propagation Limit'?",
+    "a": "A setting that prevents an agent from 'passing on' an error message more than X number of times in a chain.",
+    "d": [
+      "A law that says developers must fix all bugs in the agent.",
+      "A rule that says agents must only talk to each other 10 times a day.",
+      "A way to make the agent's responses more accurate."
+    ],
+    "e": "This prevents 'infinite error loops' where Agent A tells Agent B about an error, and Agent B tells Agent A, and so on."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'State Reconstruction' after a cascade?",
+    "a": "The ability of the system to 'wipe' all current agent states and rebuild them from a known-good 'event log'.",
+    "d": [
+      "The agent's developer rebuilding the server from scratch.",
+      "The agent's memory being full of duplicate entries.",
+      "A user asking the agent to explain what happened during a crash."
+    ],
+    "e": "Event sourcing is a great way to achieve this. If a cascade happens, you can 'replay' the history up until the point the failure started."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Agent Fatigue' in a cascading failure scenario?",
+    "a": "A high-load situation where the LLM's 'reasoning quality' drops due to context window saturation, leading to more errors and further cascading.",
+    "d": [
+      "The agent's physical server getting too hot and slowing down.",
+      "The agent's developer getting tired and making a mistake.",
+      "The agent's responses being shorter when the user is angry."
+    ],
+    "e": "This is a 'soft' failure. As the system gets stressed, the 'brain' of the agent gets 'confused,' making it more likely to make the very mistakes that cause a crash."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "How can 'Chaos Engineering' help against ASI08?",
+    "a": "By deliberately 'killing' agents or 'injecting' errors in a test environment to see how the system handles cascades.",
+    "d": [
+      "By having the agent's code be written in a very messy way.",
+      "By having the agent's developer be very disorganized.",
+      "By making the agent's responses as random and chaotic as possible."
+    ],
+    "e": "Tools like 'Chaos Monkey' for agents can help developers find and fix the 'weak links' that would allow a cascade to happen in production."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is 'Multi-Model Redundancy'?",
+    "a": "Using two different AI models for the same agent task. If one produces a 'failing' or 'dangerous' output, the other acts as a check.",
+    "d": [
+      "Running the same model twice and comparing the output.",
+      "Using two different AI companies for the same task.",
+      "Having one model for the frontend and one for the backend."
+    ],
+    "e": "Models from different vendors often have different 'blind spots.' Using a 'Diversity' strategy can prevent a single model-specific failure from cascading."
+  },
+  {
+    "c": "ASI08: Cascading Agent Failures",
+    "q": "What is a 'Global Kill-Switch' for agents?",
+    "a": "A manual or automated 'Emergency Stop' button that immediately terminates all agent processes across the entire organization.",
+    "d": [
+      "A physical switch on the server that turns it off.",
+      "A law that says all agents must be shut down on weekends.",
+      "A way to make the agent's responses more polite when it is busy."
+    ],
+    "e": "In the case of a 'Rogue Agent' or 'Hyper-Cascade' that is spreading too fast to fix, the kill-switch is the final defense to protect the organization's assets."
+  }
 ];
-const MASTER_POOL = pool;
+var MASTER_POOL = pool;

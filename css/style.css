@@ -535,6 +535,19 @@ body {
     display: none; /* Shown via JS if score exists */
 }
 
+.disclaimer {
+    margin-top: 20px;
+    padding: 12px;
+    background: rgba(48, 54, 61, 0.3);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    line-height: 1.5;
+    color: #8b949e;
+    font-size: 0.85em;
+    text-align: left;
+}
+.disclaimer b { color: var(--accent); }
+
 .start-actions {
     display: flex;
     flex-direction: column;

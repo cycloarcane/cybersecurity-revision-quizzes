@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
     <title>OWASP ASI05 - Unexpected Code Execution</title>
     <link rel="stylesheet" href="../../css/style.css">
 </head>
@@ -21,6 +21,11 @@
             <p>
                 Focuses on the risk of agents generating and executing arbitrary code, shell commands, or database migrations without proper sandboxing or human review.
             </p>
+            <div class="disclaimer">
+                <b>Ground-truth:</b> This quiz is based on the 2026 OWASP Top 10 for Agentic Applications (ASI). 
+                Questions focus on core risks and "Least Agency" principles. 
+                Corrections are welcome; please <a href="https://github.com/cycloarcane/cybersecurity-revision-quizzes/issues" style="color: var(--accent); text-decoration: none;">open an issue on GitHub</a>.
+            </div>
             <div id="high-score" class="high-score-box">Best Score: --</div>
             <div class="start-actions">
                 <button class="btn btn-p" id="start-btn">Start Quiz</button>
@@ -78,7 +83,7 @@
 
 <div class="version-tag">v1.13.0</div>
 <script src="../../data/owasp-agentic-asi05.js"></script>
-<script src="../../js/quiz.js" type="module"></script>
+<script src="../../js/quiz.js"></script>
 <script src="../../js/init-quiz.js"></script>
 </body>
 </html>

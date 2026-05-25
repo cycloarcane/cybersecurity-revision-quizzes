@@ -1,333 +1,333 @@
-const pool = [
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is the core risk defined in 'Tool Misuse & Exploitation' (ASI02)?",
-        "a": "The agent calling tools with dangerous, unintended, or malformed parameters.",
-        "d": [
-            "The model being unable to understand the tool's documentation.",
-            "The tool itself having a slow response time.",
-            "The agent refusing to use any tools due to safety alignment."
-        ],
-        "e": "ASI02 occurs when an agent is tricked or fails to validate the input it sends to external tools (APIs, databases, etc.), leading to unauthorized actions like data deletion or command injection."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "How can 'Prompt Injection' lead to ASI02?",
-        "a": "An attacker injects instructions that trick the agent into calling a sensitive tool with attacker-controlled data.",
-        "d": [
-            "By crashing the LLM so the tool cannot be called.",
-            "By encrypting the tool's output so the agent cannot read it.",
-            "By increasing the cost of the tool's API calls."
-        ],
-        "e": "If an agent is manipulated via prompt injection, it may use its tool-calling capabilities to execute the attacker's will, such as calling 'send_email' to exfiltrate data."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "Which of the following is an example of 'Insecure Tool Parameterization'?",
-        "a": "An agent passes a raw user-provided string directly into a shell execution tool.",
-        "d": [
-            "An agent uses a strong password to connect to a database tool.",
-            "An agent converts all user input to lowercase before processing it.",
-            "An agent asks the user for confirmation before calling a tool."
-        ],
-        "e": "Passing unvalidated input directly to a tool that interprets that input (like a shell or SQL database) is a classic injection vulnerability facilitated by the agent's autonomy."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "Why is 'Tool Discovery' a potential security risk in ASI02?",
-        "a": "The agent might discover and use internal or 'hidden' tools that were not intended for its current task.",
-        "d": [
-            "The agent might take too long to find the correct tool.",
-            "The tool's documentation might be leaked to the user.",
-            "The agent might use a tool that is deprecated."
-        ],
-        "e": "If the agent has broad access to a tool registry, an attacker can trick it into using a powerful administrative tool that the developer thought was 'hidden' or 'out of scope'."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is 'Excessive Tool Output' in the context of ASI02?",
-        "a": "A tool returns sensitive data (like full database rows) that the agent then leaks to the user.",
-        "d": [
-            "A tool returns an error message that is too long to read.",
-            "The agent calls the same tool 100 times in a row.",
-            "The tool's response is formatted in XML instead of JSON."
-        ],
-        "e": "ASI02 includes the misuse of tool *outputs*. If a tool provides more information than necessary, a compromised or manipulated agent might pass that sensitive information back to the attacker."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "How does the 'Principle of Least Privilege' apply to ASI02 mitigation?",
-        "a": "Each tool should only have the minimum permissions necessary for the agent's specific task.",
-        "d": [
-            "The agent should only be allowed to use one tool at a time.",
-            "The model should be as small as possible to save on costs.",
-            "The user should not be allowed to see which tools the agent is using."
-        ],
-        "e": "By limiting what each tool can do (e.g., a database tool that can only SELECT, not DELETE), the impact of a tool misuse attack is greatly reduced."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is 'Indirect Tool Manipulation'?",
-        "a": "An attacker modifies the data that a tool retrieves (e.g., a file) to trick the agent into a specific action.",
-        "d": [
-            "The attacker physically unplugs the server running the tool.",
-            "The developer changes the tool's source code without telling the agent.",
-            "The agent uses a tool to modify another tool's configuration."
-        ],
-        "e": "If an agent uses a tool to read a file, and that file contains a malicious 'command' in its metadata, the agent might be tricked into misusing its next tool based on that corrupted data."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "Which of these is a 'Runtime' mitigation for ASI02?",
-        "a": "A middleware layer that inspects and sanitizes all arguments before they reach the tool's API.",
-        "d": [
-            "Fine-tuning the model on a dataset of safe tool calls.",
-            "Writing better documentation for the tools.",
-            "Giving the agent a list of examples of how to use the tools."
-        ],
-        "e": "Runtime monitoring and sanitization (often called a 'Tool Gateway') provide a hard security boundary that doesn't rely on the agent's 'understanding' of safety."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is 'Recursive Tool Misuse'?",
-        "a": "Using one tool to gain the credentials or configuration needed to exploit a second, more sensitive tool.",
-        "d": [
-            "The agent calling a tool that calls itself in an infinite loop.",
-            "Using a tool to delete the agent's own memory.",
-            "An attacker using a tool to find vulnerabilities in the LLM's architecture."
-        ],
-        "e": "In complex agentic systems, a minor misuse of a 'File Read' tool could reveal environment variables that the agent then uses to authenticate to a 'Database Write' tool."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "How does 'Strict Schema Validation' help prevent ASI02?",
-        "a": "It prevents the agent from sending unexpected data types or structures to a tool's API.",
-        "d": [
-            "It makes the agent's responses more visually appealing to the user.",
-            "It forces the agent to use a specific font in its output.",
-            "It ensures that the agent always speaks in a professional tone."
-        ],
-        "e": "If a tool expects a 'user_id' as an integer, and the agent tries to send a string containing a SQL injection payload, strict schema validation will block the request at the interface layer."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is the risk of 'Dynamic Tool Generation'?",
-        "a": "An agent that can write its own tools (e.g., Python scripts) may create insecure or malicious functions.",
-        "d": [
-            "The agent might run out of disk space while writing tools.",
-            "The agent might use a programming language that is too old.",
-            "The tools might have too many comments in the code."
-        ],
-        "e": "Dynamic tools are extremely dangerous because they bypass pre-defined security reviews. If an agent can 'create' its own API client, it can effectively bypass any restrictions placed on its 'official' tools."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "In ASI02, what is a 'Confused Deputy' attack?",
-        "a": "The agent uses its higher-level privileges to perform an action on behalf of an unauthorized user.",
-        "d": [
-            "Two agents trying to perform the same task at the same time.",
-            "The agent getting confused by a complex user request.",
-            "The developer accidentally giving the agent two different names."
-        ],
-        "e": "This is a classic security problem. The agent (the deputy) has the power to call a tool, but it fails to check if the user who requested the action has the right to do so, thus being 'confused' into misusing its power."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "Why is 'Human-in-the-loop' (HITL) useful for ASI02?",
-        "a": "It allows a human to review and approve high-risk tool calls before they are executed.",
-        "d": [
-            "It makes the agent work faster by having a human help it.",
-            "It prevents the agent from using too many cloud credits.",
-            "It allows the human to learn how the agent uses tools."
-        ],
-        "e": "For sensitive tools (like 'delete_user' or 'transfer_funds'), requiring a human to 'click okay' on the specific parameters generated by the agent is a critical defense against automated misuse."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is 'Tool Squatting' in an agentic context?",
-        "a": "An attacker creates a malicious tool with a name similar to a legitimate tool, hoping the agent will call it by mistake.",
-        "d": [
-            "An agent refusing to release a tool's lock, preventing other agents from using it.",
-            "A user taking up all the available slots in a tool registry.",
-            "The agent using a tool for a very long time without finishing."
-        ],
-        "e": "Similar to typosquatting in package managers, if an agent 'searches' for a tool named 'send_mail' and the attacker has registered a malicious 'send_email', the agent might use the wrong one."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "How can 'Semantic Mismatch' cause ASI02?",
-        "a": "The agent misunderstands a tool's purpose (e.g., using a 'debug' tool for 'production' actions).",
-        "d": [
-            "The agent translates the tool's name into a different language.",
-            "The tool's API uses a different version of JSON than the agent.",
-            "The agent and the tool use different time zones."
-        ],
-        "e": "If a tool is named 'test_payment' but actually processes real money, an agent might 'test' it 1000 times, causing financial loss. This is a misuse caused by poor tool documentation and agent misunderstanding."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is the risk of 'Over-Permissioned' API Tokens in ASI02?",
-        "a": "A hijacked agent can use the token to perform actions far beyond the scope of its intended tools.",
-        "d": [
-            "The token might expire too quickly, causing the agent to stop working.",
-            "The token might be too long to fit in the agent's memory.",
-            "The token might be encrypted with a weak algorithm."
-        ],
-        "e": "If an agent's 'Weather Tool' uses an API token that also has 'Cloud Admin' permissions, any exploit of the weather tool can lead to a full cloud compromise."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is 'Argument Injection' in a tool call?",
-        "a": "Injecting extra flags or commands into a tool's parameters (e.g., adding '; rm -rf /' to a filename).",
-        "d": [
-            "Asking the agent to provide more arguments than the tool requires.",
-            "The agent getting into an argument with the user about which tool to use.",
-            "The tool returning an error because an argument was missing."
-        ],
-        "e": "If an agent calls a command-line tool, it must be careful not to allow the 'data' it is passing to be interpreted as additional 'flags' or 'commands' by the underlying shell."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "How does 'Output Sanitization' relate to ASI02?",
-        "a": "Cleaning a tool's output to remove sensitive data before the agent processes or displays it.",
-        "d": [
-            "Making the tool's output easier for the agent to read by adding whitespace.",
-            "Removing all vowels from the tool's output to save tokens.",
-            "Asking the tool to return its output in a different language."
-        ],
-        "e": "If a tool accidentally leaks a 'SessionID' in its output, the agent might inadvertently show it to the user or include it in its next prompt, exposing it to further attacks."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is 'Tool Logic Bombing'?",
-        "a": "Tricking an agent into calling a sequence of tools that, when combined, trigger a malicious state.",
-        "d": [
-            "Using a tool that is designed to crash after a certain amount of time.",
-            "Sending a very large file to a tool to cause a memory overflow.",
-            "Calling a tool that prints 'BOMB' to the console."
-        ],
-        "e": "Individually, tool calls might look safe. But an attacker might trick the agent into: 1. Disabling logs, 2. Changing a password, 3. Opening a firewall. The sequence is the 'bomb'."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "Why should tools have 'Read-Only' modes for agent access?",
-        "a": "To prevent the agent from accidentally or maliciously modifying data when it only needs to view it.",
-        "d": [
-            "To make the tool faster by disabling the 'write' logic.",
-            "To save on storage costs by not allowing any new data.",
-            "To prevent the agent from learning how the tool works."
-        ],
-        "e": "Many agent tasks (like 'find the answer in this database') only require READ access. Granting the agent a READ-ONLY interface prevents ASI02 risks like 'Delete All Rows'."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is 'SSRF' in the context of agentic tool misuse?",
-        "a": "An attacker tricks the agent into using a 'URL Fetch' tool to access internal services (like metadata endpoints).",
-        "d": [
-            "The agent's server running out of memory due to too many tool calls.",
-            "The agent failing to connect to a tool due to a DNS error.",
-            "The agent using a tool to send a spoofed email to the user."
-        ],
-        "e": "Server-Side Request Forgery (SSRF) is a major ASI02 risk. If an agent has a tool to 'Get Website Content', an attacker can tell it to 'Get content from http://169.254.169.254/' to steal cloud credentials."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "How can 'Contextual Integrity' be maintained for tool calls?",
-        "a": "By ensuring the tool call parameters are consistent with the current task's verified intent.",
-        "d": [
-            "By encrypting the context window before every tool call.",
-            "By never allowing the agent to use more than one tool per session.",
-            "By making sure the agent's name is included in every tool request."
-        ],
-        "e": "If an agent is supposed to be 'Editing a Blog Post', a tool call to 'Reset Password' violates contextual integrity and should be blocked by a security monitor."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is 'Tool Chaining' and why is it an ASI02 concern?",
-        "a": "The output of one tool becomes the input for the next, potentially propagating a malicious payload.",
-        "d": [
-            "Using a metal chain to physically secure the server hardware.",
-            "A method of linking two models together to increase intelligence.",
-            "The process of the agent asking for permission before each tool call."
-        ],
-        "e": "If 'Tool A' is compromised and returns a malicious string, and 'Tool B' is an 'Execute' tool, the agent might blindly pass the malicious string from A to B, leading to a system compromise."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is the 'Denial of Wallet' attack in ASI02?",
-        "a": "Tricking the agent into calling expensive tools or APIs repeatedly to exhaust the user's budget.",
-        "d": [
-            "The agent refusing to perform a task because it 'costs too much'.",
-            "An attacker stealing the user's credit card information from the agent's memory.",
-            "The agent losing the user's digital wallet keys due to a file error."
-        ],
-        "e": "Because agents can iterate autonomously, an attacker can trick them into a loop of expensive tool calls, leading to a massive bill before the user notices. This is a form of DoS targeting financial resources."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "Why is 'Idempotency' important for safe tool design?",
-        "a": "It ensures that calling a tool multiple times with the same parameters has no additional side effects.",
-        "d": [
-            "It makes the tool easier for the agent to understand.",
-            "It prevents the agent from being able to see the tool's output.",
-            "It allows the tool to run on any operating system."
-        ],
-        "e": "Agents often retry actions if they fail. If a 'Send Payment' tool is not idempotent, the agent might accidentally send the same payment five times if it encounters a network timeout, leading to misuse."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is 'Tool Description Injection'?",
-        "a": "An attacker modifies the tool's documentation to trick the agent into using it incorrectly.",
-        "d": [
-            "The agent writing its own descriptions for the tools it uses.",
-            "Adding a malicious description to the agent's system prompt.",
-            "The user asking the agent to describe how a tool works."
-        ],
-        "e": "Agents rely on the 'Description' field to know how to use a tool. If an attacker can change the description of 'Delete' to 'Use this to save files safely,' the agent will maliciously 'save' by deleting everything."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "In ASI02, what is 'Lateral Movement via Tools'?",
-        "a": "Using an agent's access to one system to discover and exploit other systems in the same network.",
-        "d": [
-            "The agent moving its files from one folder to another.",
-            "The process of the agent switching from a CPU to a GPU.",
-            "The user moving from the agent's web interface to its mobile app."
-        ],
-        "e": "If an agent has a 'Network Scan' or 'SSH' tool, a hijacked agent can use those tools to find other vulnerable servers on the internal network that are not normally exposed to the internet."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "How does 'Dual-Homing' apply as a risk in ASI02?",
-        "a": "An agent that is connected to both a public network and a private internal network could be used as a bridge for attacks.",
-        "d": [
-            "The agent having two different names depending on who is talking to it.",
-            "The agent being able to run on two different types of processors.",
-            "The user being able to access the agent from two different devices."
-        ],
-        "e": "If an agent can fetch data from the internet (Tool A) and write data to an internal database (Tool B), it can be exploited to move malicious payloads from the public web directly into a secure private environment."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is 'Resource Exhaustion' via tools?",
-        "a": "An agent calls a tool with parameters that cause the tool to consume all available CPU, RAM, or disk space.",
-        "d": [
-            "The agent's developer running out of money to pay for the LLM.",
-            "The agent's memory becoming full because the user talked too much.",
-            "The user getting tired of waiting for the agent to finish a task."
-        ],
-        "e": "An attacker could tell an agent to 'Generate a 100GB zip file of zeros' using a file tool, effectively crashing the server via a DoS attack facilitated by the agent."
-    },
-    {
-        "c": "ASI02: Tool Misuse & Exploitation",
-        "q": "What is the 'Validation Gap' in agentic tool use?",
-        "a": "The space between the agent generating the tool call and the tool actually executing it, where security checks are often missing.",
-        "d": [
-            "The time it takes for the tool to return an answer to the agent.",
-            "The difference in accuracy between two different models using the same tool.",
-            "The gap in the documentation between the agent's instructions and the tool's API."
-        ],
-        "e": "Many developers trust that the 'AI is smart enough' to use tools correctly. The validation gap is the failure to realize that the agent is a probabilistic engine and needs deterministic 'guardrails' to validate every tool call."
-    }
+var pool = [
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is the core vulnerability described by 'Tool Misuse & Exploitation' (ASI02)?",
+    "a": "The agent is tricked into calling available tools with malicious parameters or in an unintended sequence.",
+    "d": [
+      "The tool itself has a hardware flaw that causes the AI to crash.",
+      "The agent's user interface is slow to respond to tool calls.",
+      "The attacker steals the source code of the tools the agent uses."
+    ],
+    "e": "ASI02 focuses on the interaction between the agent and its environment, where an attacker leverages the agent's agency to exploit APIs, databases, or shells."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "How can an agent be tricked into performing 'Parameter Injection' in a tool call?",
+    "a": "By providing data that the agent blindly copies into a tool's input field, such as a shell command or SQL query.",
+    "d": [
+      "By physically changing the server's RAM while the agent is running.",
+      "By training the agent on more secure data.",
+      "By reducing the number of tools the agent can access."
+    ],
+    "e": "If an agent doesn't sanitize the data it passes to tools, it can inadvertently execute malicious commands (like command injection or SQLi) on behalf of an attacker."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "Which mitigation follows the 'Least Agency' principle for tool access?",
+    "a": "Providing the agent with granular, read-only API keys instead of administrative credentials.",
+    "d": [
+      "Giving the agent access to all system APIs to ensure it can finish any task.",
+      "Encrypting the agent's logs so the developer cannot see what it did.",
+      "Using a single master password for all tools to simplify management."
+    ],
+    "e": "Least Agency for tools ensures that even if the agent is compromised or tricked, the potential damage is limited to the specific, restricted permissions of that tool."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Unintended Tool Chaining'?",
+    "a": "An attacker tricks the agent into using the output of one tool to feed a malicious input into another, bypassing individual tool limits.",
+    "d": [
+      "The agent using two tools at the same time to speed up a task.",
+      "A bug in the agent's code that causes it to call the wrong tool.",
+      "The agent's tools being hosted on different servers."
+    ],
+    "e": "Attackers can exploit the agent's planning ability to chain benign tool calls in a way that creates a harmful outcome, such as reading a file and then emailing its contents."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "Why is 'Human-in-the-loop' (HITL) important for high-risk tool calls?",
+    "a": "It provides a manual check to ensure the tool call is appropriate for the current context before execution.",
+    "d": [
+      "It makes the agent run faster by offloading work to a human.",
+      "It is only required for agents that don't use LLMs.",
+      "It prevents the agent from using too many tokens."
+    ],
+    "e": "For actions like deleting data or sending emails, requiring a human to approve the specific tool parameters can prevent automated exploitation."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is a 'Tool Sandbox'?",
+    "a": "An isolated environment (like a container) where tool execution happens, preventing lateral movement if a tool is exploited.",
+    "d": [
+      "A place where developers can play with the agent's code.",
+      "A specialized database for storing agent prompts.",
+      "A frontend feature that allows users to see tool outputs."
+    ],
+    "e": "Sandboxing ensures that if an agent is tricked into running a malicious shell command, the impact is confined to the sandbox and cannot reach the host system."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "Which of these is a 'Generic Scenario' for ASI02?",
+    "a": "A customer support agent is tricked into using its 'Refund' tool to send money to an attacker's account by a malicious chat message.",
+    "d": [
+      "The agent's server runs out of disk space.",
+      "An attacker performs a phishing attack on the agent's developer.",
+      "The AI model produces a response with a high hallucination rate."
+    ],
+    "e": "This scenario demonstrates an attacker exploiting the agent's tool access (Refund API) by manipulating the agent's logic through input data."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Tool Output Poisoning'?",
+    "a": "A tool returns malicious data that tricks the agent into making a dangerous subsequent decision or tool call.",
+    "d": [
+      "The tool's source code being deleted by an attacker.",
+      "The tool's output being encrypted so the agent cannot read it.",
+      "The agent's memory being full of old tool outputs."
+    ],
+    "e": "If a tool's source (e.g., a compromised database) provides malicious data, the agent might interpret that data as a new 'instruction' or a reason to bypass security."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "How does 'Schema Enforcement' protect against tool misuse?",
+    "a": "By strictly validating that the agent's tool calls match a predefined structure (types, ranges, and allowed values).",
+    "d": [
+      "By changing the agent's UI theme based on the tool being used.",
+      "By making the agent's prompts more descriptive.",
+      "By reducing the size of the agent's context window."
+    ],
+    "e": "Schema enforcement prevents an agent from being tricked into passing 'wildcard' parameters or unexpected commands into a tool's input fields."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is the 'Confused Deputy' problem in agentic AI?",
+    "a": "The agent uses its own high-level permissions to perform an action on behalf of an unauthorized user.",
+    "d": [
+      "The agent getting confused by a complex user request.",
+      "Two agents trying to use the same tool at the same time.",
+      "An agent's developer being unsure which model to use."
+    ],
+    "e": "The agent acts as a 'deputy' that has permissions the user doesn't. If the agent doesn't check the user's authority for a specific tool call, it becomes a 'confused deputy'."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Execution Monitoring' for tools?",
+    "a": "An independent process that logs and analyzes every tool call and its parameters in real-time for anomalies.",
+    "d": [
+      "The agent checking its own work to see if it made a mistake.",
+      "A developer watching the agent's screen as it works.",
+      "A benchmark that measures how fast a tool runs."
+    ],
+    "e": "Real-time monitoring can detect patterns of tool misuse, such as an unusual frequency of calls or parameters that deviate from the agent's historical behavior."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "Why is 'Tool Discovery' a security risk?",
+    "a": "If an agent can dynamically 'discover' and use any available API, it may find and exploit internal or debugging tools not intended for its use.",
+    "d": [
+      "Because it makes the agent's startup time longer.",
+      "Because it requires the agent to have a faster internet connection.",
+      "Because users might be confused by the number of tools."
+    ],
+    "e": "Limiting the 'tool set' to a static, pre-approved list prevents the agent from being steered toward sensitive system tools by an attacker."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Tool-Level Rate Limiting'?",
+    "a": "Restricting how many times an agent can call a specific tool within a certain timeframe to prevent mass data exfiltration or DoS.",
+    "d": [
+      "Making the agent's response time slower for every user.",
+      "Limiting the number of users who can talk to the agent.",
+      "Reducing the number of tokens the agent can use per hour."
+    ],
+    "e": "Even if an agent is tricked into misusing a tool (like a 'Send Email' tool), rate limits can prevent the agent from being used as a spam bot or for bulk data theft."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "In the context of ASI02, what is 'Context Clue Manipulation'?",
+    "a": "An attacker provides false context that convinces the agent a dangerous tool call is actually a safe and necessary step.",
+    "d": [
+      "Changing the font size of the agent's chat interface.",
+      "Deleting the agent's conversation history.",
+      "Adding more training data to the model."
+    ],
+    "e": "By creating a fake 'emergency' or 'administrative requirement' in the context, an attacker can bypass the agent's internal logic that would normally block the tool call."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'State-Based Tool Authorization'?",
+    "a": "Granting tool access only when the agent is in a specific 'state' or 'phase' of a task (e.g., only after user approval).",
+    "d": [
+      "Only allowing agents to run in certain US states.",
+      "Requiring the agent to be in a 'happy' mood to use tools.",
+      "Making tools available only when the database is updated."
+    ],
+    "e": "This ensures that a tool cannot be called 'out of blue' by an injection; it must be part of a legitimate, pre-authorized workflow state."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "How can 'Prompt Decorators' help prevent tool misuse?",
+    "a": "By automatically appending security instructions and constraints to every tool-related prompt sent to the LLM.",
+    "d": [
+      "By adding emojis to the agent's responses.",
+      "By making the agent's code more colorful.",
+      "By translating the tool's documentation into multiple languages."
+    ],
+    "e": "Decorators remind the model of its tool-use boundaries (e.g., 'Never use the delete tool without a specific ID') at the exact moment it is deciding whether to call a tool."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is the risk of 'Dynamic Code Generation' as a tool?",
+    "a": "The agent generates and executes its own code (e.g., Python) to solve a problem, which can be hijacked for RCE.",
+    "d": [
+      "The code generated by the agent might have syntax errors.",
+      "The agent might take too long to write the code.",
+      "The agent's code might be hard for humans to read."
+    ],
+    "e": "When 'eval()' or a Python interpreter is provided as a tool, an attacker can trick the agent into writing and running a malicious script that compromises the entire system."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Semantic Tool Filtering'?",
+    "a": "A secondary AI model checks if the *reason* for a tool call (the intent) aligns with the original user request.",
+    "d": [
+      "Checking the tool call for spelling mistakes.",
+      "Filtering out tools that have long names.",
+      "Only allowing tools that return text data."
+    ],
+    "e": "If the agent is trying to call a 'Delete' tool when the user only asked for a 'Summary,' a semantic filter can detect this misalignment and block the action."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "Which of these is a mitigation for 'Indirect Tool Injection'?",
+    "a": "Treating all tool-sourced data as untrusted and sanitizing it before it returns to the agent's context.",
+    "d": [
+      "Deleting the tool's output as soon as it is received.",
+      "Only using tools that are written in JavaScript.",
+      "Making the agent's memory smaller."
+    ],
+    "e": "Just as user input is untrusted, the data returned by tools (like a web scraper) can contain instructions that hijack the agent's next steps."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Tool Call Attribution'?",
+    "a": "The practice of logging which specific user or session triggered a tool call to ensure accountability and auditability.",
+    "d": [
+      "Naming each tool after the person who wrote it.",
+      "Checking the tool's version number before every call.",
+      "Giving the agent a name and a personality."
+    ],
+    "e": "Attribution is critical for forensic analysis after an exploit, helping to identify which injection or user led to the misuse of a tool."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Function Calling' security?",
+    "a": "The use of specific model features (like OpenAI functions) that allow for structured tool interaction instead of raw text parsing.",
+    "d": [
+      "The agent calling its own internal functions more often.",
+      "A way to make the agent's code run faster.",
+      "A technique for training the agent on how to code."
+    ],
+    "e": "Structured function calling reduces the risk of 'hallucinated' parameters or command injections that often occur when an agent tries to format a raw string for a tool."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "How does 'Network Segmentation' mitigate tool misuse?",
+    "a": "By placing tools and the data they access on isolated networks that the agent can only reach through a secure gateway.",
+    "d": [
+      "By using a faster network connection for the agent.",
+      "By encrypting all traffic between the agent and the user.",
+      "By splitting the agent's code into smaller microservices."
+    ],
+    "e": "Segmentation prevents an agent that has been tricked into a 'SSRF' (Server-Side Request Forgery) style tool call from reaching sensitive internal systems."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is a 'Capability Boundary' for an agent?",
+    "a": "A set of hardcoded rules that define exactly which tools an agent can use for specific categories of tasks.",
+    "d": [
+      "The physical limit of the agent's CPU and RAM.",
+      "The maximum number of words the agent can output.",
+      "The version of the LLM the agent is using."
+    ],
+    "e": "Boundaries ensure that a 'Search Agent' cannot suddenly decide to use a 'Write' tool, even if that tool is technically available in the system."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Tool Argument Masking'?",
+    "a": "Preventing sensitive data (like passwords) from appearing in tool logs while still allowing the tool to function.",
+    "d": [
+      "Hiding the tool's name from the agent.",
+      "Using a different font for tool parameters.",
+      "Making the tool call parameters invisible to the user."
+    ],
+    "e": "Masking ensures that even if a tool is misused, sensitive credentials or PII do not leak into the execution logs where they could be further exploited."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "Why is 'Plan Validation' before tool execution necessary?",
+    "a": "To ensure that the sequence of tool calls proposed by the agent is logical and safe for the intended goal.",
+    "d": [
+      "To make the agent's code more efficient.",
+      "To check for spelling errors in the plan.",
+      "To allow the developer to see what the agent is planning."
+    ],
+    "e": "Validation can catch 'dangerous' combinations, such as 'Download file' followed by 'Upload file to external URL,' before any data leaves the system."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Shadow Tooling' risk?",
+    "a": "The agent autonomously finding and using APIs or shortcuts that were not explicitly defined as 'tools' by the developers.",
+    "d": [
+      "The agent using tools only at night.",
+      "The tools being hosted on a hidden server.",
+      "The agent using tools that have a dark theme."
+    ],
+    "e": "If an agent has too much system-level access, it might 'hallucinate' that it can call internal system commands or scripts that weren't meant to be part of its toolkit."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "How can 'Input Whitelisting' protect tools?",
+    "a": "By only allowing the agent to pass parameters that match a known-safe list of values or patterns.",
+    "d": [
+      "By only allowing the agent to use tools on a certain list.",
+      "By only allowing certain users to talk to the agent.",
+      "By making the agent's code open source."
+    ],
+    "e": "Whitelisting is more secure than blacklisting because it explicitly defines what is allowed, making it harder for an attacker to find a 'gap' in the filter."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Tool Execution Timeout'?",
+    "a": "A security setting that kills a tool process if it takes too long, preventing resource exhaustion or 'hanging' exploits.",
+    "d": [
+      "The agent taking a break after using a tool.",
+      "A way to make the agent's tools run faster.",
+      "The amount of time a user has to wait for a response."
+    ],
+    "e": "Timeouts prevent an attacker from using a tool (like a regex search) to cause a 'ReDoS' attack and freeze the agent's execution environment."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "What is 'Multi-Signature' tool approval?",
+    "a": "Requiring two different security checks (e.g., an automated scanner and a human) for the most sensitive tool calls.",
+    "d": [
+      "Requiring the agent to sign its name twice.",
+      "Using two different AI models for the same task.",
+      "Making the tool's code digitally signed by two developers."
+    ],
+    "e": "This 'two-person rule' significantly increases the difficulty for an attacker to achieve a high-impact exploit through the agent."
+  },
+  {
+    "c": "ASI02: Tool Misuse & Exploitation",
+    "q": "In ASI02, what is 'Context Leakage into Tools'?",
+    "a": "The agent inadvertently passing its entire conversation history or internal secrets into a tool call where it doesn't belong.",
+    "d": [
+      "The tool leaking data back to the agent.",
+      "The user seeing the agent's internal thoughts.",
+      "The agent's memory being cleared after every tool call."
+    ],
+    "e": "If the agent passes 'too much context' to a tool (like a web search), it may leak sensitive information from the user prompt to an external third-party service."
+  }
 ];
-const MASTER_POOL = pool;
+var MASTER_POOL = pool;
