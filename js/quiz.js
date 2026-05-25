@@ -182,7 +182,7 @@ function loadQ(i) {
     const meta = document.createElement('div');
     meta.className = 'q-meta';
     
-    let metaHTML = `<div style="display:flex; align-items:center; gap:10px;"><span class="tag">${esc(q.c)}</span><span class="q-num">#${i+1}</span></div>`;
+    let metaHTML = `<div style="display:flex; align-items:center; gap:20px;"><span class="tag">${esc(q.c)}</span><span class="q-num">#${i+1}</span></div>`;
     if (flagged[i]) {
         metaHTML += `<span class="tag" style="background:var(--warning); color:#111;">FLAGGED</span>`;
     }
