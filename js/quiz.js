@@ -288,10 +288,20 @@ function finish() {
     const reviewList = document.getElementById('review-list');
     reviewList.innerHTML = '';
 
-    examQs.forEach((q, i) => {
+    // Create a data array for sorting
+    const reviewData = examQs.map((q, i) => {
         const isCorrect = userAns[i] === q.a;
         if (isCorrect) score++;
+        return { q, i, isCorrect };
+    });
 
+    // Sort: Incorrect answers (isCorrect=false) at the top
+    reviewData.sort((a, b) => {
+        if (a.isCorrect === b.isCorrect) return a.i - b.i; // Maintain original order for same status
+        return a.isCorrect ? 1 : -1;
+    });
+
+    reviewData.forEach(({ q, i, isCorrect }) => {
         const item = document.createElement('div');
         item.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
         item.innerHTML = `
