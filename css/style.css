@@ -5,7 +5,7 @@
     --border: #30363d;
     --primary: #f85149;
     --accent: #ff7b72;
-    --success: #f85149;
+    --success: #238636;
     --danger: #da3633;
     --warning: #d29922;
     --text: #c9d1d9;
@@ -450,8 +450,14 @@ body {
     border: 1px solid var(--border);
 }
 
-.review-item.correct { border-left-color: var(--success); }
-.review-item.wrong { border-left-color: var(--danger); }
+.review-item.correct { 
+    border-left-color: var(--success); 
+    background: rgba(35, 134, 54, 0.05);
+}
+.review-item.wrong { 
+    border-left-color: var(--danger); 
+    background: rgba(218, 54, 51, 0.05);
+}
 
 .review-item strong { color: var(--white); font-size: 0.95em; }
 

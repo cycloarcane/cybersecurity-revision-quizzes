@@ -149,7 +149,14 @@ function renderSide() {
         const b = document.createElement('button');
         b.className = 'nav-btn';
         if (flagged[i]) b.classList.add('flagged');
-        if (answered[i] !== undefined) b.classList.add('answered');
+        
+        if (userAns[i] !== undefined) {
+            const isCorrect = userAns[i] === q.a;
+            b.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+        } else if (answered[i] !== undefined) {
+            b.classList.add('answered');
+        }
+        
         b.innerText = i+1;
         b.id = `nav-${i}`;
         b.addEventListener('click', () => {
@@ -323,6 +330,16 @@ function finish() {
 
     document.getElementById('score-circle').innerText = `${pct}%`;
     document.getElementById('raw-score').innerText = `You answered ${score} out of ${TOTAL_QUESTIONS} questions correctly.`;
+    
+    // Color score circle based on pass/fail (70% threshold)
+    const scoreCircle = document.getElementById('score-circle');
+    if (pct >= 70) {
+        scoreCircle.style.background = 'linear-gradient(135deg, #3fb950, var(--success))';
+        document.getElementById('raw-score').style.color = '#3fb950';
+    } else {
+        scoreCircle.style.background = 'linear-gradient(135deg, var(--accent), var(--danger))';
+        document.getElementById('raw-score').style.color = '#ff7b72';
+    }
     
     clearProgress();
 }
