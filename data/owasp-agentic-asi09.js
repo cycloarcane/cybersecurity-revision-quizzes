@@ -158,7 +158,7 @@ var pool = [
     "q": "What is 'Source Attribution' in user responses?",
     "a": "The agent must provide the exact link or document source for any advice it gives, allowing the user to check the original source.",
     "d": [
-      "The agent naming the person who wrote its code.",
+      "The agent providing a cryptographically signed provenance record.",
       "The agent giving a unique ID number for every word it says.",
       "The agent checking the user's GPS location."
     ],

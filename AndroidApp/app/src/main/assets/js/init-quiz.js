@@ -56,15 +56,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Dynamic Question Count Update
+    const TARGET_QUESTIONS = 30;
+
     if (typeof MASTER_POOL !== 'undefined') {
+        const actualToAsk = Math.min(TARGET_QUESTIONS, MASTER_POOL.length);
         const statNums = document.querySelectorAll('.stat-num');
         if (statNums.length > 0) {
-            statNums[0].innerText = MASTER_POOL.length;
+            statNums[0].innerText = `${actualToAsk} / ${MASTER_POOL.length}`;
         }
         const headerProgress = document.getElementById('progress-display');
-        if (headerProgress) headerProgress.innerText = `0 / ${MASTER_POOL.length}`;
+        if (headerProgress) headerProgress.innerText = `0 / ${actualToAsk}`;
         const footerStatus = document.getElementById('status');
-        if (footerStatus) footerStatus.innerText = `Q 1 / ${MASTER_POOL.length}`;
+        if (footerStatus) footerStatus.innerText = `Q 1 / ${actualToAsk}`;
     }
 
     if (startBtn) {
@@ -72,7 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.addEventListener('click', () => {
             console.log("Start button clicked");
             if (typeof MASTER_POOL !== 'undefined') {
-                initQuiz(MASTER_POOL, MASTER_POOL.length);
+                const actualToAsk = Math.min(TARGET_QUESTIONS, MASTER_POOL.length);
+                initQuiz(MASTER_POOL, actualToAsk);
             } else {
                 console.error("MASTER_POOL is not defined. Data file might have failed to load.");
                 alert("Error: Quiz data not found.");
