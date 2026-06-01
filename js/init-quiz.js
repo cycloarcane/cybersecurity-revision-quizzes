@@ -5,13 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Shared listeners for all quizzes
     const startBtn = document.getElementById('start-btn');
+    const homeBtn = document.getElementById('home-btn');
+    const restartBtn = document.getElementById('restart-btn');
     const prevBtn = document.getElementById('prev-btn');
+    const nextFooterBtn = document.getElementById('next-footer-btn');
     const flagBtn = document.getElementById('flag-btn');
     const finishBtn = document.getElementById('finish-btn');
     const reloadBtn = document.getElementById('reload-btn');
-    const homeBtn = document.getElementById('home-btn');
-    const restartBtn = document.getElementById('restart-btn');
-    const nextFooterBtn = document.getElementById('next-footer-btn');
     const reviewBtn = document.getElementById('review-btn');
     const resultsHomeBtn = document.getElementById('results-home-btn');
     const backBtn = document.getElementById('back-btn');
@@ -24,10 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (reviewBtn) {
         reviewBtn.addEventListener('click', () => {
-            document.getElementById('results-screen').style.display = 'none';
-            document.getElementById('exam-ui').style.display = 'flex';
-            document.getElementById('footer').style.display = 'flex';
-            loadQ(0);
+            // results-screen is hidden, review-list remains
+            document.getElementById('score-circle').style.display = 'none';
         });
     }
 
@@ -57,12 +55,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Dynamic Question Count Update
+    if (typeof MASTER_POOL !== 'undefined') {
+        const statNums = document.querySelectorAll('.stat-num');
+        if (statNums.length > 0) {
+            statNums[0].innerText = MASTER_POOL.length;
+        }
+        const headerProgress = document.getElementById('progress-display');
+        if (headerProgress) headerProgress.innerText = `0 / ${MASTER_POOL.length}`;
+        const footerStatus = document.getElementById('status');
+        if (footerStatus) footerStatus.innerText = `Q 1 / ${MASTER_POOL.length}`;
+    }
+
     if (startBtn) {
         console.log("Attaching listener to start-btn");
         startBtn.addEventListener('click', () => {
             console.log("Start button clicked");
             if (typeof MASTER_POOL !== 'undefined') {
-                initQuiz(MASTER_POOL, 60);
+                initQuiz(MASTER_POOL, MASTER_POOL.length);
             } else {
                 console.error("MASTER_POOL is not defined. Data file might have failed to load.");
                 alert("Error: Quiz data not found.");
